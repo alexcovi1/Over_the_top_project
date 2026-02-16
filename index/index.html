@@ -3,66 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <title>Over The Top</title>
-    <link rel="stylesheet" href="style.css">
+
+    <!-- FONT MONTSERRAT -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="index.css">
 </head>
 <body>
 
-<!-- HEADER -->
 <header class="header">
-    <div class="logo">OVER THE TOP</div>
+    <div class="logo-container">
+        <div class="logo">
+            <span class="logo-text">OVER THE TOP</span>
+            <div class="logo-line"></div>
+        </div>
+    </div>
+
     <nav class="nav">
-        <a href="#">New collection</a>
-        <a href="#">Hiking</a>
-        <a href="#">Running</a>
-        <a href="#">Trail</a>
+        <a href="/index.html">Home</a>
+        <a href="/hiking.html">Hiking</a>
+        <a href="/running.html">Running</a>
+        <a href="/trail.html">Trail</a>
+        <a href="/about.html">About</a>
     </nav>
 </header>
 
-<!-- HERO -->
 <section class="hero">
     <h1>OVER THE TOP</h1>
-    <p>Designed for runners and explorers</p>
+    <p>From road to mountain</p>
 </section>
 
-<!-- CATEGORY SHOES -->
 <section class="categories">
-    <div class="card">
-        <img src="images/running.jpg" alt="Running">
+    <a href="running.html" class="card">
+        <img src="images/running.jpg">
         <span>RUNNING</span>
-    </div>
-    <div class="card">
-        <img src="images/hiking.jpg" alt="Hiking">
+    </a>
+
+    <a href="hiking.html" class="card">
+        <img src="/images/hiking_shoes.png">
         <span>HIKING</span>
-    </div>
-    <div class="card">
-        <img src="images/trail.jpg" alt="Trail">
+    </a>
+
+    <a href="trail.html" class="card">
+        <img src="images/trail.jpg">
         <span>TRAIL</span>
-    </div>
+    </a>
 </section>
 
-<!-- LIFESTYLE SECTION -->
-<section class="lifestyle">
-    <img src="images/hiker1.jpg" alt="">
-    <div class="center-banner">
-        <img src="images/hiker2.jpg" alt="">
-        <div class="overlay">
-            <h2>OVER THE TOP</h2>
-            <p>From road to mountain</p>
-            <button>LEARN MORE</button>
-        </div>
-    </div>
-    <img src="images/hiker3.jpg" alt="">
-</section>
-
+<script src="js/script.js"></script>
 <!-- APP SECTION -->
-<section class="app">
+<section class="app-section">
     <div class="app-left">
         <img src="images/app-icon.png" alt="App icon">
     </div>
+
     <div class="app-right">
         <h2>DOWNLOAD OUR APP</h2>
         <p>track your runs, explore new trails</p>
-        <div class="stores">
+
+        <div class="store-buttons">
             <img src="images/appstore.png" alt="App Store">
             <img src="images/googleplay.png" alt="Google Play">
         </div>
@@ -72,27 +71,30 @@
 <!-- FOOTER -->
 <footer class="footer">
     <div class="footer-columns">
-        <div>
+
+        <div class="footer-col">
             <h4>Resources</h4>
             <p>Gift cards</p>
             <p>Find a store</p>
             <p>Become a member</p>
         </div>
-        <div>
+
+        <div class="footer-col">
             <h4>Assistance</h4>
             <p>Shipping and delivery</p>
             <p>Returns</p>
             <p>Contact us</p>
         </div>
-        <div>
+
+        <div class="footer-col">
             <h4>About us</h4>
             <p>Work with us</p>
             <p>Mission</p>
             <p>Vision</p>
         </div>
+
     </div>
 </footer>
 
-<script src="js/script.js"></script>
 </body>
 </html>
