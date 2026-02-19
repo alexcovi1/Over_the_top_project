@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Running Shoes - Over The Top</title>
+    <link rel="stylesheet" href="../css/running.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <!-- ========== NAVBAR ========== -->
+    <header class="navbar">
+        <div class="navbar-inner">
+            <div class="navbar-left">
+                <a href="/home/Home.html" class="logo">
+                    <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+                        <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+                        <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+                    </svg>
+                </a>
+                <nav class="nav-categories">
+                    <a href="./newCollection.html">New collection</a>
+                    <a href="./hiking.html">Hiking</a>
+                    <a href="./running.html">Running</a>
+                    <a href="./trail.html">Trail</a>
+                </nav>
+            </div>
+            <div class="navbar-right">
+                <nav class="nav-links">
+                    <a href="/home/Home.html">Home</a>
+                    <a href="./about.html">About</a>
+                    <a href="./contact.html">Contact</a>
+                </nav>
+                <button class="search-btn" id="searchBtn">
+                    <span>Search</span>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                </button>
+            </div>
+            <button class="hamburger" id="hamburger" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+        <div class="mobile-menu" id="mobileMenu">
+            <a href="/home/Home.html">Home</a>
+            <a href="./newCollection.html">New collection</a>
+            <a href="./hiking.html">Hiking</a>
+            <a href="./running.html">Running</a>
+            <a href="./trail.html">Trail</a>
+            <a href="./about.html">About</a>
+            <a href="./contact.html">Contact</a>
+        </div>
+        <div class="search-overlay" id="searchOverlay">
+            <div class="search-box">
+                <input type="text" placeholder="Search products..." id="searchInput">
+                <button class="search-close" id="searchClose">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round">
+                        <line x1="18" y1="6" x2="6" y2="18" />
+                        <line x1="6" y1="6" x2="18" y2="18" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ========== HERO ========== -->
+    <section class="hero">
+        <h1 class="hero-title">RUNNING SHOES</h1>
+        <p class="hero-subtitle">Speed, comfort and performance for every run</p>
+    </section>
+
+    <!-- ========== PRODUCTS ========== -->
+    <section class="products">
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Speed Runner Running Shoe">
+                    <span class="product-badge">FEATURED</span>
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Speed Runner</h3>
+                    <p class="product-description">Lightweight and responsive for competitive runs</p>
+                    <p class="product-price">€120</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Urban Pace Running Shoe">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Urban Pace</h3>
+                    <p class="product-description">Perfect for city running and daily training</p>
+                    <p class="product-price">€110</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Daily Trainer Running Shoe">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Daily Trainer</h3>
+                    <p class="product-description">Versatile trainer for everyday workouts</p>
+                    <p class="product-price">€95</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Marathon Elite Running Shoe">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Marathon Elite</h3>
+                    <p class="product-description">Energy return technology for long distances</p>
+                    <p class="product-price">€145</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Tempo Racer Running Shoe">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Tempo Racer</h3>
+                    <p class="product-description">Designed for fast-paced interval training</p>
+                    <p class="product-price">€130</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="/images/hiking_shoes.png" alt="Transition Flow Running Shoe">
+                </div>
+                <div class="product-info">
+                    <h3 class="product-name">Transition Flow</h3>
+                    <p class="product-description">Smooth transition from road to off-road</p>
+                    <p class="product-price">€125</p>
+                    <button class="btn-add-cart">Add to cart</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ========== CTA SECTION ========== -->
+    <section class="cta-section">
+        <h2 class="cta-title">Plan Your Perfect Run</h2>
+        <p class="cta-subtitle">Start your running journey with shoes designed for your pace and style</p>
+        <a href="#" class="btn-explore">DISCOVER YOUR STYLE</a>
+    </section>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="footer">
+        <div class="footer-inner">
+            <div class="footer-logo">
+                <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+                    <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+                    <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+                </svg>
+            </div>
+            <div class="footer-columns">
+                <div class="footer-col">
+                    <h3>Resources</h3>
+                    <ul>
+                        <li><a href="#">Gift cards</a></li>
+                        <li><a href="#">Find a store</a></li>
+                        <li><a href="#">Become a member</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Assistance</h3>
+                    <ul>
+                        <li><a href="#">Shipping and delivery</a></li>
+                        <li><a href="#">Returns</a></li>
+                        <li><a href="#">Contact us</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>About us</h3>
+                    <ul>
+                        <li><a href="#">Work with us</a></li>
+                        <li><a href="#">Mission</a></li>
+                        <li><a href="#">Vision</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Follow us</h3>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Instagram">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                                <circle cx="12" cy="12" r="5" />
+                                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="Facebook">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="YouTube">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path
+                                    d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+                                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor"
+                                    stroke="none" />
+                            </svg>
+                        </a>
+                    </div>
+                    <ul>
+                        <li><a href="#">Events</a></li>
+                        <li><a href="#">Forum</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="footer-bottom-inner">
+                <p>&copy; 2026 OVER THE TOP.</p>
+                <p>Privacy Policy &middot; Terms &middot; Pages</p>
+                <p>Legal Information</p>
+                <p>Privacy and cookie</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../index/script.js"></script>
+</body>
+
+</html>
+

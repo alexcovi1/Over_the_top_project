@@ -252,6 +252,10 @@ img {
   background-color: var(--green-dark);
   text-align: center;
   padding: 60px 24px 80px;
+  height: 40vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-title {
@@ -272,202 +276,236 @@ img {
 }
 
 /* ==============================
-   CATEGORIES
+   FEATURED SECTION
    ============================== */
-.categories {
-  padding: 40px 24px;
+.featured-section {
+  padding: 60px 24px;
   max-width: 1280px;
   margin: 0 auto;
 }
 
-.categories-grid {
+.featured-inner {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
 }
 
-.category-card {
-  position: relative;
-  border-radius: 16px;
+.featured-card {
+  border-radius: 12px;
   overflow: hidden;
-  aspect-ratio: 3 / 4;
-  display: block;
+  position: relative;
+  background: var(--white);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-.category-card img {
+.featured-main {
+  aspect-ratio: 16 / 9;
+  grid-row: 1 / 3;
+}
+
+.featured-small {
+  aspect-ratio: 1;
+}
+
+.featured-card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   transition: transform 0.4s ease;
 }
 
-.category-card:hover img {
-  transform: scale(1.05);
+.featured-card:hover img {
+  transform: scale(1.08);
 }
 
-.category-label {
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: clamp(18px, 2.5vw, 28px);
-  color: var(--white);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  letter-spacing: 1px;
-}
-
-/* ==============================
-   LIFESTYLE
-   ============================== */
-.lifestyle {
-  padding: 0 24px 60px;
-  max-width: 1280px;
-  margin: 0 auto;
-}
-
-.lifestyle-grid {
-  display: grid;
-  grid-template-columns: 1fr 1.4fr 1fr;
-  gap: 20px;
-  align-items: stretch;
-}
-
-.lifestyle-card {
-  border-radius: 16px;
-  overflow: hidden;
-  position: relative;
-}
-
-.lifestyle-card img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.lifestyle-side {
-  aspect-ratio: 3 / 4;
-}
-
-.lifestyle-center {
-  aspect-ratio: auto;
-}
-
-.lifestyle-overlay {
+.featured-overlay {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   padding: 32px 24px;
-  background: linear-gradient(transparent, rgba(0,0,0,0.7));
+  background: linear-gradient(transparent, rgba(0,0,0,0.8));
   text-align: center;
 }
 
-.lifestyle-brand {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: clamp(16px, 2vw, 22px);
-  color: var(--white);
-  letter-spacing: 2px;
-}
-
-.lifestyle-tagline {
+.featured-label {
+  font-size: 12px;
   color: var(--text-light);
-  font-size: 13px;
-  margin: 4px 0 16px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
 }
 
-.btn-learn-more {
+.featured-label-small {
+  font-size: 11px;
+  color: var(--text-light);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+.featured-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.featured-title-small {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.featured-price {
+  font-size: 24px;
+  color: var(--white);
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.featured-price-small {
+  font-size: 16px;
+  color: var(--white);
+  font-weight: 600;
+}
+
+.btn-featured {
   display: inline-block;
   background-color: var(--white);
   color: var(--green-dark);
-  font-size: 12px;
-  font-weight: 600;
   padding: 10px 28px;
   border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
   letter-spacing: 1px;
   transition: background-color 0.2s, transform 0.2s;
 }
 
-.btn-learn-more:hover {
+.btn-featured:hover {
   background-color: var(--off-white);
-  transform: translateY(-1px);
+  transform: translateY(-2px);
 }
 
 /* ==============================
-   APP DOWNLOAD
+   PRODUCTS SECTION
    ============================== */
-.app-download {
-  background-color: var(--green-dark);
+.products {
   padding: 60px 24px;
-}
-
-.app-download-inner {
   max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 60px;
 }
 
-.app-phone {
+.products-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 4vw, 44px);
+  color: var(--green-dark);
+  margin-bottom: 40px;
+  text-align: center;
+  font-weight: 700;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 28px;
+}
+
+.product-card {
+  background: var(--white);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   position: relative;
-  flex-shrink: 0;
 }
 
-.app-phone img {
-  width: 220px;
-  height: auto;
-  border-radius: 24px;
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 24px rgba(0,0,0,0.15);
 }
 
-.btn-download {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background-color: var(--green-medium);
+.product-category {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background-color: var(--green-dark);
   color: var(--white);
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  z-index: 10;
+}
+
+.product-image {
+  overflow: hidden;
+  aspect-ratio: 3 / 4;
+  background: linear-gradient(135deg, #f2efe9 0%, #e8e5df 100%);
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image img {
+  transform: scale(1.08);
+}
+
+.product-info {
+  padding: 22px;
+}
+
+.product-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--green-dark);
+  margin-bottom: 8px;
+}
+
+.product-description {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+.product-price {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--green-medium);
+  margin-bottom: 14px;
+}
+
+.btn-add-cart {
+  width: 100%;
+  background-color: var(--green-dark);
+  color: var(--white);
+  border: none;
+  padding: 11px 16px;
+  border-radius: 8px;
   font-size: 13px;
   font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 8px;
-  margin-top: 16px;
-  transition: background-color 0.2s;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.5px;
+  transition: background-color 0.2s, transform 0.2s;
 }
 
-.btn-download:hover {
-  background-color: var(--green-light);
-}
-
-.app-info {
-  text-align: left;
-}
-
-.app-title {
-  font-family: 'Playfair Display', serif;
-  font-weight: 700;
-  font-size: clamp(24px, 3vw, 36px);
-  color: var(--white);
-  letter-spacing: 1px;
-}
-
-.app-subtitle {
-  color: var(--text-light);
-  font-size: 15px;
-  margin-top: 8px;
-}
-
-.app-badges {
-  display: flex;
-  gap: 12px;
-  margin-top: 24px;
-}
-
-.badge-link img {
-  height: 42px;
-  width: auto;
-  border-radius: 8px;
+.btn-add-cart:hover {
+  background-color: var(--green-medium);
+  transform: translateY(-1px);
 }
 
 /* ==============================
@@ -492,6 +530,7 @@ img {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 32px;
+  margin-bottom: 32px;
 }
 
 .footer-col h3 {
@@ -505,11 +544,11 @@ img {
 .footer-col ul {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 12px;
 }
 
 .footer-col a {
-  color: var(--text-muted);
+  color: var(--text-light);
   font-size: 13px;
   transition: color 0.2s;
 }
@@ -521,46 +560,67 @@ img {
 .social-icons {
   display: flex;
   gap: 16px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .social-icons a {
-  color: var(--white);
-  transition: opacity 0.2s;
+  color: var(--text-light);
+  transition: color 0.2s;
 }
 
 .social-icons a:hover {
-  opacity: 0.7;
+  color: var(--white);
 }
 
-/* Footer bottom */
 .footer-bottom {
   border-top: 1px solid rgba(255,255,255,0.1);
-  padding: 16px 24px;
+  padding-top: 24px;
 }
 
 .footer-bottom-inner {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
   max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px;
+  padding: 0 24px;
 }
 
-.footer-bottom p {
+.footer-bottom-inner p {
   color: var(--text-muted);
   font-size: 12px;
 }
 
-
 /* ==============================
    RESPONSIVE
    ============================== */
+@media (max-width: 1024px) {
+  .featured-inner {
+    grid-template-columns: 1fr;
+  }
 
-/* Tablet */
-@media (max-width: 900px) {
-  .nav-categories,
+  .featured-main {
+    grid-row: auto;
+    aspect-ratio: 16 / 9;
+  }
+
+  .featured-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (max-width: 768px) {
+  .navbar-inner {
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .nav-categories {
+    display: none;
+  }
+
   .nav-links {
     display: none;
   }
@@ -569,113 +629,83 @@ img {
     display: flex;
   }
 
+  .navbar-right {
+    gap: 12px;
+  }
+
   .search-btn span {
     display: none;
   }
 
   .search-btn {
-    padding: 8px 10px;
-  }
-
-  .navbar-right {
-    gap: 12px;
-  }
-
-  .categories-grid {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  .categories-grid .category-card:last-child {
-    grid-column: 1 / -1;
-    aspect-ratio: 16 / 9;
-  }
-
-  .lifestyle-grid {
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: auto auto;
-  }
-
-  .lifestyle-center {
-    grid-column: 1 / -1;
-    aspect-ratio: 16 / 9;
-  }
-
-  .app-download-inner {
-    flex-direction: column;
-    text-align: center;
-    gap: 32px;
-  }
-
-  .app-info {
-    text-align: center;
-  }
-
-  .app-badges {
-    justify-content: center;
-  }
-
-  .footer-columns {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-/* Mobile */
-@media (max-width: 600px) {
-  .navbar-inner {
-    height: 56px;
+    padding: 8px 12px;
   }
 
   .hero {
-    padding: 40px 20px 60px;
+    padding: 40px 24px 60px;
+    height: auto;
+    min-height: 35vh;
   }
 
-  .categories {
-    padding: 24px 16px;
-  }
-
-  .categories-grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-
-  .categories-grid .category-card:last-child {
-    grid-column: auto;
-    aspect-ratio: 3 / 4;
-  }
-
-  .category-card {
-    aspect-ratio: 4 / 5;
-  }
-
-  .lifestyle {
-    padding: 0 16px 40px;
-  }
-
-  .lifestyle-grid {
+  .featured-cards-grid {
     grid-template-columns: 1fr;
   }
 
-  .lifestyle-center {
-    grid-column: auto;
-    aspect-ratio: 3 / 4;
-  }
-
-  .lifestyle-side {
-    aspect-ratio: 4 / 5;
-  }
-
-  .app-phone img {
-    width: 180px;
+  .products-grid {
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
   }
 
   .footer-columns {
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(2, 1fr);
     gap: 24px;
   }
 
   .footer-bottom-inner {
-    flex-direction: column;
-    align-items: center;
+    grid-template-columns: 1fr;
+  }
+
+  .footer-bottom-inner p {
     text-align: center;
+  }
+
+  .featured-title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar-inner {
+    padding: 0 12px;
+  }
+
+  .products-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .featured-title {
+    font-size: 18px;
+  }
+
+  .featured-overlay {
+    padding: 20px 16px;
+  }
+
+  .footer-columns {
+    grid-template-columns: 1fr;
+  }
+
+  .search-overlay {
+    padding-top: 80px;
+  }
+
+  .search-box {
+    width: 95%;
+  }
+
+  .products-title {
+    font-size: 20px;
+    margin-bottom: 24px;
   }
 }
