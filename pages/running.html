@@ -4,13 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Running Shoes - Over The Top</title>
+    <title>Trail Shoes - Over The Top</title>
     <link rel="stylesheet" href="../css/running.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Inter:wght@400;500;600;700&display=swap"
         rel="stylesheet">
+
 </head>
 
 <body>
@@ -34,23 +35,31 @@
                 </nav>
             </div>
             <div class="navbar-right">
-                <form class="search-form" style="display:inline-block;margin-right:1rem;">
-                    <input type="text" placeholder="Search..." style="padding:0.4rem 1rem;border-radius:20px;border:none;background:#222;color:#fff;font-size:1rem;outline:none;">
-                    <button type="submit" style="background:#007bff;border:none;color:#fff;padding:0.4rem 1rem;border-radius:20px;font-size:1rem;cursor:pointer;margin-left:0.5rem;">Search</button>
-                </form>
+                <button class="search-btn" id="searchBtn" aria-label="Search"
+                    style="display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);color:#fff;border:2px solid #fff;border-radius:50px;padding:8px 16px;font-size:1rem;font-family:'Inter',sans-serif;cursor:pointer;transition:background-color 0.2s;">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="8" />
+                        <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    </svg>
+                    <span>Search</span>
+                </button>
                 <nav class="nav-links">
                     <a href="/home/Home.html">Home</a>
                     <a href="./about.html">About</a>
                     <a href="./contact.html">Contact</a>
                 </nav>
-                <button class="cart-btn" id="cartBtn" aria-label="Cart" style="background:#007bff;color:#fff;border:none;font-weight:600;font-size:1rem;padding:0.35rem 1rem;border-radius:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;gap:0.6rem;transition:background 0.2s,border 0.2s;">
+                <button class="cart-btn" id="cartBtn" aria-label="Cart"
+                    style="background:#007bff;color:#fff;border:none;font-weight:600;font-size:1rem;padding:0.35rem 1rem;border-radius:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;gap:0.6rem;transition:background 0.2s,border 0.2s;">
                     <span>Cart</span>
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+                        stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1" />
                         <circle cx="20" cy="21" r="1" />
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61l1.6-7.39a2 2 0 0 0-2-2H6" />
                     </svg>
-                    <span id="cart-count" style="background:#dc3545;color:#fff;border-radius:50%;padding:0 5px;font-size:0.85em;">0</span>
+                    <span id="cart-count"
+                        style="background:#dc3545;color:#fff;border-radius:50%;padding:0 5px;font-size:0.85em;">0</span>
                 </button>
             </div>
             <button class="hamburger" id="hamburger" aria-label="Menu">
@@ -59,47 +68,31 @@
                 <span></span>
             </button>
         </div>
-        <div class="mobile-menu" id="mobileMenu">
-            <a href="/home/Home.html">Home</a>
-            <a href="./newCollection.html">New collection</a>
-            <a href="./hiking.html">Hiking</a>
-            <a href="./running.html">Running</a>
-            <a href="./trail.html">Trail</a>
-            <a href="./about.html">About</a>
-            <a href="./contact.html">Contact</a>
-        </div>
-        <div class="search-overlay" id="searchOverlay">
-            <div class="search-box">
-                <input type="text" placeholder="Search products..." id="searchInput">
-                <button class="search-close" id="searchClose">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
-                        stroke-linecap="round">
-                        <line x1="18" y1="6" x2="6" y2="18" />
-                        <line x1="6" y1="6" x2="18" y2="18" />
-                    </svg>
-                </button>
+        <!-- Mini cart overlay -->
+        <div id="miniCart"
+            style="display:none;position:absolute;right:2rem;top:4rem;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:1rem;min-width:300px;z-index:1000;">
+            <h4>Cart</h4>
+            <div id="miniCartItems"></div>
+            <div style="margin-top:1rem;display:flex;justify-content:space-between;align-items:center;">
+                <span>Total: <span id="miniCartTotal">€0.00</span></span>
+                <a href="./cart.html" id="goToCartBtn"
+                    style="background:#007bff;color:#fff;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none;font-weight:bold;">Go
+                    to checkout</a>
             </div>
         </div>
     </header>
-    <button class="cart-btn" id="cartBtnFixed" aria-label="Cart" style="background:rgba(255,255,255,0.12);border:2px solid #fff;color:#fff;font-weight:600;font-size:1rem;padding:0.35rem 1rem;border-radius:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;gap:0.6rem;transition:background 0.2s,border 0.2s;cursor:pointer;position:fixed;bottom:32px;right:32px;z-index:1001;">
+    <button class="cart-btn" id="cartBtnFixed" aria-label="Cart"
+        style="background:rgba(255,255,255,0.12);border:2px solid #fff;color:#fff;font-weight:600;font-size:1rem;padding:0.35rem 1rem;border-radius:24px;box-shadow:0 2px 8px rgba(0,0,0,0.08);display:flex;align-items:center;gap:0.6rem;transition:background 0.2s,border 0.2s;cursor:pointer;position:fixed;bottom:32px;right:32px;z-index:1001;">
         <span>Cart</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5"
+            stroke-linecap="round" stroke-linejoin="round">
             <circle cx="9" cy="21" r="1" />
             <circle cx="20" cy="21" r="1" />
             <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61l1.6-7.39a2 2 0 0 0-2-2H6" />
         </svg>
-        <span id="cart-count-fixed" style="background:#dc3545;color:#fff;border-radius:50%;padding:0 5px;font-size:0.85em;">0</span>
+        <span id="cart-count-fixed"
+            style="background:#dc3545;color:#fff;border-radius:50%;padding:0 5px;font-size:0.85em;">0</span>
     </button>
-
-    <!-- Mini cart overlay -->
-    <div id="miniCart" style="display:none;position:absolute;right:2rem;top:4rem;background:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.15);padding:1rem;min-width:300px;z-index:1000;">
-        <h4>Cart</h4>
-        <div id="miniCartItems"></div>
-        <div style="margin-top:1rem;display:flex;justify-content:space-between;align-items:center;">
-            <span>Total: <span id="miniCartTotal">€0.00</span></span>
-            <a href="./cart.html" id="goToCartBtn" style="background:#007bff;color:#fff;padding:0.5rem 1.2rem;border-radius:4px;text-decoration:none;font-weight:bold;">Go to checkout</a>
-        </div>
-    </div>
 
     <!-- ========== HERO ========== -->
     <section class="hero">
@@ -273,6 +266,6 @@
     <script src="../index/script.js"></script>
     <script src="../javascript/cart.js"></script>
 </body>
+<script src="../javascript/cart.js"></script>
 
 </html>
-

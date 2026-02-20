@@ -1,3 +1,4 @@
+
 *::before,
 *::after {
   margin: 0;
@@ -380,28 +381,7 @@ img {
   transform: translateY(-1px);
 }
 
-.cart-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 1rem;
-  border: none;
-  cursor: pointer;
-  background: var(--green-medium);
-  color: var(--white);
-  border-radius: 4px;
-  padding: 0.5rem 1.2rem;
-  font-weight: bold;
-  transition: background 0.2s;
-}
-.cart-btn:hover {
-  background: var(--green-light);
-}
-
-.cart-btn svg {
-  stroke: #fff;
-}
-
+*/
 /* ==============================
    CTA SECTION
    ============================== */
@@ -656,22 +636,3 @@ img {
   font-weight: 700;
 }
 
-@media (max-width: 700px) {
-  .cart-btn {
-    position: fixed;
-    bottom: 24px;
-    right: 24px;
-    z-index: 1001;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  }
-}
-
-@media (min-width: 701px) {
-  .cart-btn {
-    position: fixed;
-    bottom: 32px;
-    right: 32px;
-    z-index: 1001;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-  }
-}
