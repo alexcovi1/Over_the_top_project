@@ -1,3 +1,22 @@
+/* Cart button navbar style */
+.cart-btn {
+  background: #007bff;
+  color: #fff;
+  border: none;
+  font-weight: 600;
+  font-size: 1rem;
+  padding: 0.35rem 1rem;
+  border-radius: 24px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  transition: background 0.2s, border 0.2s;
+  cursor: pointer;
+}
+.cart-btn:hover {
+  background: #339cff;
+}
 
 *::before,
 *::after {
@@ -381,7 +400,7 @@ img {
   transform: translateY(-1px);
 }
 
-*/
+
 /* ==============================
    CTA SECTION
    ============================== */
@@ -421,8 +440,10 @@ img {
 }
 
 .btn-explore:hover {
-  background-color: var(--off-white);
-  transform: translateY(-2px);
+  background-color: var(--green-light);
+  color: #fff;
+  transform: translateY(-2px) scale(1.04);
+  cursor: pointer;
 }
 
 /* ==============================
@@ -434,28 +455,19 @@ img {
 }
 
 .footer-inner {
-  max-width: 1200px;
+  max-width: 1280px;
   margin: 0 auto;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: flex-start;
-  gap: 2rem;
+  padding: 48px 24px 32px;
 }
 
 .footer-logo {
-  margin-bottom: 1rem;
-  flex: 1 1 180px;
-  display: flex;
-  align-items: center;
-  gap: 0.7rem;
+  margin-bottom: 32px;
 }
 
 .footer-columns {
-  display: flex;
-  gap: 2.5rem;
-  flex: 3 1 600px;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32px;
   margin-bottom: 32px;
 }
 
@@ -504,11 +516,10 @@ img {
 }
 
 .footer-bottom-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 1.2rem;
-  max-width: 1200px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  max-width: 1280px;
   margin: 0 auto;
   padding: 0 24px;
 }
@@ -517,7 +528,6 @@ img {
   color: var(--text-muted);
   font-size: 12px;
 }
-
 /* ==============================
    RESPONSIVE
    ============================== */
