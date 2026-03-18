@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trail — Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="page-body">
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <a href="index.html" class="logo"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><span class="logo-text">Over The Top</span></a>
+        <nav class="nav-categories"><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html" class="active">Trail</a></nav>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+        <div class="nav-actions">
+          <button class="search-btn" id="searchBtn"><span>Search</span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></button>
+          <button class="cart-btn" aria-label="Cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count" id="cartCount">0</span></button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+    <div class="search-overlay" id="searchOverlay"><div class="search-box"><input type="text" placeholder="Search products…" id="searchInput" autocomplete="off"><button class="search-close" id="searchClose"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div></div>
+  </header>
+
+  <section class="hero hero-trail">
+    <h1 class="hero-title">TRAIL</h1>
+    <p class="hero-subtitle">No path? No problem. Own every terrain.</p>
+  </section>
+
+  <section class="products-section">
+    <div class="section-header"><h2>Trail Collection</h2><div class="section-divider"></div><p>Aggressive grip, rock-plate protection, relentless durability</p></div>
+    <div class="filter-bar">
+      <button class="filter-btn active" data-filter="all">All Trail</button>
+      <button class="filter-btn" data-filter-tag="technical">Technical</button>
+      <button class="filter-btn" data-filter-tag="speed">Speed</button>
+    </div>
+    <div class="products-grid">
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/><path d="M45 82 L70 52 L90 80" stroke="#a8855e" stroke-width="1.5" fill="none" opacity="0.5"/><path d="M95 78 L115 54 L134 77" stroke="#a8855e" stroke-width="1.5" fill="none" opacity="0.5"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Mountain Grip</h3>
+          <p class="product-description">Self-cleaning lugs, rock-plate underfoot, aggressive traction for gnarly terrain</p>
+          <div class="product-footer"><span class="product-price">€140</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Rock Climber</h3>
+          <p class="product-description">Enhanced ankle support, heel-cup protection — built for rocky ascents</p>
+          <div class="product-footer"><span class="product-price">€130</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Summit Apex</h3>
+          <p class="product-description">Professional grade for the most extreme and technical trails</p>
+          <div class="product-footer"><span class="product-price">€165</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Forest Runner</h3>
+          <p class="product-description">Lightweight design for speed on soft forest and wooded terrain</p>
+          <div class="product-footer"><span class="product-price">€115</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Mud Crusher</h3>
+          <p class="product-description">Wide-lug outsole with drainage ports — dominates wet and muddy conditions</p>
+          <div class="product-footer"><span class="product-price">€125</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+      <div class="product-card">
+        <div class="product-category">TRAIL</div>
+        <div class="product-image">
+          <div class="shoe-placeholder"><svg viewBox="0 0 200 120" fill="none"><path d="M18 86 Q60 38 105 36 Q145 34 178 58 L180 80 Q162 95 128 92 L22 94 Z" stroke="#c8a882" stroke-width="2.5" fill="rgba(200,168,130,0.08)"/></svg></div>
+          <button class="btn-wish" aria-label="Wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <div class="product-info">
+          <h3 class="product-name">Skyrunner Ultra</h3>
+          <p class="product-description">Proven in ultra-distance races — light, fast, and indestructible</p>
+          <div class="product-footer"><span class="product-price">€175</span><select class="size-select"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select></div>
+          <button class="btn-add-cart">Add to cart</button>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><p class="footer-logo-text">Over The Top</p></div>
+      <div class="footer-columns">
+        <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="#">Careers</a></li></ul></div>
+        <div class="footer-col"><h3>Follow</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a></div></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top.</p><p>Privacy Policy</p><p>Terms</p></div></div>
+  </footer>
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar"><div class="cart-header"><h2>Your Cart</h2><button class="cart-close" id="cartClose"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="cart-items" id="cartItems"></div><div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">€0</span></div><p class="cart-note">Shipping calculated at checkout.</p><button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button><button class="btn-continue" id="continueBtn">Continue Shopping</button></div></aside>
+  <div class="checkout-modal" id="checkoutModal"><div class="checkout-box"><div class="checkout-icon">🎉</div><h2>Order Confirmed!</h2><p>Thank you! A confirmation email is on its way.</p><button class="btn-close-modal" id="closeCheckout">Continue Shopping</button></div></div>
+  <script src="js/app.js"></script>
+</body>
+</html>
