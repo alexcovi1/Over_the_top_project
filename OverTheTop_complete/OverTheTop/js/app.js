@@ -535,10 +535,43 @@ function initAmbient() {
     mode = (mode+1) % 4;
     if (mode === 0) {
       if (label) label.textContent = NAMES[0];
+      try { localStorage.removeItem('ott_ambient'); } catch(e) {}
     } else {
       startMode(mode);
+      try { localStorage.setItem('ott_ambient', String(mode)); } catch(e) {}
     }
   });
+
+  // Resume mode from previous page
+  try {
+    var saved = parseInt(localStorage.getItem('ott_ambient'), 10);
+    if (saved >= 1 && saved <= 3) {
+      mode = saved;
+      // Start visuals immediately
+      var name = NAMES[mode].toLowerCase();
+      btn.classList.add('active','mode-'+name);
+      vignette.classList.add('mode-'+name);
+      if (label) label.textContent = NAMES[mode];
+      resetParticles(name);
+      canvas.classList.add('visible');
+      vignette.classList.add('visible');
+      drawFrame();
+      // Audio needs a user gesture — boot on first interaction
+      function unlockAudio() {
+        if (mode===1) bootForest();
+        else if (mode===2) bootRain();
+        else if (mode===3) bootFlute();
+        document.removeEventListener('click', unlockAudio, true);
+        document.removeEventListener('touchstart', unlockAudio, true);
+        document.removeEventListener('keydown', unlockAudio, true);
+        document.removeEventListener('scroll', unlockAudio, true);
+      }
+      document.addEventListener('click', unlockAudio, true);
+      document.addEventListener('touchstart', unlockAudio, true);
+      document.addEventListener('keydown', unlockAudio, true);
+      document.addEventListener('scroll', unlockAudio, true);
+    }
+  } catch(e) {}
 }
 
 // ── Cart Sidebar ─────────────────────────────────────────────
