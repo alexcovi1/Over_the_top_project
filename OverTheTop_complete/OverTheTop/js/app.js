@@ -270,15 +270,105 @@ function initAddToCart() {
   });
 }
 
-// ── Wishlist ────────────────────────────────────────────────
+// ── View Details buttons ──────────────────────────────────────
+function initViewDetails() {
+  const slugMap = {
+    'Summit Explorer': 'product-summit-explorer.html',
+    'Mountain Guardian': 'product-mountain-guardian.html',
+    'Trail Voyager': 'product-trail-voyager.html',
+    'Marathon Elite': 'product-marathon-elite.html',
+    'Urban Pace': 'product-urban-pace.html',
+    'Tempo Racer': 'product-tempo-racer.html',
+    'Mountain Grip': 'product-mountain-grip.html',
+    'Rock Climber': 'product-rock-climber.html',
+    'Summit Apex': 'product-summit-apex.html'
+  };
+
+  document.querySelectorAll('.product-card').forEach(card => {
+    const name = card.querySelector('.product-name')?.textContent?.trim();
+    const slug = slugMap[name];
+    if (!slug) return;
+
+    const addBtn = card.querySelector('.btn-add-cart');
+    if (!addBtn) return;
+
+    const link = document.createElement('a');
+    link.href = slug;
+    link.className = 'btn-view-details';
+    link.textContent = 'View Details';
+    addBtn.after(link);
+  });
+}
+
+// ── Wishlist (persistent) ────────────────────────────────────
+const WISH_KEY = 'ott_wishlist';
+
+function getWishlist() {
+  try { return JSON.parse(localStorage.getItem(WISH_KEY)) || []; }
+  catch { return []; }
+}
+function saveWishlist(list) {
+  localStorage.setItem(WISH_KEY, JSON.stringify(list));
+}
+function addToWishlist(name, price, category) {
+  const list = getWishlist();
+  if (!list.find(i => i.name === name)) {
+    list.push({ name, price, category });
+    saveWishlist(list);
+  }
+}
+function removeFromWishlist(name) {
+  saveWishlist(getWishlist().filter(i => i.name !== name));
+}
+
 function initWishlist() {
+  const wishlist = getWishlist();
+  // Restore wished state on page load
   document.querySelectorAll('.btn-wish').forEach(btn => {
+    const card = btn.closest('.product-card');
+    const name = card?.querySelector('.product-name')?.textContent;
+    if (name && wishlist.find(i => i.name === name)) {
+      btn.classList.add('wished');
+    }
     btn.addEventListener('click', function () {
       this.classList.toggle('wished');
-      const name = this.closest('.product-card')?.querySelector('.product-name')?.textContent;
-      showToast(this.classList.contains('wished') ? `${name} saved to wishlist` : `${name} removed from wishlist`);
+      const n = this.closest('.product-card')?.querySelector('.product-name')?.textContent;
+      const priceEl = this.closest('.product-card')?.querySelector('.product-price')?.textContent || '€0';
+      const price = parseFloat(priceEl.replace(/[^0-9.]/g, '')) || 0;
+      const cat = this.closest('.product-card')?.querySelector('.product-category')?.textContent?.trim() || '';
+      if (this.classList.contains('wished')) {
+        addToWishlist(n, price, cat);
+        showToast(`${n} saved to wishlist`);
+      } else {
+        removeFromWishlist(n);
+        showToast(`${n} removed from wishlist`);
+      }
     });
   });
+}
+
+// ── Order History & Loyalty Points ───────────────────────────
+const ORDERS_KEY = 'ott_orders';
+const POINTS_KEY = 'ott_points';
+
+function getOrders() {
+  try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
+  catch { return []; }
+}
+function saveOrder(order) {
+  const orders = getOrders();
+  orders.unshift(order);
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+}
+function getPoints() {
+  try { return parseInt(localStorage.getItem(POINTS_KEY)) || 0; }
+  catch { return 0; }
+}
+function addPoints(amount) {
+  // 1 point per €1 spent
+  const pts = getPoints() + Math.floor(amount);
+  localStorage.setItem(POINTS_KEY, String(pts));
+  return pts;
 }
 
 // ── Newsletter ────────────────────────────────────────────────
@@ -348,6 +438,19 @@ function initLogoMenu() {
     const action = link.getAttribute('data-action');
     link.href = 'account.html?action=' + action;
   });
+
+  // If user is logged in, add My Account link at top of dropdown
+  try {
+    const session = JSON.parse(localStorage.getItem('ott_session'));
+    if (session) {
+      const myAccLink = document.createElement('a');
+      myAccLink.href = 'dashboard.html';
+      myAccLink.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2"/><circle cx="12" cy="7" r="4"/></svg> My Account';
+      myAccLink.style.fontWeight = '600';
+      const firstLink = dropdown.querySelector('a');
+      dropdown.insertBefore(myAccLink, firstLink);
+    }
+  } catch {}
 }
 
 // ── Boot ─────────────────────────────────────────────────────
@@ -358,6 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initCart();
   initFilters();
   initAddToCart();
+  initViewDetails();
   initWishlist();
   initNewsletter();
   initContactForm();

@@ -664,6 +664,29 @@
       return getCart().reduce((s, i) => s + i.qty, 0);
     }
 
+    /* ── Order History & Points ────────────────────────────────── */
+    const ORDERS_KEY = 'ott_orders';
+    const POINTS_KEY = 'ott_points';
+
+    function getOrders() {
+      try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveOrder(order) {
+      const orders = getOrders();
+      orders.unshift(order);
+      localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+    }
+    function getPoints() {
+      try { return parseInt(localStorage.getItem(POINTS_KEY)) || 0; }
+      catch { return 0; }
+    }
+    function addPoints(amount) {
+      const pts = getPoints() + Math.floor(amount);
+      localStorage.setItem(POINTS_KEY, String(pts));
+      return pts;
+    }
+
     /* ── Update cart badge ────────────────────────────────────── */
     function updateCartUI() {
       const count = getItemCount();
@@ -770,6 +793,23 @@
       btn.textContent = 'Processing…';
 
       setTimeout(() => {
+        // Save order to history
+        const cart = getCart();
+        const subtotal = getTotal();
+        const shipping = subtotal >= 100 ? 0 : 9;
+        const order = {
+          id: 'OTT-' + Date.now().toString(36).toUpperCase(),
+          date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
+          items: cart.map(i => ({ name: i.name, category: i.category, size: i.size, qty: i.qty, price: i.price })),
+          subtotal: subtotal,
+          shipping: shipping,
+          total: subtotal + shipping
+        };
+
+        // Use shared functions from app.js
+        saveOrder(order);
+        addPoints(order.total);
+
         // Clear cart and show success
         saveCart([]);
         updateCartUI();

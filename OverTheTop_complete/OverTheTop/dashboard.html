@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .dash-wrapper {
+      margin-top: var(--nav-h);
+      min-height: calc(100vh - var(--nav-h));
+      background: var(--off-white);
+      padding: 40px 32px 60px;
+    }
+
+    .dash-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .dash-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .dash-header h1 {
+      font-size: 30px;
+    }
+
+    .dash-header-actions {
+      display: flex;
+      gap: 12px;
+    }
+
+    .btn-dash {
+      padding: 10px 20px;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+
+    .btn-dash-primary {
+      background: var(--black);
+      color: var(--white);
+      border: none;
+    }
+
+    .btn-dash-primary:hover {
+      background: #2a2a2a;
+    }
+
+    .btn-dash-outline {
+      background: transparent;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+
+    .btn-dash-outline:hover {
+      border-color: var(--text);
+    }
+
+    /* ── Stats Row ─────────────────────────────────────────── */
+    .dash-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-bottom: 36px;
+    }
+
+    .stat-card {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 24px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .stat-card-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .stat-card-icon svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .stat-card-icon.purple {
+      background: #f3e8ff;
+    }
+
+    .stat-card-icon.purple svg {
+      stroke: #7c3aed;
+    }
+
+    .stat-card-icon.gold {
+      background: #fef3c7;
+    }
+
+    .stat-card-icon.gold svg {
+      stroke: #b45309;
+    }
+
+    .stat-card-icon.green {
+      background: #dcfce7;
+    }
+
+    .stat-card-icon.green svg {
+      stroke: #16a34a;
+    }
+
+    .stat-card-icon.blue {
+      background: #dbeafe;
+    }
+
+    .stat-card-icon.blue svg {
+      stroke: #2563eb;
+    }
+
+    .stat-value {
+      font-family: 'Playfair Display', serif;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ── Points Bar ────────────────────────────────────────── */
+    .points-bar-wrapper {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 24px 28px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      margin-bottom: 36px;
+    }
+
+    .points-bar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .points-bar-header h3 {
+      font-size: 16px;
+    }
+
+    .points-tier {
+      font-size: 13px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tier-bronze {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .tier-silver {
+      background: #e5e7eb;
+      color: #374151;
+    }
+
+    .tier-gold {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .tier-platinum {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+
+    .points-track {
+      height: 8px;
+      background: var(--off-white);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-bottom: 8px;
+    }
+
+    .points-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      transition: width 0.6s ease;
+    }
+
+    .points-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* ── Section Cards ─────────────────────────────────────── */
+    .dash-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .dash-section {
+      background: var(--white);
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+      overflow: hidden;
+    }
+
+    .dash-section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .dash-section-header h3 {
+      font-size: 17px;
+    }
+
+    .dash-section-header a {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-dark);
+    }
+
+    .dash-section-header a:hover {
+      color: var(--text);
+    }
+
+    .dash-section-body {
+      padding: 16px 24px 20px;
+      max-height: 340px;
+      overflow-y: auto;
+    }
+
+    /* ── Profile Details ───────────────────────────────────── */
+    .profile-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 14px;
+    }
+
+    .profile-row:last-child {
+      border-bottom: none;
+    }
+
+    .profile-row-label {
+      color: var(--text-muted);
+    }
+
+    .profile-row-value {
+      font-weight: 500;
+      text-align: right;
+    }
+
+    /* ── Order Items ───────────────────────────────────────── */
+    .order-entry {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-entry:last-child {
+      border-bottom: none;
+    }
+
+    .order-entry-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .order-id {
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .order-total {
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .order-date {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .order-products {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    /* ── Wish/Cart Items ───────────────────────────────────── */
+    .mini-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .mini-item:last-child {
+      border-bottom: none;
+    }
+
+    .mini-item-icon {
+      width: 44px;
+      height: 44px;
+      background: var(--off-white);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .mini-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .mini-item-name {
+      font-weight: 600;
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .mini-item-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .mini-item-price {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+    }
+
+    .empty-section {
+      text-align: center;
+      padding: 30px 10px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .empty-section svg {
+      width: 36px;
+      height: 36px;
+      stroke: var(--border);
+      margin-bottom: 10px;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .empty-section a {
+      color: var(--gold-dark);
+      font-weight: 600;
+    }
+
+    /* ── Not logged in ─────────────────────────────────────── */
+    .dash-login-prompt {
+      text-align: center;
+      padding: 80px 20px;
+    }
+
+    .dash-login-prompt svg {
+      width: 64px;
+      height: 64px;
+      stroke: var(--border);
+      margin-bottom: 20px;
+    }
+
+    .dash-login-prompt h2 {
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    .dash-login-prompt p {
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .dash-login-prompt a {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      transition: background var(--transition);
+    }
+
+    .dash-login-prompt a:hover {
+      background: #2a2a2a;
+    }
+
+    /* ── Responsive ────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .dash-stats {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .dash-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .dash-wrapper {
+        padding: 24px 16px;
+      }
+
+      .dash-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .dash-header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-body">
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu">
+            <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+              <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+              <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+            </svg>
+            <span class="logo-text">Over The Top</span>
+          </button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories">
+          <a href="newCollection.html">New Collection</a>
+          <a href="hiking.html">Hiking</a>
+          <a href="running.html">Running</a>
+          <a href="trail.html">Trail</a>
+        </nav>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="cart-btn" aria-label="Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="newCollection.html">New Collection</a>
+      <a href="hiking.html">Hiking</a>
+      <a href="running.html">Running</a>
+      <a href="trail.html">Trail</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ══ DASHBOARD ═══════════════════════════════════════════ -->
+  <div class="dash-wrapper">
+    <div class="dash-inner">
+
+      <!-- Not logged in -->
+      <div id="loginPrompt" class="dash-login-prompt" style="display:none;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2" />
+          <circle cx="12" cy="7" r="4" />
+        </svg>
+        <h2>Sign in to view your account</h2>
+        <p>Login or create an account to see your dashboard, orders, and wishlist.</p>
+        <a href="account.html?action=login">Login / Register</a>
+      </div>
+
+      <!-- Logged in content -->
+      <div id="dashContent" style="display:none;">
+
+        <div class="dash-header">
+          <div>
+            <h1 id="dashGreeting">Welcome back</h1>
+          </div>
+          <div class="dash-header-actions">
+            <a href="index.html" class="btn-dash btn-dash-primary">Shop Now</a>
+            <a href="account.html" class="btn-dash btn-dash-outline">Account Settings</a>
+          </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="dash-stats">
+          <div class="stat-card">
+            <div class="stat-card-icon gold">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <div class="stat-value" id="statPoints">0</div>
+            <div class="stat-label">Loyalty Points</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <div class="stat-value" id="statOrders">0</div>
+            <div class="stat-label">Total Orders</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <div class="stat-value" id="statWishlist">0</div>
+            <div class="stat-label">Wishlist Items</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-card-icon blue">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg>
+            </div>
+            <div class="stat-value" id="statCart">0</div>
+            <div class="stat-label">Cart Items</div>
+          </div>
+        </div>
+
+        <!-- Points Progress Bar -->
+        <div class="points-bar-wrapper">
+          <div class="points-bar-header">
+            <h3>Loyalty Program</h3>
+            <span class="points-tier" id="tierBadge">Bronze</span>
+          </div>
+          <div class="points-track">
+            <div class="points-fill" id="pointsFill" style="width: 0%"></div>
+          </div>
+          <div class="points-text" id="pointsText">Earn 1 point for every €1 spent. Next tier at 500 points.</div>
+        </div>
+
+        <!-- Grid: 4 sections -->
+        <div class="dash-grid">
+
+          <!-- Account Details -->
+          <div class="dash-section">
+            <div class="dash-section-header">
+              <h3>Account Details</h3>
+              <a href="account.html">Edit</a>
+            </div>
+            <div class="dash-section-body" id="sectionProfile"></div>
+          </div>
+
+          <!-- Recent Orders -->
+          <div class="dash-section">
+            <div class="dash-section-header">
+              <h3>Recent Orders</h3>
+            </div>
+            <div class="dash-section-body" id="sectionOrders"></div>
+          </div>
+
+          <!-- Wishlist -->
+          <div class="dash-section">
+            <div class="dash-section-header">
+              <h3>My Wishlist</h3>
+              <a href="index.html">Browse Products</a>
+            </div>
+            <div class="dash-section-body" id="sectionWishlist"></div>
+          </div>
+
+          <!-- Current Cart -->
+          <div class="dash-section">
+            <div class="dash-section-header">
+              <h3>Current Cart</h3>
+              <a href="index.html">Continue Shopping</a>
+            </div>
+            <div class="dash-section-body" id="sectionCart"></div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+          <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+          <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+        </svg>
+        <p class="footer-logo-text">Over The Top</p>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="newCollection.html">New Collection</a></li>
+            <li><a href="hiking.html">Hiking</a></li>
+            <li><a href="running.html">Running</a></li>
+            <li><a href="trail.html">Trail</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Assistance</h3>
+          <ul>
+            <li><a href="#">Shipping & Delivery</a></li>
+            <li><a href="#">Returns & Exchanges</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#">Mission & Vision</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+          <ul>
+            <li><a href="#">Events</a></li>
+            <li><a href="#">Community Forum</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2026 Over The Top. All rights reserved.</p>
+        <p>Privacy Policy</p>
+        <p>Terms of Service</p>
+        <p>Cookie Policy</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ══ CART SIDEBAR ══════════════════════════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+    <div class="cart-header">
+      <h2>Your Cart</h2>
+      <button class="cart-close" id="cartClose" aria-label="Close cart">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18" />
+          <line x1="6" y1="6" x2="18" y2="18" />
+        </svg>
+      </button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-subtotal">
+        <span>Subtotal</span>
+        <span id="cartTotal">€0</span>
+      </div>
+      <p class="cart-note">Shipping calculated at checkout. Free over €100.</p>
+      <button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button>
+      <button class="btn-continue" id="continueBtn">Continue Shopping</button>
+    </div>
+  </aside>
+
+  <script src="js/app.js"></script>
+  <script>
+    /* ═══ Dashboard Logic ═════════════════════════════════════ */
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    const shoeIcon = `<svg viewBox="0 0 100 60" fill="none" width="28" height="20"><path d="M5 45 Q20 20 50 18 Q70 16 90 28 L92 40 Q80 48 60 46 L10 48 Z" stroke="#c8a882" stroke-width="2" fill="none"/></svg>`;
+
+    function initDashboard() {
+      const session = (function() {
+        try { return JSON.parse(localStorage.getItem('ott_session')); }
+        catch { return null; }
+      })();
+
+      if (!session) {
+        document.getElementById('loginPrompt').style.display = '';
+        document.getElementById('dashContent').style.display = 'none';
+        return;
+      }
+
+      document.getElementById('loginPrompt').style.display = 'none';
+      document.getElementById('dashContent').style.display = '';
+
+      // Greeting
+      document.getElementById('dashGreeting').textContent = `Welcome back, ${escapeHtml(session.firstName)}`;
+
+      // Data
+      const points = getPoints();
+      const orders = getOrders();
+      const wishlist = getWishlist();
+      const cart = getCart();
+
+      // Stats
+      document.getElementById('statPoints').textContent = points.toLocaleString();
+      document.getElementById('statOrders').textContent = orders.length;
+      document.getElementById('statWishlist').textContent = wishlist.length;
+      document.getElementById('statCart').textContent = getItemCount();
+
+      // Tier & progress
+      renderTier(points);
+
+      // Account Details
+      renderProfile(session);
+
+      // Orders
+      renderOrders(orders);
+
+      // Wishlist
+      renderWishlist(wishlist);
+
+      // Cart
+      renderCart(cart);
+    }
+
+    function renderTier(points) {
+      const badge = document.getElementById('tierBadge');
+      const fill = document.getElementById('pointsFill');
+      const text = document.getElementById('pointsText');
+
+      let tier, tierClass, nextTier, nextThreshold, pct;
+
+      if (points >= 2000) {
+        tier = 'Platinum';
+        tierClass = 'tier-platinum';
+        pct = 100;
+        text.textContent = `You've reached the highest tier! Enjoy exclusive benefits.`;
+      } else if (points >= 1000) {
+        tier = 'Gold';
+        tierClass = 'tier-gold';
+        nextTier = 'Platinum';
+        nextThreshold = 2000;
+        pct = ((points - 1000) / 1000) * 100;
+        text.textContent = `${nextThreshold - points} points to ${nextTier}. Earn 1 point per €1 spent.`;
+      } else if (points >= 500) {
+        tier = 'Silver';
+        tierClass = 'tier-silver';
+        nextTier = 'Gold';
+        nextThreshold = 1000;
+        pct = ((points - 500) / 500) * 100;
+        text.textContent = `${nextThreshold - points} points to ${nextTier}. Earn 1 point per €1 spent.`;
+      } else {
+        tier = 'Bronze';
+        tierClass = 'tier-bronze';
+        nextTier = 'Silver';
+        nextThreshold = 500;
+        pct = (points / 500) * 100;
+        text.textContent = `${nextThreshold - points} points to ${nextTier}. Earn 1 point per €1 spent.`;
+      }
+
+      badge.textContent = tier;
+      badge.className = 'points-tier ' + tierClass;
+      fill.style.width = Math.min(100, pct) + '%';
+    }
+
+    function renderProfile(session) {
+      const el = document.getElementById('sectionProfile');
+      el.innerHTML = `
+        <div class="profile-row"><span class="profile-row-label">Name</span><span class="profile-row-value">${escapeHtml(session.firstName)} ${escapeHtml(session.lastName)}</span></div>
+        <div class="profile-row"><span class="profile-row-label">Email</span><span class="profile-row-value">${escapeHtml(session.email)}</span></div>
+        <div class="profile-row"><span class="profile-row-label">Member since</span><span class="profile-row-value">${escapeHtml(session.createdAt)}</span></div>
+        <div class="profile-row"><span class="profile-row-label">Loyalty tier</span><span class="profile-row-value" id="profileTier"></span></div>
+      `;
+      // Copy tier from badge
+      setTimeout(() => {
+        const badge = document.getElementById('tierBadge');
+        const target = document.getElementById('profileTier');
+        if (badge && target) target.textContent = badge.textContent;
+      }, 0);
+    }
+
+    function renderOrders(orders) {
+      const el = document.getElementById('sectionOrders');
+      if (orders.length === 0) {
+        el.innerHTML = `<div class="empty-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><p>No orders yet</p><a href="index.html">Start shopping</a></div>`;
+        return;
+      }
+      el.innerHTML = orders.slice(0, 10).map(o => `
+        <div class="order-entry">
+          <div class="order-entry-top">
+            <span class="order-id">${escapeHtml(o.id)}</span>
+            <span class="order-total">€${o.total}</span>
+          </div>
+          <div class="order-date">${escapeHtml(o.date)}</div>
+          <div class="order-products">${o.items.map(i => escapeHtml(i.name) + ' (×' + i.qty + ')').join(', ')}</div>
+        </div>
+      `).join('');
+    }
+
+    function renderWishlist(wishlist) {
+      const el = document.getElementById('sectionWishlist');
+      if (wishlist.length === 0) {
+        el.innerHTML = `<div class="empty-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><p>Your wishlist is empty</p><a href="index.html">Discover products</a></div>`;
+        return;
+      }
+      el.innerHTML = wishlist.map(item => `
+        <div class="mini-item">
+          <div class="mini-item-icon">${shoeIcon}</div>
+          <div class="mini-item-info">
+            <div class="mini-item-name">${escapeHtml(item.name)}</div>
+            <div class="mini-item-meta">${escapeHtml(item.category)}</div>
+          </div>
+          <span class="mini-item-price">€${item.price}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderCart(cart) {
+      const el = document.getElementById('sectionCart');
+      if (cart.length === 0) {
+        el.innerHTML = `<div class="empty-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><p>Your cart is empty</p><a href="index.html">Add some items</a></div>`;
+        return;
+      }
+      el.innerHTML = cart.map(item => `
+        <div class="mini-item">
+          <div class="mini-item-icon">${shoeIcon}</div>
+          <div class="mini-item-info">
+            <div class="mini-item-name">${escapeHtml(item.name)}</div>
+            <div class="mini-item-meta">${escapeHtml(item.category)} · Size ${escapeHtml(String(item.size))} · Qty ${item.qty}</div>
+          </div>
+          <span class="mini-item-price">€${(item.price * item.qty).toFixed(0)}</span>
+        </div>
+      `).join('');
+    }
+
+    // Init
+    initDashboard();
+  </script>
+</body>
+
+</html>

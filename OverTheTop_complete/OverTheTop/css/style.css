@@ -516,6 +516,24 @@ button.logo { cursor: pointer; }
 .btn-add-cart:active { transform: scale(0.98); }
 .btn-add-cart.added { background: var(--gold-dark); }
 
+.btn-view-details {
+  display: block;
+  width: 100%;
+  margin-top: 8px;
+  padding: 11px 12px;
+  background: transparent;
+  color: var(--text);
+  font-size: 12px; font-weight: 700; letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-align: center;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--transition), background var(--transition);
+  font-family: 'Inter', sans-serif;
+  text-decoration: none;
+}
+.btn-view-details:hover { border-color: var(--black); background: var(--off-white); }
+
 /* ── Toast notification ───────────────────────────────────── */
 .toast {
   position: fixed;

@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trail Voyager — Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    .pdp-wrapper{margin-top:var(--nav-h);background:var(--off-white);min-height:calc(100vh - var(--nav-h))}
+    .pdp-breadcrumb{max-width:1200px;margin:0 auto;padding:18px 32px 0;font-size:13px;color:var(--text-muted)}
+    .pdp-breadcrumb a{color:var(--text-muted);text-decoration:none;transition:color .2s}
+    .pdp-breadcrumb a:hover{color:var(--text)}
+    .pdp-breadcrumb span{margin:0 6px;opacity:.5}
+    .pdp-inner{max-width:1200px;margin:0 auto;padding:24px 32px 60px;display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:start}
+    .pdp-gallery{position:sticky;top:calc(var(--nav-h) + 24px)}
+    .pdp-main-img{width:100%;aspect-ratio:1/1;background:var(--white);border-radius:8px;overflow:hidden;margin-bottom:12px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
+    .pdp-main-img img{width:100%;height:100%;object-fit:cover;transition:opacity .3s}
+    .pdp-thumbs{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+    .pdp-thumb{aspect-ratio:1/1;background:var(--white);border-radius:6px;overflow:hidden;cursor:pointer;border:2px solid transparent;transition:border-color .2s;box-shadow:0 1px 4px rgba(0,0,0,.04)}
+    .pdp-thumb:hover,.pdp-thumb.active{border-color:var(--gold)}
+    .pdp-thumb img{width:100%;height:100%;object-fit:cover}
+    .pdp-info{padding-top:8px}
+    .pdp-category{font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--gold-dark);margin-bottom:8px}
+    .pdp-name{font-size:34px;font-weight:700;margin-bottom:6px}
+    .pdp-price{font-size:26px;font-weight:700;margin-bottom:24px}
+    .pdp-divider{height:1px;background:var(--border);margin:24px 0}
+    .pdp-desc-title{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px}
+    .pdp-desc{font-size:15px;line-height:1.75;color:var(--text-muted);margin-bottom:0}
+    .pdp-features{list-style:none;padding:0;margin:20px 0 0}
+    .pdp-features li{font-size:13px;color:var(--text);padding:7px 0;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+    .pdp-features li:last-child{border-bottom:none}
+    .pdp-features li::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--gold);flex-shrink:0}
+    .pdp-size-row{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+    .pdp-size-label{font-size:13px;font-weight:600}
+    .pdp-size-select{border:1.5px solid var(--border);border-radius:var(--radius);padding:10px 16px;font-size:14px;font-weight:500;color:var(--text);background:var(--white);outline:none;cursor:pointer;min-width:80px}
+    .pdp-size-select:focus{border-color:var(--black)}
+    .pdp-actions{display:flex;gap:12px;margin-bottom:16px}
+    .pdp-btn-cart{flex:1;padding:16px;background:var(--black);color:var(--white);font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border-radius:var(--radius);border:none;cursor:pointer;transition:background .2s}
+    .pdp-btn-cart:hover{background:#2a2a2a}
+    .pdp-btn-cart.added{background:var(--gold-dark)}
+    .pdp-btn-wish{width:52px;height:52px;display:flex;align-items:center;justify-content:center;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);cursor:pointer;transition:border-color .2s,color .2s;color:var(--text-muted)}
+    .pdp-btn-wish:hover,.pdp-btn-wish.wished{color:#d44;border-color:#d44}
+    .pdp-back{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-muted);text-decoration:none;margin-top:12px;transition:color .2s}
+    .pdp-back:hover{color:var(--text)}
+    .pdp-back svg{transition:transform .2s}
+    .pdp-back:hover svg{transform:translateX(-3px)}
+    @media(max-width:860px){.pdp-inner{grid-template-columns:1fr;gap:28px}.pdp-gallery{position:static}}
+    @media(max-width:480px){.pdp-inner{padding:16px 16px 40px}.pdp-name{font-size:26px}.pdp-price{font-size:22px}}
+  </style>
+</head>
+<body class="page-body">
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><span class="logo-text">Over The Top</span></button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories"><a href="newCollection.html">New Collection</a><a href="hiking.html" class="active">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a></nav>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+        <div class="nav-actions">
+          <button class="cart-btn" aria-label="Cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count" id="cartCount">0</span></button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+  </header>
+
+  <div class="pdp-wrapper">
+    <div class="pdp-breadcrumb"><a href="index.html">Home</a><span>/</span><a href="hiking.html">Hiking</a><span>/</span>Trail Voyager</div>
+    <div class="pdp-inner">
+      <div class="pdp-gallery">
+        <div class="pdp-main-img"><img id="mainImg" src="images/foto_4.jpg" alt="Trail Voyager — front view" /></div>
+        <div class="pdp-thumbs">
+          <div class="pdp-thumb active" onclick="changeImg(this,'images/foto_4.jpg')"><img src="images/foto_4.jpg" alt="Front view" /></div>
+          <div class="pdp-thumb" onclick="changeImg(this,'images/foto_5.jpg')"><img src="images/foto_5.jpg" alt="Side view" /></div>
+          <div class="pdp-thumb" onclick="changeImg(this,'images/foto_6.jpg')"><img src="images/foto_6.jpg" alt="Back view" /></div>
+          <div class="pdp-thumb" onclick="changeImg(this,'images/foto_4.jpg')"><img src="images/foto_4.jpg" alt="Detail view" /></div>
+        </div>
+      </div>
+      <div class="pdp-info">
+        <div class="pdp-category">HIKING</div>
+        <h1 class="pdp-name">Trail Voyager</h1>
+        <div class="pdp-price">€145</div>
+        <div class="pdp-size-row">
+          <span class="pdp-size-label">Size (EU)</span>
+          <select class="pdp-size-select" id="pdpSize"><option>38</option><option>39</option><option>40</option><option selected>41</option><option>42</option><option>43</option><option>44</option><option>45</option></select>
+        </div>
+        <div class="pdp-actions">
+          <button class="pdp-btn-cart" id="pdpAddCart">Add to Cart</button>
+          <button class="pdp-btn-wish" id="pdpWish" aria-label="Add to wishlist"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg></button>
+        </div>
+        <a href="hiking.html" class="pdp-back"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg> Back to Hiking Collection</a>
+        <div class="pdp-divider"></div>
+        <h3 class="pdp-desc-title">Crafted by Master Artisans</h3>
+        <p class="pdp-desc">The Trail Voyager is the versatile masterpiece of our hiking collection. Crafted in small batches by experienced cobblers in our mountain workshop, each pair blends traditional leatherworking techniques with cutting-edge breathable materials. The upper is hand-lasted on wooden forms — the same technique used by European bootmakers for centuries — ensuring a fit that is both secure and supremely comfortable.</p>
+        <p class="pdp-desc" style="margin-top:14px;">Every detail, from the hand-painted eyelets to the individually tensioned lacing system, reflects our unwavering commitment to artisanal excellence. Waterproof and breathable in all seasons, this is the shoe for those who refuse to compromise.</p>
+        <ul class="pdp-features">
+          <li>Hand-lasted on traditional wooden forms</li>
+          <li>Waterproof and breathable membrane</li>
+          <li>Hand-painted metal eyelets</li>
+          <li>Dual-density cushioning system</li>
+          <li>All-season compound outsole</li>
+          <li>Weight: 395g per shoe</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><p class="footer-logo-text">Over The Top</p></div>
+      <div class="footer-columns">
+        <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping</a></li><li><a href="#">Returns</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+        <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="#">Careers</a></li></ul></div>
+        <div class="footer-col"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a></div></div>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top.</p><p>Privacy Policy</p><p>Terms</p></div></div>
+  </footer>
+
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar"><div class="cart-header"><h2>Your Cart</h2><button class="cart-close" id="cartClose"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="cart-items" id="cartItems"></div><div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">€0</span></div><p class="cart-note">Shipping calculated at checkout.</p><button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button><button class="btn-continue" id="continueBtn">Continue Shopping</button></div></aside>
+
+  <script src="js/app.js"></script>
+  <script>
+    function changeImg(thumb, src) {
+      document.getElementById('mainImg').src = src;
+      document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
+      thumb.classList.add('active');
+    }
+    const pdpProduct = { name: 'Trail Voyager', price: 145, category: 'HIKING' };
+    document.getElementById('pdpAddCart').addEventListener('click', function() {
+      const size = document.getElementById('pdpSize').value;
+      addToCart(pdpProduct.name, pdpProduct.price, pdpProduct.category, size);
+      this.textContent = 'Added ✓';
+      this.classList.add('added');
+      setTimeout(() => { this.textContent = 'Add to Cart'; this.classList.remove('added'); }, 1800);
+    });
+    document.getElementById('pdpWish').addEventListener('click', function() {
+      const w = getWishlist();
+      const exists = w.find(i => i.name === pdpProduct.name);
+      if (exists) { removeFromWishlist(pdpProduct.name); this.classList.remove('wished'); }
+      else { addToWishlist(pdpProduct.name, pdpProduct.price, pdpProduct.category); this.classList.add('wished'); }
+    });
+    (function() { const w = getWishlist(); if (w.find(i => i.name === pdpProduct.name)) document.getElementById('pdpWish').classList.add('wished'); })();
+  </script>
+</body>
+</html>
