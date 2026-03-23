@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Payment Page Styles ──────────────────────────────────── */
+    .payment-wrapper {
+      margin-top: var(--nav-h);
+      min-height: calc(100vh - var(--nav-h));
+      background: var(--off-white);
+      padding: 48px 32px;
+    }
+
+    .payment-layout {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* ── Left: Payment Form ────────────────────────────────────── */
+    .payment-form-section {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 36px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+    }
+
+    .payment-form-section h2 {
+      font-size: 26px;
+      margin-bottom: 8px;
+    }
+
+    .payment-form-section p.section-subtitle {
+      color: var(--text-muted);
+      font-size: 14px;
+      margin-bottom: 28px;
+    }
+
+    .form-section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 28px 0 16px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+
+    .form-section-title:first-of-type {
+      margin-top: 0;
+      padding-top: 0;
+      border-top: none;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-row.full {
+      grid-template-columns: 1fr;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .form-group input,
+    .form-group select {
+      padding: 12px 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 15px;
+      color: var(--text);
+      background: var(--white);
+      transition: border-color var(--transition);
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+
+    .form-group input::placeholder {
+      color: #b5afa8;
+    }
+
+    .card-icons {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .card-icons span {
+      display: inline-block;
+      padding: 4px 10px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+
+    .btn-pay {
+      width: 100%;
+      padding: 16px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      margin-top: 28px;
+      transition: background var(--transition);
+    }
+
+    .btn-pay:hover {
+      background: #2a2a2a;
+    }
+
+    .btn-pay:disabled {
+      background: #999;
+      cursor: not-allowed;
+    }
+
+    .secure-note {
+      text-align: center;
+      margin-top: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    /* ── Right: Order Summary ──────────────────────────────────── */
+    .order-summary {
+      background: var(--white);
+      border-radius: 8px;
+      padding: 32px;
+      box-shadow: 0 1px 6px rgba(0, 0, 0, 0.06);
+      position: sticky;
+      top: calc(var(--nav-h) + 24px);
+    }
+
+    .order-summary h3 {
+      font-size: 20px;
+      margin-bottom: 24px;
+    }
+
+    .order-items {
+      max-height: 360px;
+      overflow-y: auto;
+    }
+
+    .order-item {
+      display: flex;
+      gap: 14px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .order-item:last-child {
+      border-bottom: none;
+    }
+
+    .order-item-img {
+      width: 64px;
+      height: 64px;
+      background: var(--off-white);
+      border-radius: var(--radius);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .order-item-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .order-item-name {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .order-item-meta {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .order-item-price {
+      font-weight: 600;
+      font-size: 14px;
+      white-space: nowrap;
+      align-self: center;
+    }
+
+    .order-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 20px 0;
+    }
+
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      font-size: 14px;
+      margin-bottom: 10px;
+      color: var(--text-muted);
+    }
+
+    .order-line.total {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 14px;
+      padding-top: 14px;
+      border-top: 2px solid var(--text);
+    }
+
+    .empty-cart-msg {
+      text-align: center;
+      padding: 40px 20px;
+      color: var(--text-muted);
+    }
+
+    .empty-cart-msg svg {
+      width: 48px;
+      height: 48px;
+      stroke: var(--border);
+      margin-bottom: 16px;
+    }
+
+    .empty-cart-msg p {
+      margin-bottom: 20px;
+    }
+
+    .empty-cart-msg a {
+      color: var(--gold-dark);
+      font-weight: 600;
+      text-decoration: underline;
+    }
+
+    /* ── Success Overlay ───────────────────────────────────────── */
+    .payment-success-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+
+    .payment-success-overlay.open {
+      opacity: 1;
+      pointer-events: all;
+    }
+
+    .success-box {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 48px 40px;
+      text-align: center;
+      max-width: 440px;
+      width: 90%;
+    }
+
+    .success-box .success-icon {
+      font-size: 56px;
+      margin-bottom: 20px;
+    }
+
+    .success-box h2 {
+      font-size: 28px;
+      margin-bottom: 12px;
+    }
+
+    .success-box p {
+      color: var(--text-muted);
+      margin-bottom: 28px;
+      line-height: 1.6;
+    }
+
+    .btn-back-home {
+      display: inline-block;
+      padding: 14px 32px;
+      background: var(--black);
+      color: var(--white);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border: none;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: background var(--transition);
+    }
+
+    .btn-back-home:hover {
+      background: #2a2a2a;
+    }
+
+    /* ── Responsive ────────────────────────────────────────────── */
+    @media (max-width: 860px) {
+      .payment-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .order-summary {
+        position: static;
+        order: -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .payment-wrapper {
+        padding: 24px 16px;
+      }
+
+      .payment-form-section,
+      .order-summary {
+        padding: 24px 20px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body class="page-body">
+
+  <!-- ══ NAVBAR ══════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu">
+            <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+              <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+              <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+            </svg>
+            <span class="logo-text">Over The Top</span>
+          </button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories">
+          <a href="newCollection.html">New Collection</a>
+          <a href="hiking.html">Hiking</a>
+          <a href="running.html">Running</a>
+          <a href="trail.html">Trail</a>
+        </nav>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="cart-btn" aria-label="Cart" onclick="window.location.href='index.html'">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
+              <line x1="3" y1="6" x2="21" y2="6" />
+              <path d="M16 10a4 4 0 01-8 0" />
+            </svg>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="newCollection.html">New Collection</a>
+      <a href="hiking.html">Hiking</a>
+      <a href="running.html">Running</a>
+      <a href="trail.html">Trail</a>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+    </nav>
+  </header>
+
+  <!-- ══ PAYMENT PAGE ═══════════════════════════════════════ -->
+  <div class="payment-wrapper">
+    <div class="payment-layout">
+
+      <!-- LEFT: Payment Form -->
+      <div class="payment-form-section">
+        <h2>Checkout</h2>
+        <p class="section-subtitle">Complete your order by filling in your details below.</p>
+
+        <form id="paymentForm" novalidate>
+          <h4 class="form-section-title" style="margin-top:0;padding-top:0;border-top:none;">Contact Information</h4>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="firstName">First Name</label>
+              <input type="text" id="firstName" placeholder="John" required>
+            </div>
+            <div class="form-group">
+              <label for="lastName">Last Name</label>
+              <input type="text" id="lastName" placeholder="Doe" required>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" id="email" placeholder="john@example.com" required>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="phone">Phone</label>
+              <input type="tel" id="phone" placeholder="+39 123 456 7890">
+            </div>
+          </div>
+
+          <h4 class="form-section-title">Shipping Address</h4>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="address">Street Address</label>
+              <input type="text" id="address" placeholder="Via Roma 1" required>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="city">City</label>
+              <input type="text" id="city" placeholder="Milan" required>
+            </div>
+            <div class="form-group">
+              <label for="zip">Postal Code</label>
+              <input type="text" id="zip" placeholder="20100" required>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="country">Country</label>
+              <select id="country" required>
+                <option value="">Select country</option>
+                <option value="IT" selected>Italy</option>
+                <option value="FR">France</option>
+                <option value="DE">Germany</option>
+                <option value="ES">Spain</option>
+                <option value="AT">Austria</option>
+                <option value="CH">Switzerland</option>
+                <option value="GB">United Kingdom</option>
+                <option value="US">United States</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+          </div>
+
+          <h4 class="form-section-title">Payment Details</h4>
+          <div class="card-icons">
+            <span>Visa</span>
+            <span>Mastercard</span>
+            <span>Amex</span>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="cardName">Name on Card</label>
+              <input type="text" id="cardName" placeholder="John Doe" required>
+            </div>
+          </div>
+          <div class="form-row full">
+            <div class="form-group">
+              <label for="cardNumber">Card Number</label>
+              <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19" required
+                inputmode="numeric">
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="expiry">Expiry (MM/YY)</label>
+              <input type="text" id="expiry" placeholder="12/28" maxlength="5" required>
+            </div>
+            <div class="form-group">
+              <label for="cvc">CVC</label>
+              <input type="text" id="cvc" placeholder="123" maxlength="4" required inputmode="numeric">
+            </div>
+          </div>
+
+          <button type="submit" class="btn-pay" id="btnPay">Complete Order</button>
+          <p class="secure-note">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+              <path d="M7 11V7a5 5 0 0110 0v4" />
+            </svg>
+            Secure checkout — your data is encrypted
+          </p>
+        </form>
+      </div>
+
+      <!-- RIGHT: Order Summary -->
+      <div class="order-summary">
+        <h3>Order Summary</h3>
+        <div class="order-items" id="orderItems">
+          <!-- Populated by JS -->
+        </div>
+        <hr class="order-divider">
+        <div class="order-line">
+          <span>Subtotal</span>
+          <span id="summarySubtotal">€0</span>
+        </div>
+        <div class="order-line">
+          <span>Shipping</span>
+          <span id="summaryShipping">Calculated</span>
+        </div>
+        <div class="order-line total">
+          <span>Total</span>
+          <span id="summaryTotal">€0</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PAYMENT SUCCESS OVERLAY ═══════════════════════════ -->
+  <div class="payment-success-overlay" id="paymentSuccess">
+    <div class="success-box">
+      <div class="success-icon">🎉</div>
+      <h2>Order Confirmed!</h2>
+      <p>Thank you for your purchase. You'll receive a confirmation email shortly with tracking details.</p>
+      <button class="btn-back-home" id="btnBackHome">Continue Shopping</button>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ════════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+          <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+          <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+        </svg>
+        <p class="footer-logo-text">Over The Top</p>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="newCollection.html">New Collection</a></li>
+            <li><a href="hiking.html">Hiking</a></li>
+            <li><a href="running.html">Running</a></li>
+            <li><a href="trail.html">Trail</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Assistance</h3>
+          <ul>
+            <li><a href="#">Shipping & Delivery</a></li>
+            <li><a href="#">Returns & Exchanges</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#">Mission & Vision</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="#">Press</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round">
+                <path
+                  d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+          <ul>
+            <li><a href="#">Events</a></li>
+            <li><a href="#">Community Forum</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2026 Over The Top. All rights reserved.</p>
+        <p>Privacy Policy</p>
+        <p>Terms of Service</p>
+        <p>Cookie Policy</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    /* ── Read cart from localStorage ──────────────────────────── */
+    const CART_KEY = 'ott_cart';
+
+    function getCart() {
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveCart(cart) {
+      localStorage.setItem(CART_KEY, JSON.stringify(cart));
+    }
+    function getTotal() {
+      return getCart().reduce((s, i) => s + i.price * i.qty, 0);
+    }
+    function getItemCount() {
+      return getCart().reduce((s, i) => s + i.qty, 0);
+    }
+
+    /* ── Update cart badge ────────────────────────────────────── */
+    function updateCartUI() {
+      const count = getItemCount();
+      document.querySelectorAll('.cart-count').forEach(el => {
+        el.textContent = count;
+        el.classList.toggle('visible', count > 0);
+      });
+    }
+
+    /* ── Render order summary ─────────────────────────────────── */
+    function renderOrderSummary() {
+      const container = document.getElementById('orderItems');
+      const cart = getCart();
+
+      if (cart.length === 0) {
+        container.innerHTML = `
+          <div class="empty-cart-msg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <p>Your cart is empty</p>
+            <a href="index.html">← Back to shop</a>
+          </div>`;
+        document.getElementById('btnPay').disabled = true;
+        document.querySelector('.order-divider').style.display = 'none';
+        document.querySelectorAll('.order-line').forEach(el => el.style.display = 'none');
+        return;
+      }
+
+      container.innerHTML = cart.map(item => `
+        <div class="order-item">
+          <div class="order-item-img">
+            <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg" width="48" height="32">
+              <path d="M5 45 Q20 20 50 18 Q70 16 90 28 L92 40 Q80 48 60 46 L10 48 Z" stroke="#c8a882" stroke-width="2" fill="none"/>
+              <path d="M20 40 Q40 22 65 22" stroke="#c8a882" stroke-width="1.5" fill="none" opacity="0.5"/>
+            </svg>
+          </div>
+          <div class="order-item-info">
+            <p class="order-item-name">${escapeHtml(item.name)}</p>
+            <p class="order-item-meta">${escapeHtml(item.category)} · Size ${escapeHtml(String(item.size))} · Qty ${item.qty}</p>
+          </div>
+          <span class="order-item-price">€${(item.price * item.qty).toFixed(0)}</span>
+        </div>
+      `).join('');
+
+      const subtotal = getTotal();
+      const shipping = subtotal >= 100 ? 0 : 9;
+      const total = subtotal + shipping;
+
+      document.getElementById('summarySubtotal').textContent = `€${subtotal.toFixed(0)}`;
+      document.getElementById('summaryShipping').textContent = shipping === 0 ? 'Free' : `€${shipping}`;
+      document.getElementById('summaryTotal').textContent = `€${total.toFixed(0)}`;
+    }
+
+    /* ── HTML escaping to prevent XSS ─────────────────────────── */
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.appendChild(document.createTextNode(str));
+      return div.innerHTML;
+    }
+
+    /* ── Card number formatting (auto spaces) ─────────────────── */
+    document.getElementById('cardNumber').addEventListener('input', function () {
+      let v = this.value.replace(/\D/g, '').substring(0, 16);
+      this.value = v.replace(/(.{4})/g, '$1 ').trim();
+    });
+
+    /* ── Expiry formatting (auto slash) ───────────────────────── */
+    document.getElementById('expiry').addEventListener('input', function () {
+      let v = this.value.replace(/\D/g, '').substring(0, 4);
+      if (v.length >= 3) v = v.substring(0, 2) + '/' + v.substring(2);
+      this.value = v;
+    });
+
+    /* ── CVC: digits only ─────────────────────────────────────── */
+    document.getElementById('cvc').addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').substring(0, 4);
+    });
+
+    /* ── Form submit ──────────────────────────────────────────── */
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      if (getCart().length === 0) return;
+
+      // Basic validation — check all required fields are filled
+      const required = this.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(input => {
+        if (!input.value.trim()) {
+          input.style.borderColor = '#c44';
+          valid = false;
+        } else {
+          input.style.borderColor = '';
+        }
+      });
+      if (!valid) return;
+
+      // Simulate payment
+      const btn = document.getElementById('btnPay');
+      btn.disabled = true;
+      btn.textContent = 'Processing…';
+
+      setTimeout(() => {
+        // Clear cart and show success
+        saveCart([]);
+        updateCartUI();
+        document.getElementById('paymentSuccess').classList.add('open');
+      }, 1500);
+    });
+
+    /* ── Success: back to home ────────────────────────────────── */
+    document.getElementById('btnBackHome').addEventListener('click', function () {
+      window.location.href = 'index.html';
+    });
+
+    /* ── Navbar scroll shadow ─────────────────────────────────── */
+    window.addEventListener('scroll', () => {
+      document.querySelector('.navbar')?.classList.toggle('scrolled', window.scrollY > 10);
+    });
+
+    /* ── Hamburger ────────────────────────────────────────────── */
+    const hamburger = document.getElementById('hamburger');
+    const mobileMenu = document.getElementById('mobileMenu');
+    hamburger?.addEventListener('click', () => {
+      hamburger.classList.toggle('open');
+      mobileMenu?.classList.toggle('open');
+    });
+
+    /* ── Init ─────────────────────────────────────────────────── */
+    updateCartUI();
+    renderOrderSummary();
+  </script>
+</body>
+
+</html>

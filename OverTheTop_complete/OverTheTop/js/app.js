@@ -214,16 +214,11 @@ function initCart() {
   closeBtn?.addEventListener('click', close);
   overlay?.addEventListener('click', close);
 
-  // Checkout
+  // Checkout — navigate to payment page
   document.getElementById('checkoutBtn')?.addEventListener('click', () => {
     if (getCart().length === 0) { showToast('Your cart is empty!'); return; }
     close();
-    const modal = document.getElementById('checkoutModal');
-    if (modal) {
-      modal.classList.add('open');
-      saveCart([]);
-      updateCartUI();
-    }
+    window.location.href = 'payment.html';
   });
 
   document.getElementById('closeCheckout')?.addEventListener('click', () => {
@@ -330,8 +325,34 @@ function initScrollReveal() {
   });
 }
 
+// ── Logo Dropdown Menu ───────────────────────────────────────
+function initLogoMenu() {
+  const toggle = document.getElementById('logoMenuToggle');
+  const dropdown = document.getElementById('logoDropdown');
+  if (!toggle || !dropdown) return;
+
+  toggle.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.classList.toggle('open');
+  });
+
+  // Close on outside click
+  document.addEventListener('click', (e) => {
+    if (!dropdown.contains(e.target) && e.target !== toggle) {
+      dropdown.classList.remove('open');
+    }
+  });
+
+  // Append ?action= to account links
+  dropdown.querySelectorAll('a[data-action]').forEach(link => {
+    const action = link.getAttribute('data-action');
+    link.href = 'account.html?action=' + action;
+  });
+}
+
 // ── Boot ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initLogoMenu();
   initNavbar();
   initSearch();
   initCart();

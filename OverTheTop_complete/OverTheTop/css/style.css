@@ -87,6 +87,63 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.15; }
   text-transform: uppercase;
 }
 
+/* ── Logo Dropdown Menu ───────────────────────────────────── */
+.logo-wrapper { position: relative; }
+button.logo { cursor: pointer; }
+
+.logo-dropdown {
+  position: absolute;
+  top: calc(100% + 10px);
+  left: 0;
+  background: var(--white);
+  border-radius: 8px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+  min-width: 210px;
+  padding: 8px 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.2s, transform 0.2s, visibility 0.2s;
+  z-index: 1100;
+}
+
+.logo-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.logo-dropdown a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 18px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text);
+  transition: background var(--transition);
+}
+
+.logo-dropdown a:hover {
+  background: var(--off-white);
+}
+
+.logo-dropdown a svg {
+  flex-shrink: 0;
+  stroke: var(--text-muted);
+}
+
+.logo-dropdown-danger {
+  color: #c44 !important;
+  border-top: 1px solid var(--border);
+  margin-top: 4px;
+  padding-top: 12px !important;
+}
+
+.logo-dropdown-danger svg {
+  stroke: #c44 !important;
+}
+
 .nav-categories, .nav-links {
   display: flex;
   align-items: center;
