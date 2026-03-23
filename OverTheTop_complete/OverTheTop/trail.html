@@ -33,12 +33,13 @@
     <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
   </header>
 
-  <section class="hero hero-trail">
-    <div style="position:absolute;right:8%;top:50%;transform:translateY(-50%);opacity:0.15;pointer-events:none;max-width:520px;width:40vw;">
-      <img src="images/07_TRAIL_Mountain_Grip_01_Hero.png" alt="Trail Hero" style="width:100%;height:auto;object-fit:contain;" />
+  <section class="hero hero-trail" style="position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;z-index:0;">
+      <img src="images/00_HERO_Trail_Page.png" alt="" style="width:100%;height:100%;object-fit:cover;" />
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.55) 0%,rgba(42,26,10,0.7) 100%);"></div>
     </div>
-    <h1 class="hero-title">TRAIL</h1>
-    <p class="hero-subtitle">No path? No problem. Own every terrain.</p>
+    <h1 class="hero-title" style="position:relative;z-index:1;">TRAIL</h1>
+    <p class="hero-subtitle" style="position:relative;z-index:1;">No path? No problem. Own every terrain.</p>
   </section>
 
   <section class="products-section">

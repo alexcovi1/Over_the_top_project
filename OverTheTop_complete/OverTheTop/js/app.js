@@ -836,11 +836,169 @@ function initLogoMenu() {
   } catch {}
 }
 
+// ── Interactive Terrain Canvas ───────────────────────────────
+function initTerrain() {
+  const canvas = document.getElementById('terrainCanvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const altEl = document.getElementById('terrainAlt');
+  let W, H, mouseX = 0.5, mouseY = 0.5, animId;
+  const peaks = [];
+  const particles = [];
+  const LAYERS = 4;
+
+  function resize() {
+    W = canvas.clientWidth;
+    H = canvas.clientHeight;
+    canvas.width = W * devicePixelRatio;
+    canvas.height = H * devicePixelRatio;
+    ctx.scale(devicePixelRatio, devicePixelRatio);
+    buildPeaks();
+  }
+
+  function buildPeaks() {
+    peaks.length = 0;
+    for (let l = 0; l < LAYERS; l++) {
+      const pts = [];
+      const segments = 80;
+      const baseY = H * (0.45 + l * 0.14);
+      for (let i = 0; i <= segments; i++) {
+        const x = (i / segments) * W;
+        const noise = Math.sin(i * 0.15 + l * 2) * 30 +
+                      Math.sin(i * 0.07 + l * 5) * 20 +
+                      Math.cos(i * 0.23 + l * 3) * 15;
+        pts.push({ x, baseY: baseY + noise });
+      }
+      peaks.push({ pts, depth: l });
+    }
+  }
+
+  function spawnParticle() {
+    if (particles.length > 40) return;
+    particles.push({
+      x: Math.random() * W,
+      y: H * (0.15 + Math.random() * 0.5),
+      r: 1 + Math.random() * 1.5,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: -0.15 - Math.random() * 0.3,
+      life: 1,
+      decay: 0.003 + Math.random() * 0.004
+    });
+  }
+
+  function getAltitudeAt(mx) {
+    const layer = peaks[0];
+    if (!layer) return 0;
+    const frac = mx / W;
+    const idx = frac * (layer.pts.length - 1);
+    const i = Math.floor(idx);
+    const t = idx - i;
+    const a = layer.pts[Math.min(i, layer.pts.length - 1)];
+    const b = layer.pts[Math.min(i + 1, layer.pts.length - 1)];
+    const peakY = a.baseY * (1 - t) + b.baseY * t;
+    const normAlt = 1 - (peakY / H);
+    return Math.round(normAlt * 4800 + 200);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+
+    // Draw mountain layers back-to-front
+    for (let l = LAYERS - 1; l >= 0; l--) {
+      const layer = peaks[l];
+      const parallax = (mouseX - 0.5) * (12 + l * 8);
+      const liftY = (mouseY - 0.5) * (3 + l * 2);
+      const alpha = 0.12 + l * 0.08;
+      const g = l * 15;
+
+      ctx.beginPath();
+      ctx.moveTo(-10, H + 10);
+      for (const p of layer.pts) {
+        ctx.lineTo(p.x + parallax, p.baseY + liftY);
+      }
+      ctx.lineTo(W + 10, H + 10);
+      ctx.closePath();
+
+      const grad = ctx.createLinearGradient(0, H * 0.3, 0, H);
+      grad.addColorStop(0, `rgba(${140 + g},${120 + g},${90 + g},${alpha})`);
+      grad.addColorStop(1, `rgba(10,10,10,0)`);
+      ctx.fillStyle = grad;
+      ctx.fill();
+
+      // Ridge highlight on front layer
+      if (l === 0) {
+        ctx.beginPath();
+        for (let i = 0; i < layer.pts.length; i++) {
+          const p = layer.pts[i];
+          if (i === 0) ctx.moveTo(p.x + parallax, p.baseY + liftY);
+          else ctx.lineTo(p.x + parallax, p.baseY + liftY);
+        }
+        ctx.strokeStyle = 'rgba(200,168,130,0.18)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+    }
+
+    // Glow at cursor
+    const gx = mouseX * W;
+    const gy = mouseY * H;
+    const glow = ctx.createRadialGradient(gx, gy, 0, gx, gy, 120);
+    glow.addColorStop(0, 'rgba(200,168,130,0.08)');
+    glow.addColorStop(1, 'transparent');
+    ctx.fillStyle = glow;
+    ctx.fillRect(0, 0, W, H);
+
+    // Particles
+    for (let i = particles.length - 1; i >= 0; i--) {
+      const p = particles[i];
+      p.x += p.vx;
+      p.y += p.vy;
+      p.life -= p.decay;
+      if (p.life <= 0) { particles.splice(i, 1); continue; }
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(200,168,130,${p.life * 0.35})`;
+      ctx.fill();
+    }
+
+    if (Math.random() < 0.3) spawnParticle();
+
+    // Altitude
+    const alt = getAltitudeAt(mouseX * W);
+    if (altEl) altEl.textContent = alt.toLocaleString() + ' m';
+
+    animId = requestAnimationFrame(draw);
+  }
+
+  const strip = document.getElementById('terrainStrip');
+  strip.addEventListener('mousemove', e => {
+    const r = strip.getBoundingClientRect();
+    mouseX = (e.clientX - r.left) / r.width;
+    mouseY = (e.clientY - r.top) / r.height;
+  });
+  strip.addEventListener('mouseleave', () => {
+    mouseX = 0.5;
+    mouseY = 0.5;
+  });
+  // Touch support
+  strip.addEventListener('touchmove', e => {
+    const t = e.touches[0];
+    const r = strip.getBoundingClientRect();
+    mouseX = (t.clientX - r.left) / r.width;
+    mouseY = (t.clientY - r.top) / r.height;
+  }, { passive: true });
+
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+}
+
 // ── Boot ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
   initLogoMenu();
   initNavbar();
   initAmbient();
+  initTerrain();
   initCart();
   initFilters();
   initAddToCart();

@@ -33,12 +33,13 @@
     <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
   </header>
 
-  <section class="hero hero-running">
-    <div style="position:absolute;right:8%;top:50%;transform:translateY(-50%);opacity:0.15;pointer-events:none;max-width:520px;width:40vw;">
-      <img src="images/04_RUNNING_Marathon_Elite_01_Hero.png" alt="Running Hero" style="width:100%;height:auto;object-fit:contain;" />
+  <section class="hero hero-running" style="position:relative;overflow:hidden;">
+    <div style="position:absolute;inset:0;z-index:0;">
+      <img src="images/00_HERO_Running_Page.png" alt="" style="width:100%;height:100%;object-fit:cover;" />
+      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.55) 0%,rgba(26,26,42,0.7) 100%);"></div>
     </div>
-    <h1 class="hero-title">RUNNING</h1>
-    <p class="hero-subtitle">Speed, comfort, and responsiveness — every stride counts.</p>
+    <h1 class="hero-title" style="position:relative;z-index:1;">RUNNING</h1>
+    <p class="hero-subtitle" style="position:relative;z-index:1;">Speed, comfort, and responsiveness — every stride counts.</p>
   </section>
 
   <section class="products-section">
