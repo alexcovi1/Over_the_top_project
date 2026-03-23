@@ -201,15 +201,19 @@ button.logo { cursor: pointer; }
 }
 .cart-count.visible { opacity: 1; transform: scale(1); }
 
-.search-btn {
+.ambient-btn {
   display: flex; align-items: center; gap: 6px;
-  color: rgba(255,255,255,0.78);
+  color: rgba(255,255,255,0.5);
   font-size: 13px; font-weight: 500; letter-spacing: 0.06em;
   text-transform: uppercase;
-  transition: color var(--transition);
+  transition: color 0.4s, text-shadow 0.4s;
   padding: 6px 0;
+  position: relative;
 }
-.search-btn:hover { color: var(--white); }
+.ambient-btn:hover { color: rgba(255,255,255,0.85); }
+.ambient-btn.active { color: var(--gold); text-shadow: 0 0 14px rgba(200,168,130,0.45); }
+.ambient-btn.active svg { filter: drop-shadow(0 0 5px rgba(200,168,130,0.5)); animation: ambientPulse 3s ease-in-out infinite; }
+@keyframes ambientPulse { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
 
 /* Hamburger */
 .hamburger {
@@ -247,39 +251,21 @@ button.logo { cursor: pointer; }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-menu a:hover { color: var(--gold); }
 
-/* Search overlay */
-.search-overlay {
-  position: fixed;
-  inset: 0; z-index: 2000;
-  background: rgba(10,10,10,0.92);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s;
+/* Ambient mode overlays */
+.ambient-canvas {
+  position: fixed; inset: 0; z-index: 500;
+  pointer-events: none;
+  opacity: 0; transition: opacity 1.2s ease;
 }
-.search-overlay.open { opacity: 1; pointer-events: all; }
-.search-box {
-  width: 100%; max-width: 640px;
-  padding: 0 32px;
-  display: flex; align-items: center; gap: 16px;
+.ambient-canvas.visible { opacity: 1; }
+.ambient-vignette {
+  position: fixed; inset: 0; z-index: 499;
+  pointer-events: none;
+  opacity: 0; transition: opacity 1.5s ease;
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(200,168,130,0.06) 100%);
+  box-shadow: inset 0 0 120px rgba(200,168,130,0.04);
 }
-.search-box input {
-  flex: 1;
-  background: none;
-  border: none;
-  border-bottom: 2px solid var(--white);
-  color: var(--white);
-  font-size: 28px;
-  font-family: 'Playfair Display', serif;
-  padding: 12px 0;
-  outline: none;
-}
-.search-box input::placeholder { color: rgba(255,255,255,0.35); }
-.search-close {
-  color: var(--white);
-  opacity: 0.6;
-  transition: opacity var(--transition);
-}
-.search-close:hover { opacity: 1; }
+.ambient-vignette.visible { opacity: 1; }
 
 /* ── Page offset for fixed navbar ─────────────────────────── */
 .page-body { padding-top: var(--nav-h); }
@@ -1038,7 +1024,7 @@ button.logo { cursor: pointer; }
 @media (max-width: 768px) {
   .navbar-left .nav-categories, .navbar-right .nav-links { display: none; }
   .hamburger { display: flex; }
-  .nav-actions .search-btn span { display: none; }
+  .nav-actions .ambient-btn span { display: none; }
   .home-hero { padding: 60px 32px; }
   .home-hero h1 { font-size: clamp(38px, 10vw, 64px); }
   .products-grid { grid-template-columns: 1fr; }

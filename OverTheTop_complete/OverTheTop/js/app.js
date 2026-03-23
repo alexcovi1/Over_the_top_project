@@ -156,39 +156,153 @@ function initNavbar() {
   });
 }
 
-// ── Search ───────────────────────────────────────────────────
-function initSearch() {
-  const overlay = document.getElementById('searchOverlay');
-  const openBtn = document.getElementById('searchBtn');
-  const closeBtn = document.getElementById('searchClose');
-  const input   = document.getElementById('searchInput');
+// ── Ambient Mode ─────────────────────────────────────────────
+function initAmbient() {
+  const btn = document.getElementById('ambientBtn');
+  if (!btn) return;
+  let active = false;
+  let audioCtx, windGain, masterGain;
+  let animId, canvas, ctx, vignette;
+  const particles = [];
 
-  openBtn?.addEventListener('click', () => {
-    overlay?.classList.add('open');
-    setTimeout(() => input?.focus(), 200);
-  });
-  closeBtn?.addEventListener('click', () => overlay?.classList.remove('open'));
-  overlay?.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('open'); });
+  // Create canvas + vignette (no HTML edits needed on product pages)
+  canvas = document.createElement('canvas');
+  canvas.className = 'ambient-canvas';
+  document.body.appendChild(canvas);
+  ctx = canvas.getContext('2d');
 
-  input?.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && input.value.trim()) {
-      // Search across products on the current page
-      const q = input.value.trim().toLowerCase();
-      overlay?.classList.remove('open');
-      filterBySearch(q);
+  vignette = document.createElement('div');
+  vignette.className = 'ambient-vignette';
+  document.body.appendChild(vignette);
+
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+  window.addEventListener('resize', resize);
+  resize();
+
+  // ── Particles ──
+  function spawn() {
+    return {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 2.5 + 0.8,
+      vy: -(Math.random() * 0.25 + 0.08),
+      vx: (Math.random() - 0.5) * 0.35,
+      o: Math.random() * 0.35 + 0.08,
+      hue: 30 + Math.random() * 25,
+      phase: Math.random() * Math.PI * 2,
+      speed: Math.random() * 0.015 + 0.006
+    };
+  }
+  for (let i = 0; i < 45; i++) particles.push(spawn());
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const p of particles) {
+      p.x += p.vx; p.y += p.vy; p.phase += p.speed;
+      if (p.y < -10) { p.y = canvas.height + 10; p.x = Math.random() * canvas.width; }
+      if (p.x < -10) p.x = canvas.width + 10;
+      if (p.x > canvas.width + 10) p.x = -10;
+      const a = p.o * (0.55 + 0.45 * Math.sin(p.phase));
+      ctx.save();
+      ctx.globalAlpha = a;
+      ctx.shadowBlur = p.r * 5;
+      ctx.shadowColor = 'hsl(' + p.hue + ',55%,68%)';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+      ctx.fillStyle = 'hsl(' + p.hue + ',55%,75%)';
+      ctx.fill();
+      ctx.restore();
     }
-    if (e.key === 'Escape') overlay?.classList.remove('open');
-  });
-}
+    animId = requestAnimationFrame(draw);
+  }
 
-function filterBySearch(q) {
-  const cards = document.querySelectorAll('.product-card');
-  if (!cards.length) return;
-  cards.forEach(card => {
-    const text = card.textContent.toLowerCase();
-    card.classList.toggle('hidden', !text.includes(q));
+  // ── Web Audio: brown-noise wind + bird chirps ──
+  function bootAudio() {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = 0.3;
+    masterGain.connect(audioCtx.destination);
+
+    // Brown noise
+    const len = 2 * audioCtx.sampleRate;
+    const buf = audioCtx.createBuffer(1, len, audioCtx.sampleRate);
+    const d = buf.getChannelData(0);
+    let last = 0;
+    for (let i = 0; i < len; i++) {
+      const w = Math.random() * 2 - 1;
+      d[i] = (last + 0.02 * w) / 1.02;
+      last = d[i];
+      d[i] *= 3.5;
+    }
+    const src = audioCtx.createBufferSource();
+    src.buffer = buf; src.loop = true;
+    const lp = audioCtx.createBiquadFilter();
+    lp.type = 'lowpass'; lp.frequency.value = 550;
+    windGain = audioCtx.createGain();
+    windGain.gain.value = 0;
+    src.connect(lp); lp.connect(windGain); windGain.connect(masterGain);
+    src.start();
+
+    // Wind volume modulation
+    (function modWind() {
+      if (!active) { setTimeout(modWind, 2000); return; }
+      windGain.gain.linearRampToValueAtTime(
+        0.12 + Math.random() * 0.16,
+        audioCtx.currentTime + 2 + Math.random() * 3
+      );
+      setTimeout(modWind, 3000 + Math.random() * 4000);
+    })();
+
+    // Bird chirps
+    (function chirp() {
+      if (!active) { setTimeout(chirp, 4000); return; }
+      const o = audioCtx.createOscillator();
+      const g = audioCtx.createGain();
+      o.type = 'sine';
+      const base = 1200 + Math.random() * 800;
+      o.frequency.setValueAtTime(base, audioCtx.currentTime);
+      o.frequency.linearRampToValueAtTime(base + 400, audioCtx.currentTime + 0.06);
+      o.frequency.linearRampToValueAtTime(base - 100, audioCtx.currentTime + 0.14);
+      g.gain.setValueAtTime(0.025, audioCtx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.18);
+      o.connect(g); g.connect(masterGain);
+      o.start(); o.stop(audioCtx.currentTime + 0.2);
+      // Double chirp sometimes
+      if (Math.random() > 0.6) {
+        const o2 = audioCtx.createOscillator();
+        const g2 = audioCtx.createGain();
+        o2.type = 'sine';
+        const b2 = base + 200;
+        o2.frequency.setValueAtTime(b2, audioCtx.currentTime + 0.25);
+        o2.frequency.linearRampToValueAtTime(b2 + 300, audioCtx.currentTime + 0.31);
+        o2.frequency.linearRampToValueAtTime(b2 - 50, audioCtx.currentTime + 0.38);
+        g2.gain.setValueAtTime(0.02, audioCtx.currentTime + 0.25);
+        g2.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.42);
+        o2.connect(g2); g2.connect(masterGain);
+        o2.start(audioCtx.currentTime + 0.25);
+        o2.stop(audioCtx.currentTime + 0.44);
+      }
+      setTimeout(chirp, 6000 + Math.random() * 15000);
+    })();
+  }
+
+  btn.addEventListener('click', function() {
+    active = !active;
+    btn.classList.toggle('active', active);
+    if (active) {
+      if (!audioCtx) bootAudio();
+      else if (audioCtx.state === 'suspended') audioCtx.resume();
+      windGain.gain.linearRampToValueAtTime(0.18, audioCtx.currentTime + 1.5);
+      canvas.classList.add('visible');
+      vignette.classList.add('visible');
+      draw();
+    } else {
+      if (windGain) windGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.8);
+      canvas.classList.remove('visible');
+      vignette.classList.remove('visible');
+      if (animId) { cancelAnimationFrame(animId); animId = null; }
+    }
   });
-  if (q === '') cards.forEach(c => c.classList.remove('hidden'));
 }
 
 // ── Cart Sidebar ─────────────────────────────────────────────
@@ -457,7 +571,7 @@ function initLogoMenu() {
 document.addEventListener('DOMContentLoaded', () => {
   initLogoMenu();
   initNavbar();
-  initSearch();
+  initAmbient();
   initCart();
   initFilters();
   initAddToCart();
