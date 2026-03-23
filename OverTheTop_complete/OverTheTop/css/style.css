@@ -211,8 +211,19 @@ button.logo { cursor: pointer; }
   position: relative;
 }
 .ambient-btn:hover { color: rgba(255,255,255,0.85); }
-.ambient-btn.active { color: var(--gold); text-shadow: 0 0 14px rgba(200,168,130,0.45); }
-.ambient-btn.active svg { filter: drop-shadow(0 0 5px rgba(200,168,130,0.5)); animation: ambientPulse 3s ease-in-out infinite; }
+
+/* Forest mode – warm gold */
+.ambient-btn.mode-forest { color: var(--gold); text-shadow: 0 0 14px rgba(200,168,130,0.45); }
+.ambient-btn.mode-forest svg { filter: drop-shadow(0 0 5px rgba(200,168,130,0.5)); animation: ambientPulse 3s ease-in-out infinite; }
+
+/* Rain mode – cool blue */
+.ambient-btn.mode-rain { color: #82c8e0; text-shadow: 0 0 14px rgba(130,200,224,0.5); }
+.ambient-btn.mode-rain svg { filter: drop-shadow(0 0 5px rgba(130,200,224,0.5)); animation: ambientPulse 3s ease-in-out infinite; }
+
+/* Flute mode – soft lavender */
+.ambient-btn.mode-flute { color: #c0a0e0; text-shadow: 0 0 14px rgba(192,160,224,0.5); }
+.ambient-btn.mode-flute svg { filter: drop-shadow(0 0 5px rgba(192,160,224,0.5)); animation: ambientPulse 3s ease-in-out infinite; }
+
 @keyframes ambientPulse { 0%,100% { opacity: 0.8; } 50% { opacity: 1; } }
 
 /* Hamburger */
@@ -262,10 +273,26 @@ button.logo { cursor: pointer; }
   position: fixed; inset: 0; z-index: 499;
   pointer-events: none;
   opacity: 0; transition: opacity 1.5s ease;
+}
+.ambient-vignette.visible { opacity: 1; }
+
+/* Forest vignette – warm gold edges */
+.ambient-vignette.mode-forest {
   background: radial-gradient(ellipse at center, transparent 50%, rgba(200,168,130,0.06) 100%);
   box-shadow: inset 0 0 120px rgba(200,168,130,0.04);
 }
-.ambient-vignette.visible { opacity: 1; }
+
+/* Rain vignette – cool blue edges */
+.ambient-vignette.mode-rain {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(100,160,200,0.09) 100%);
+  box-shadow: inset 0 0 140px rgba(100,160,200,0.06);
+}
+
+/* Flute vignette – soft purple edges */
+.ambient-vignette.mode-flute {
+  background: radial-gradient(ellipse at center, transparent 50%, rgba(170,130,210,0.08) 100%);
+  box-shadow: inset 0 0 130px rgba(170,130,210,0.05);
+}
 
 /* ── Page offset for fixed navbar ─────────────────────────── */
 .page-body { padding-top: var(--nav-h); }
