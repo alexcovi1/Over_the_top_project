@@ -50,6 +50,12 @@
       font-weight: 700;
       color: var(--white);
       box-shadow: 0 4px 24px rgba(200,168,130,0.3);
+      padding: 8px;
+      overflow: hidden;
+    }
+    .dash-avatar svg {
+      width: 100%;
+      height: 100%;
     }
     .dash-welcome h1 {
       color: var(--white);
@@ -357,7 +363,8 @@
     .mini-item-img img {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
+      padding: 4px;
     }
     .mini-item-icon {
       width: 52px;
@@ -827,7 +834,8 @@
 
     function getProductImage(name, storedImage) {
       if (storedImage) return storedImage;
-      return productImages[name] || '';
+      var n = (name || '').trim();
+      return productImages[n] || '';
     }
 
     function getTimeGreeting() {
@@ -836,6 +844,22 @@
       if (h < 18) return 'Good afternoon';
       return 'Good evening';
     }
+
+    const ANIMAL_SVGS = {
+      fox: '<svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#FF8C42"/><circle cx="50" cy="54" r="28" fill="#FFB074"/><ellipse cx="36" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="64" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="50" cy="56" rx="4" ry="3" fill="#2D1B00"/><path d="M44 62 Q50 68 56 62" fill="none" stroke="#2D1B00" stroke-width="2" stroke-linecap="round"/><polygon points="28,34 18,8 40,28" fill="#FF8C42"/><polygon points="32,30 22,14 40,28" fill="#FFD4B0"/><polygon points="72,34 82,8 60,28" fill="#FF8C42"/><polygon points="68,30 78,14 60,28" fill="#FFD4B0"/><circle cx="38" cy="44" r="1.5" fill="#FFF"/><circle cx="66" cy="44" r="1.5" fill="#FFF"/><ellipse cx="36" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/><ellipse cx="64" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/></svg>',
+      panda: '<svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#F5F5F5"/><circle cx="32" cy="32" r="14" fill="#333"/><circle cx="68" cy="32" r="14" fill="#333"/><circle cx="50" cy="54" r="30" fill="#FFF"/><ellipse cx="38" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="62" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="40" cy="46" rx="5" ry="5.5" fill="#FFF"/><ellipse cx="60" cy="46" rx="5" ry="5.5" fill="#FFF"/><circle cx="41" cy="46" r="3" fill="#1A1A1A"/><circle cx="59" cy="46" r="3" fill="#1A1A1A"/><circle cx="42" cy="44.5" r="1" fill="#FFF"/><circle cx="60" cy="44.5" r="1" fill="#FFF"/><ellipse cx="50" cy="58" rx="4" ry="3" fill="#333"/><path d="M46 62 Q50 66 54 62" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="38" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/><ellipse cx="62" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/></svg>',
+      owl: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="56" rx="34" ry="36" fill="#7B5EA7"/><ellipse cx="50" cy="58" rx="26" ry="24" fill="#9B7FCC"/><polygon points="30,26 20,6 42,30" fill="#7B5EA7"/><polygon points="70,26 80,6 58,30" fill="#7B5EA7"/><polygon points="33,26 24,12 42,30" fill="#A88CD4"/><polygon points="67,26 76,12 58,30" fill="#A88CD4"/><circle cx="38" cy="48" r="12" fill="#FFF"/><circle cx="62" cy="48" r="12" fill="#FFF"/><circle cx="40" cy="48" r="7" fill="#FFB830"/><circle cx="60" cy="48" r="7" fill="#FFB830"/><circle cx="40" cy="47" r="4" fill="#1A1A1A"/><circle cx="60" cy="47" r="4" fill="#1A1A1A"/><circle cx="42" cy="45.5" r="1.5" fill="#FFF"/><circle cx="62" cy="45.5" r="1.5" fill="#FFF"/><polygon points="50,56 46,64 54,64" fill="#FFB830"/><ellipse cx="38" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/><ellipse cx="62" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/></svg>',
+      bunny: '<svg viewBox="0 0 100 100"><ellipse cx="38" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="62" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="38" cy="26" rx="5" ry="18" fill="#FFC8D6"/><ellipse cx="62" cy="26" rx="5" ry="18" fill="#FFC8D6"/><circle cx="50" cy="58" r="34" fill="#FFB6C1"/><circle cx="50" cy="58" r="28" fill="#FFC8D6"/><ellipse cx="40" cy="52" rx="4" ry="5" fill="#4A3040"/><ellipse cx="60" cy="52" rx="4" ry="5" fill="#4A3040"/><circle cx="41.5" cy="50.5" r="1.5" fill="#FFF"/><circle cx="61.5" cy="50.5" r="1.5" fill="#FFF"/><ellipse cx="50" cy="60" rx="3.5" ry="2.5" fill="#FF8FAB"/><path d="M46 64 Q50 68 54 64" fill="none" stroke="#D46A8E" stroke-width="1.8" stroke-linecap="round"/><path d="M50 60 L50 64" stroke="#D46A8E" stroke-width="1" stroke-linecap="round"/><circle cx="34" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/><circle cx="66" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/></svg>',
+      parrot: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="32" ry="36" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="26" ry="28" fill="#58D68D"/><polygon points="34,24 22,6 42,26" fill="#2ECC71"/><polygon points="66,24 78,6 58,26" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="18" ry="16" fill="#FFEAA7"/><circle cx="40" cy="46" r="6" fill="#FFF"/><circle cx="60" cy="46" r="6" fill="#FFF"/><circle cx="41" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="59" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="42.5" cy="44" r="1.2" fill="#FFF"/><circle cx="60.5" cy="44" r="1.2" fill="#FFF"/><path d="M44 56 Q50 52 56 56" fill="#FF7675" stroke="#E55A5A" stroke-width="1"/><path d="M50 56 L50 60" stroke="none"/><ellipse cx="50" cy="86" rx="8" ry="6" fill="#E74C3C"/><ellipse cx="44" cy="88" rx="4" ry="5" fill="#F39C12"/><ellipse cx="56" cy="88" rx="4" ry="5" fill="#3498DB"/><path d="M17 50 Q8 46 12 36 Q16 26 24 34" fill="#2ECC71" stroke="none"/><path d="M83 50 Q92 46 88 36 Q84 26 76 34" fill="#2ECC71" stroke="none"/></svg>'
+    };
+
+    const ANIMAL_GREETINGS = {
+      fox: { emoji: '🦊', subs: ['Your clever instincts brought you back.', 'A fox always finds the best deals.', 'Sneaking through the trails with style.'] },
+      panda: { emoji: '🐼', subs: ['Take it easy — your gear is safe here.', 'Inner peace starts with great footwear.', 'Bamboo breaks, but your shoes won\'t.'] },
+      owl: { emoji: '🦉', subs: ['A wise choice, coming back to base camp.', 'Knowledge of the trail is your superpower.', 'The wisest hikers prepare ahead.'] },
+      bunny: { emoji: '🐰', subs: ['Hopping back for more adventures!', 'Quick feet need the best shoes!', 'Every hop starts with a great sole.'] },
+      parrot: { emoji: '🦜', subs: ['Ready for another colorful adventure!', 'The world is your playground — explore it!', 'Fly high, trail far, look fabulous.'] }
+    };
 
     function initDashboard() {
       const session = (function() {
@@ -852,26 +876,32 @@
       document.getElementById('loginPrompt').style.display = 'none';
       document.getElementById('dashContent').style.display = '';
 
-      // Avatar initial
-      const initial = (session.firstName || 'O').charAt(0).toUpperCase();
-      document.getElementById('dashAvatar').textContent = initial;
+      // Avatar animal
+      const avatarKey = session.avatar || 'fox';
+      const avatarEl = document.getElementById('dashAvatar');
+      avatarEl.textContent = '';
+      avatarEl.innerHTML = ANIMAL_SVGS[avatarKey] || ANIMAL_SVGS.fox;
 
-      // Time-aware greeting
+      // Time-aware greeting with animal personality
       const greeting = getTimeGreeting();
-      document.getElementById('dashGreeting').textContent = `${greeting}, ${escapeHtml(session.firstName)}`;
+      const animalInfo = ANIMAL_GREETINGS[avatarKey] || ANIMAL_GREETINGS.fox;
+      document.getElementById('dashGreeting').textContent = `${greeting}, ${escapeHtml(session.firstName)} ${animalInfo.emoji}`;
 
-      // Contextual subtitle
+      // Contextual subtitle with animal personality fallback
       const cart = getCart();
       const wishlist = getWishlist();
       const orders = getOrders();
       const cartCount = getItemCount();
-      let sub = 'Your personal base camp — everything in one place.';
+      let sub;
       if (cartCount > 0) {
         sub = `You have ${cartCount} item${cartCount > 1 ? 's' : ''} waiting in your cart.`;
       } else if (wishlist.length > 0) {
         sub = `${wishlist.length} item${wishlist.length > 1 ? 's' : ''} on your wishlist — ready when you are.`;
       } else if (orders.length > 0) {
         sub = `${orders.length} order${orders.length > 1 ? 's' : ''} in your trail history. Keep exploring.`;
+      } else {
+        const subs = animalInfo.subs;
+        sub = subs[Math.floor(Math.random() * subs.length)];
       }
       document.getElementById('dashWelcomeSub').textContent = sub;
 
@@ -984,12 +1014,15 @@
           </div>
           <div class="order-date">${escapeHtml(o.date)}</div>
           <div class="order-items-row">
-            ${o.items.map(i => `
-              <div class="order-item-thumb" title="${escapeHtml(i.name)}">
-                ${getProductImage(i.name, i.image) ? `<img src="${escapeHtml(getProductImage(i.name, i.image))}" alt="${escapeHtml(i.name)}">` : shoeIcon}
+            ${o.items.map(i => {
+              var iName = (i.name || '').trim();
+              var iImg = getProductImage(iName, i.image);
+              return `
+              <div class="order-item-thumb" title="${escapeHtml(iName)}">
+                ${iImg ? `<img src="${escapeHtml(iImg)}" alt="${escapeHtml(iName)}">` : shoeIcon}
                 ${i.qty > 1 ? `<span class="order-qty-badge">${i.qty}</span>` : ''}
-              </div>
-            `).join('')}
+              </div>`;
+            }).join('')}
           </div>
         </div>
       `).join('');
@@ -1001,16 +1034,19 @@
         el.innerHTML = `<div class="empty-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg><p>Your wishlist is empty — find your next favorite.</p><a href="index.html">Discover products</a></div>`;
         return;
       }
-      el.innerHTML = wishlist.map(item => `
+      el.innerHTML = wishlist.map(item => {
+        var name = (item.name || '').trim();
+        var img = getProductImage(name, item.image);
+        return `
         <div class="mini-item">
-          ${getProductImage(item.name, item.image) ? `<div class="mini-item-img"><img src="${escapeHtml(getProductImage(item.name, item.image))}" alt="${escapeHtml(item.name)}"></div>` : `<div class="mini-item-icon">${shoeIcon}</div>`}
+          ${img ? `<div class="mini-item-img"><img src="${escapeHtml(img)}" alt="${escapeHtml(name)}"></div>` : `<div class="mini-item-icon">${shoeIcon}</div>`}
           <div class="mini-item-info">
-            <div class="mini-item-name">${escapeHtml(item.name)}</div>
-            <div class="mini-item-meta">${escapeHtml(item.category)}</div>
+            <div class="mini-item-name">${escapeHtml(name)}</div>
+            <div class="mini-item-meta">${escapeHtml(item.category || '')}</div>
           </div>
           <span class="mini-item-price">€${item.price}</span>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     function renderCart(cart) {
@@ -1019,16 +1055,19 @@
         el.innerHTML = `<div class="empty-section"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg><p>Your cart is empty — the trail is calling.</p><a href="index.html">Add some items</a></div>`;
         return;
       }
-      el.innerHTML = cart.map(item => `
+      el.innerHTML = cart.map(item => {
+        var name = (item.name || '').trim();
+        var img = getProductImage(name, item.image);
+        return `
         <div class="mini-item">
-          ${getProductImage(item.name, item.image) ? `<div class="mini-item-img"><img src="${escapeHtml(getProductImage(item.name, item.image))}" alt="${escapeHtml(item.name)}"></div>` : `<div class="mini-item-icon">${shoeIcon}</div>`}
+          ${img ? `<div class="mini-item-img"><img src="${escapeHtml(img)}" alt="${escapeHtml(name)}"></div>` : `<div class="mini-item-icon">${shoeIcon}</div>`}
           <div class="mini-item-info">
-            <div class="mini-item-name">${escapeHtml(item.name)}</div>
-            <div class="mini-item-meta">${escapeHtml(item.category)} · Size ${escapeHtml(String(item.size))} · Qty ${item.qty}</div>
+            <div class="mini-item-name">${escapeHtml(name)}</div>
+            <div class="mini-item-meta">${escapeHtml(item.category || '')} · Size ${escapeHtml(String(item.size))} · Qty ${item.qty}</div>
           </div>
           <span class="mini-item-price">€${(item.price * item.qty).toFixed(0)}</span>
-        </div>
-      `).join('');
+        </div>`;
+      }).join('');
     }
 
     // Init

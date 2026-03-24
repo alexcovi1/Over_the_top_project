@@ -277,6 +277,133 @@
         padding: 28px 20px;
       }
     }
+
+    /* Edit Profile */
+    .edit-section {
+      margin-top: 20px;
+      border-top: 1px solid var(--border);
+      padding-top: 20px;
+    }
+    .edit-section h3 {
+      font-size: 16px;
+      margin-bottom: 18px;
+      text-align: center;
+    }
+    .edit-divider {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--gold-dark);
+      margin: 20px 0 12px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+    .btn-account-secondary {
+      background: transparent;
+      color: var(--gold-dark);
+      border: 1.5px solid var(--gold);
+      margin-top: 12px;
+      width: 100%;
+      padding: 14px;
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      border-radius: var(--radius);
+      cursor: pointer;
+      transition: all var(--transition);
+    }
+    .btn-account-secondary:hover {
+      background: var(--gold);
+      color: var(--black);
+    }
+    .edit-btn-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .edit-btn-row button { flex: 1; }
+
+    /* Avatar Picker */
+    .avatar-picker-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 10px;
+    }
+    .avatar-picker {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+    .avatar-option {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      border: 3px solid var(--border);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      background: var(--white);
+      position: relative;
+    }
+    .avatar-option:hover {
+      border-color: var(--gold);
+      transform: scale(1.1);
+      box-shadow: 0 4px 16px rgba(200,168,130,0.25);
+    }
+    .avatar-option.selected {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(200,168,130,0.3), 0 4px 16px rgba(200,168,130,0.25);
+      transform: scale(1.1);
+    }
+    .avatar-option.selected::after {
+      content: '✓';
+      position: absolute;
+      bottom: -2px;
+      right: -2px;
+      width: 18px;
+      height: 18px;
+      background: var(--gold);
+      color: var(--white);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--white);
+    }
+    .avatar-option svg { width: 100%; height: 100%; }
+
+    /* Profile avatar large */
+    .profile-avatar {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background: var(--off-white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 16px;
+      padding: 10px;
+      border: 3px solid var(--gold);
+      box-shadow: 0 4px 20px rgba(200,168,130,0.2);
+    }
+    .profile-avatar svg {
+      width: 100%;
+      height: 100%;
+    }
+
   </style>
 </head>
 
@@ -404,6 +531,24 @@
               <label for="regConfirm">Confirm Password</label>
               <input type="password" id="regConfirm" placeholder="Repeat password" required minlength="6">
             </div>
+            <label class="avatar-picker-label">Choose your spirit animal</label>
+            <div class="avatar-picker" id="regAvatarPicker">
+              <div class="avatar-option selected" data-avatar="fox" title="Fox">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#FF8C42"/><circle cx="50" cy="54" r="28" fill="#FFB074"/><ellipse cx="36" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="64" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="50" cy="56" rx="4" ry="3" fill="#2D1B00"/><path d="M44 62 Q50 68 56 62" fill="none" stroke="#2D1B00" stroke-width="2" stroke-linecap="round"/><polygon points="28,34 18,8 40,28" fill="#FF8C42"/><polygon points="32,30 22,14 40,28" fill="#FFD4B0"/><polygon points="72,34 82,8 60,28" fill="#FF8C42"/><polygon points="68,30 78,14 60,28" fill="#FFD4B0"/><circle cx="38" cy="44" r="1.5" fill="#FFF"/><circle cx="66" cy="44" r="1.5" fill="#FFF"/><ellipse cx="36" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/><ellipse cx="64" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="panda" title="Panda">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#F5F5F5"/><circle cx="32" cy="32" r="14" fill="#333"/><circle cx="68" cy="32" r="14" fill="#333"/><circle cx="50" cy="54" r="30" fill="#FFF"/><ellipse cx="38" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="62" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="40" cy="46" rx="5" ry="5.5" fill="#FFF"/><ellipse cx="60" cy="46" rx="5" ry="5.5" fill="#FFF"/><circle cx="41" cy="46" r="3" fill="#1A1A1A"/><circle cx="59" cy="46" r="3" fill="#1A1A1A"/><circle cx="42" cy="44.5" r="1" fill="#FFF"/><circle cx="60" cy="44.5" r="1" fill="#FFF"/><ellipse cx="50" cy="58" rx="4" ry="3" fill="#333"/><path d="M46 62 Q50 66 54 62" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="38" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/><ellipse cx="62" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="owl" title="Owl">
+                <svg viewBox="0 0 100 100"><ellipse cx="50" cy="56" rx="34" ry="36" fill="#7B5EA7"/><ellipse cx="50" cy="58" rx="26" ry="24" fill="#9B7FCC"/><polygon points="30,26 20,6 42,30" fill="#7B5EA7"/><polygon points="70,26 80,6 58,30" fill="#7B5EA7"/><polygon points="33,26 24,12 42,30" fill="#A88CD4"/><polygon points="67,26 76,12 58,30" fill="#A88CD4"/><circle cx="38" cy="48" r="12" fill="#FFF"/><circle cx="62" cy="48" r="12" fill="#FFF"/><circle cx="40" cy="48" r="7" fill="#FFB830"/><circle cx="60" cy="48" r="7" fill="#FFB830"/><circle cx="40" cy="47" r="4" fill="#1A1A1A"/><circle cx="60" cy="47" r="4" fill="#1A1A1A"/><circle cx="42" cy="45.5" r="1.5" fill="#FFF"/><circle cx="62" cy="45.5" r="1.5" fill="#FFF"/><polygon points="50,56 46,64 54,64" fill="#FFB830"/><ellipse cx="38" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/><ellipse cx="62" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="bunny" title="Bunny">
+                <svg viewBox="0 0 100 100"><ellipse cx="38" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="62" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="38" cy="26" rx="5" ry="18" fill="#FFC8D6"/><ellipse cx="62" cy="26" rx="5" ry="18" fill="#FFC8D6"/><circle cx="50" cy="58" r="34" fill="#FFB6C1"/><circle cx="50" cy="58" r="28" fill="#FFC8D6"/><ellipse cx="40" cy="52" rx="4" ry="5" fill="#4A3040"/><ellipse cx="60" cy="52" rx="4" ry="5" fill="#4A3040"/><circle cx="41.5" cy="50.5" r="1.5" fill="#FFF"/><circle cx="61.5" cy="50.5" r="1.5" fill="#FFF"/><ellipse cx="50" cy="60" rx="3.5" ry="2.5" fill="#FF8FAB"/><path d="M46 64 Q50 68 54 64" fill="none" stroke="#D46A8E" stroke-width="1.8" stroke-linecap="round"/><path d="M50 60 L50 64" stroke="#D46A8E" stroke-width="1" stroke-linecap="round"/><circle cx="34" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/><circle cx="66" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="parrot" title="Parrot">
+                <svg viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="32" ry="36" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="26" ry="28" fill="#58D68D"/><polygon points="34,24 22,6 42,26" fill="#2ECC71"/><polygon points="66,24 78,6 58,26" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="18" ry="16" fill="#FFEAA7"/><circle cx="40" cy="46" r="6" fill="#FFF"/><circle cx="60" cy="46" r="6" fill="#FFF"/><circle cx="41" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="59" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="42.5" cy="44" r="1.2" fill="#FFF"/><circle cx="60.5" cy="44" r="1.2" fill="#FFF"/><path d="M44 56 Q50 52 56 56" fill="#FF7675" stroke="#E55A5A" stroke-width="1"/><path d="M50 56 L50 60" stroke="none"/><ellipse cx="50" cy="86" rx="8" ry="6" fill="#E74C3C"/><ellipse cx="44" cy="88" rx="4" ry="5" fill="#F39C12"/><ellipse cx="56" cy="88" rx="4" ry="5" fill="#3498DB"/><path d="M17 50 Q8 46 12 36 Q16 26 24 34" fill="#2ECC71" stroke="none"/><path d="M83 50 Q92 46 88 36 Q84 26 76 34" fill="#2ECC71" stroke="none"/></svg>
+              </div>
+            </div>
             <button type="submit" class="btn-account btn-account-primary">Create Account</button>
           </form>
         </div>
@@ -412,12 +557,7 @@
       <!-- ── Logged-in view ─── -->
       <div id="userView" style="display:none;">
         <div class="account-profile">
-          <div class="profile-avatar">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-              <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
+          <div class="profile-avatar" id="profileAvatar"></div>
           <p class="profile-name" id="profileName"></p>
           <p class="profile-email" id="profileEmail"></p>
         </div>
@@ -427,7 +567,64 @@
         </div>
 
         <button class="btn-account btn-account-primary" id="btnLogout">Logout</button>
+        <button class="btn-account-secondary" id="btnEditProfile">Edit Profile</button>
         <button class="btn-account btn-account-outline" id="btnShowDelete">Delete My Account</button>
+
+        <!-- Edit Profile Section -->
+        <div id="editSection" class="edit-section" style="display:none;">
+          <h3>Edit Profile</h3>
+          <div id="editMessage" class="acc-message"></div>
+          <form id="editForm">
+            <div class="acc-form-group">
+              <label for="editFirstName">First Name</label>
+              <input type="text" id="editFirstName" required>
+            </div>
+            <div class="acc-form-group">
+              <label for="editLastName">Last Name</label>
+              <input type="text" id="editLastName" required>
+            </div>
+            <div class="acc-form-group">
+              <label for="editEmail">Email</label>
+              <input type="email" id="editEmail" required>
+            </div>
+            <div class="edit-divider">Change Avatar</div>
+            <div class="avatar-picker" id="editAvatarPicker">
+              <div class="avatar-option" data-avatar="fox" title="Fox">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#FF8C42"/><circle cx="50" cy="54" r="28" fill="#FFB074"/><ellipse cx="36" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="64" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="50" cy="56" rx="4" ry="3" fill="#2D1B00"/><path d="M44 62 Q50 68 56 62" fill="none" stroke="#2D1B00" stroke-width="2" stroke-linecap="round"/><polygon points="28,34 18,8 40,28" fill="#FF8C42"/><polygon points="32,30 22,14 40,28" fill="#FFD4B0"/><polygon points="72,34 82,8 60,28" fill="#FF8C42"/><polygon points="68,30 78,14 60,28" fill="#FFD4B0"/><circle cx="38" cy="44" r="1.5" fill="#FFF"/><circle cx="66" cy="44" r="1.5" fill="#FFF"/><ellipse cx="36" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/><ellipse cx="64" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="panda" title="Panda">
+                <svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#F5F5F5"/><circle cx="32" cy="32" r="14" fill="#333"/><circle cx="68" cy="32" r="14" fill="#333"/><circle cx="50" cy="54" r="30" fill="#FFF"/><ellipse cx="38" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="62" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="40" cy="46" rx="5" ry="5.5" fill="#FFF"/><ellipse cx="60" cy="46" rx="5" ry="5.5" fill="#FFF"/><circle cx="41" cy="46" r="3" fill="#1A1A1A"/><circle cx="59" cy="46" r="3" fill="#1A1A1A"/><circle cx="42" cy="44.5" r="1" fill="#FFF"/><circle cx="60" cy="44.5" r="1" fill="#FFF"/><ellipse cx="50" cy="58" rx="4" ry="3" fill="#333"/><path d="M46 62 Q50 66 54 62" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="38" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/><ellipse cx="62" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="owl" title="Owl">
+                <svg viewBox="0 0 100 100"><ellipse cx="50" cy="56" rx="34" ry="36" fill="#7B5EA7"/><ellipse cx="50" cy="58" rx="26" ry="24" fill="#9B7FCC"/><polygon points="30,26 20,6 42,30" fill="#7B5EA7"/><polygon points="70,26 80,6 58,30" fill="#7B5EA7"/><polygon points="33,26 24,12 42,30" fill="#A88CD4"/><polygon points="67,26 76,12 58,30" fill="#A88CD4"/><circle cx="38" cy="48" r="12" fill="#FFF"/><circle cx="62" cy="48" r="12" fill="#FFF"/><circle cx="40" cy="48" r="7" fill="#FFB830"/><circle cx="60" cy="48" r="7" fill="#FFB830"/><circle cx="40" cy="47" r="4" fill="#1A1A1A"/><circle cx="60" cy="47" r="4" fill="#1A1A1A"/><circle cx="42" cy="45.5" r="1.5" fill="#FFF"/><circle cx="62" cy="45.5" r="1.5" fill="#FFF"/><polygon points="50,56 46,64 54,64" fill="#FFB830"/><ellipse cx="38" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/><ellipse cx="62" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="bunny" title="Bunny">
+                <svg viewBox="0 0 100 100"><ellipse cx="38" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="62" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="38" cy="26" rx="5" ry="18" fill="#FFC8D6"/><ellipse cx="62" cy="26" rx="5" ry="18" fill="#FFC8D6"/><circle cx="50" cy="58" r="34" fill="#FFB6C1"/><circle cx="50" cy="58" r="28" fill="#FFC8D6"/><ellipse cx="40" cy="52" rx="4" ry="5" fill="#4A3040"/><ellipse cx="60" cy="52" rx="4" ry="5" fill="#4A3040"/><circle cx="41.5" cy="50.5" r="1.5" fill="#FFF"/><circle cx="61.5" cy="50.5" r="1.5" fill="#FFF"/><ellipse cx="50" cy="60" rx="3.5" ry="2.5" fill="#FF8FAB"/><path d="M46 64 Q50 68 54 64" fill="none" stroke="#D46A8E" stroke-width="1.8" stroke-linecap="round"/><path d="M50 60 L50 64" stroke="#D46A8E" stroke-width="1" stroke-linecap="round"/><circle cx="34" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/><circle cx="66" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/></svg>
+              </div>
+              <div class="avatar-option" data-avatar="parrot" title="Parrot">
+                <svg viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="32" ry="36" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="26" ry="28" fill="#58D68D"/><polygon points="34,24 22,6 42,26" fill="#2ECC71"/><polygon points="66,24 78,6 58,26" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="18" ry="16" fill="#FFEAA7"/><circle cx="40" cy="46" r="6" fill="#FFF"/><circle cx="60" cy="46" r="6" fill="#FFF"/><circle cx="41" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="59" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="42.5" cy="44" r="1.2" fill="#FFF"/><circle cx="60.5" cy="44" r="1.2" fill="#FFF"/><path d="M44 56 Q50 52 56 56" fill="#FF7675" stroke="#E55A5A" stroke-width="1"/><path d="M50 56 L50 60" stroke="none"/><ellipse cx="50" cy="86" rx="8" ry="6" fill="#E74C3C"/><ellipse cx="44" cy="88" rx="4" ry="5" fill="#F39C12"/><ellipse cx="56" cy="88" rx="4" ry="5" fill="#3498DB"/><path d="M17 50 Q8 46 12 36 Q16 26 24 34" fill="#2ECC71" stroke="none"/><path d="M83 50 Q92 46 88 36 Q84 26 76 34" fill="#2ECC71" stroke="none"/></svg>
+              </div>
+            </div>
+            <div class="edit-divider">Change Password (optional)</div>
+            <div class="acc-form-group">
+              <label for="editNewPassword">New Password</label>
+              <input type="password" id="editNewPassword" placeholder="Leave blank to keep current" minlength="6">
+            </div>
+            <div class="acc-form-group">
+              <label for="editConfirmPassword">Confirm New Password</label>
+              <input type="password" id="editConfirmPassword" placeholder="Repeat new password" minlength="6">
+            </div>
+            <div class="edit-divider">Verify Identity</div>
+            <div class="acc-form-group">
+              <label for="editCurrentPassword">Current Password</label>
+              <input type="password" id="editCurrentPassword" placeholder="Required to save changes" required>
+            </div>
+            <div class="edit-btn-row">
+              <button type="submit" class="btn-account btn-account-primary">Save Changes</button>
+              <button type="button" class="btn-account btn-account-outline" id="btnCancelEdit">Cancel</button>
+            </div>
+          </form>
+        </div>
 
         <div id="deleteConfirm" class="delete-confirm" style="display:none;">
           <p>Are you sure? This will permanently delete your account and all data. This action cannot be undone.</p>
@@ -556,6 +753,7 @@
     /* ═══ Account System (localStorage) ═══════════════════════ */
     const ACCOUNTS_KEY = 'ott_accounts';
     const SESSION_KEY = 'ott_session';
+    const MAX_ACCOUNTS = 10;
 
     function getAccounts() {
       try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
@@ -585,8 +783,44 @@
       el.className = 'acc-message';
       el.style.display = 'none';
     }
+    function showEditMessage(text, type) {
+      const el = document.getElementById('editMessage');
+      el.textContent = text;
+      el.className = 'acc-message ' + type;
+    }
+    function hideEditMessage() {
+      const el = document.getElementById('editMessage');
+      el.className = 'acc-message';
+      el.style.display = 'none';
+    }
 
-    /* ── Tabs ─────────────────────────────────────────────── */
+    /* ═══ Animal Avatar SVGs ═════════════════════════════════ */
+    const ANIMAL_SVGS = {
+      fox: '<svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#FF8C42"/><circle cx="50" cy="54" r="28" fill="#FFB074"/><ellipse cx="36" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="64" cy="46" rx="5" ry="6" fill="#2D1B00"/><ellipse cx="50" cy="56" rx="4" ry="3" fill="#2D1B00"/><path d="M44 62 Q50 68 56 62" fill="none" stroke="#2D1B00" stroke-width="2" stroke-linecap="round"/><polygon points="28,34 18,8 40,28" fill="#FF8C42"/><polygon points="32,30 22,14 40,28" fill="#FFD4B0"/><polygon points="72,34 82,8 60,28" fill="#FF8C42"/><polygon points="68,30 78,14 60,28" fill="#FFD4B0"/><circle cx="38" cy="44" r="1.5" fill="#FFF"/><circle cx="66" cy="44" r="1.5" fill="#FFF"/><ellipse cx="36" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/><ellipse cx="64" cy="70" rx="4" ry="2" fill="#FF6B6B" opacity="0.4"/></svg>',
+      panda: '<svg viewBox="0 0 100 100"><circle cx="50" cy="54" r="36" fill="#F5F5F5"/><circle cx="32" cy="32" r="14" fill="#333"/><circle cx="68" cy="32" r="14" fill="#333"/><circle cx="50" cy="54" r="30" fill="#FFF"/><ellipse cx="38" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="62" cy="48" rx="10" ry="11" fill="#333"/><ellipse cx="40" cy="46" rx="5" ry="5.5" fill="#FFF"/><ellipse cx="60" cy="46" rx="5" ry="5.5" fill="#FFF"/><circle cx="41" cy="46" r="3" fill="#1A1A1A"/><circle cx="59" cy="46" r="3" fill="#1A1A1A"/><circle cx="42" cy="44.5" r="1" fill="#FFF"/><circle cx="60" cy="44.5" r="1" fill="#FFF"/><ellipse cx="50" cy="58" rx="4" ry="3" fill="#333"/><path d="M46 62 Q50 66 54 62" fill="none" stroke="#333" stroke-width="1.8" stroke-linecap="round"/><ellipse cx="38" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/><ellipse cx="62" cy="62" rx="5" ry="3" fill="#FF9EAA" opacity="0.5"/></svg>',
+      owl: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="56" rx="34" ry="36" fill="#7B5EA7"/><ellipse cx="50" cy="58" rx="26" ry="24" fill="#9B7FCC"/><polygon points="30,26 20,6 42,30" fill="#7B5EA7"/><polygon points="70,26 80,6 58,30" fill="#7B5EA7"/><polygon points="33,26 24,12 42,30" fill="#A88CD4"/><polygon points="67,26 76,12 58,30" fill="#A88CD4"/><circle cx="38" cy="48" r="12" fill="#FFF"/><circle cx="62" cy="48" r="12" fill="#FFF"/><circle cx="40" cy="48" r="7" fill="#FFB830"/><circle cx="60" cy="48" r="7" fill="#FFB830"/><circle cx="40" cy="47" r="4" fill="#1A1A1A"/><circle cx="60" cy="47" r="4" fill="#1A1A1A"/><circle cx="42" cy="45.5" r="1.5" fill="#FFF"/><circle cx="62" cy="45.5" r="1.5" fill="#FFF"/><polygon points="50,56 46,64 54,64" fill="#FFB830"/><ellipse cx="38" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/><ellipse cx="62" cy="68" rx="5" ry="2" fill="#C9A0DC" opacity="0.5"/></svg>',
+      bunny: '<svg viewBox="0 0 100 100"><ellipse cx="38" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="62" cy="26" rx="9" ry="22" fill="#FFB6C1"/><ellipse cx="38" cy="26" rx="5" ry="18" fill="#FFC8D6"/><ellipse cx="62" cy="26" rx="5" ry="18" fill="#FFC8D6"/><circle cx="50" cy="58" r="34" fill="#FFB6C1"/><circle cx="50" cy="58" r="28" fill="#FFC8D6"/><ellipse cx="40" cy="52" rx="4" ry="5" fill="#4A3040"/><ellipse cx="60" cy="52" rx="4" ry="5" fill="#4A3040"/><circle cx="41.5" cy="50.5" r="1.5" fill="#FFF"/><circle cx="61.5" cy="50.5" r="1.5" fill="#FFF"/><ellipse cx="50" cy="60" rx="3.5" ry="2.5" fill="#FF8FAB"/><path d="M46 64 Q50 68 54 64" fill="none" stroke="#D46A8E" stroke-width="1.8" stroke-linecap="round"/><path d="M50 60 L50 64" stroke="#D46A8E" stroke-width="1" stroke-linecap="round"/><circle cx="34" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/><circle cx="66" cy="62" r="6" fill="#FF8FAB" opacity="0.35"/></svg>',
+      parrot: '<svg viewBox="0 0 100 100"><ellipse cx="50" cy="54" rx="32" ry="36" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="26" ry="28" fill="#58D68D"/><polygon points="34,24 22,6 42,26" fill="#2ECC71"/><polygon points="66,24 78,6 58,26" fill="#2ECC71"/><ellipse cx="50" cy="56" rx="18" ry="16" fill="#FFEAA7"/><circle cx="40" cy="46" r="6" fill="#FFF"/><circle cx="60" cy="46" r="6" fill="#FFF"/><circle cx="41" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="59" cy="45.5" r="3.5" fill="#1A1A1A"/><circle cx="42.5" cy="44" r="1.2" fill="#FFF"/><circle cx="60.5" cy="44" r="1.2" fill="#FFF"/><path d="M44 56 Q50 52 56 56" fill="#FF7675" stroke="#E55A5A" stroke-width="1"/><path d="M50 56 L50 60" stroke="none"/><ellipse cx="50" cy="86" rx="8" ry="6" fill="#E74C3C"/><ellipse cx="44" cy="88" rx="4" ry="5" fill="#F39C12"/><ellipse cx="56" cy="88" rx="4" ry="5" fill="#3498DB"/><path d="M17 50 Q8 46 12 36 Q16 26 24 34" fill="#2ECC71" stroke="none"/><path d="M83 50 Q92 46 88 36 Q84 26 76 34" fill="#2ECC71" stroke="none"/></svg>'
+    };
+
+    /* ── Avatar picker logic ──────────────────────────────── */
+    function initAvatarPicker(containerId) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.querySelectorAll('.avatar-option').forEach(opt => {
+        opt.addEventListener('click', () => {
+          container.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+          opt.classList.add('selected');
+        });
+      });
+    }
+    function getSelectedAvatar(containerId) {
+      const sel = document.querySelector('#' + containerId + ' .avatar-option.selected');
+      return sel ? sel.dataset.avatar : 'fox';
+    }
+
+    initAvatarPicker('regAvatarPicker');
+    initAvatarPicker('editAvatarPicker');
     document.querySelectorAll('.account-tab').forEach(tab => {
       tab.addEventListener('click', () => {
         document.querySelectorAll('.account-tab').forEach(t => t.classList.remove('active'));
@@ -597,7 +831,7 @@
       });
     });
 
-    /* ── Register ─────────────────────────────────────────── */
+    /* ── Register (max 10 accounts) ───────────────────────── */
     document.getElementById('registerForm').addEventListener('submit', function (e) {
       e.preventDefault();
       hideMessage();
@@ -614,6 +848,12 @@
       }
 
       const accounts = getAccounts();
+
+      if (accounts.length >= MAX_ACCOUNTS) {
+        showMessage('Maximum number of accounts (' + MAX_ACCOUNTS + ') reached. Delete an account to create a new one.', 'error');
+        return;
+      }
+
       if (accounts.find(a => a.email === email)) {
         showMessage('An account with this email already exists.', 'error');
         return;
@@ -624,14 +864,18 @@
         lastName: last,
         email: email,
         password: pass,
+        avatar: getSelectedAvatar('regAvatarPicker'),
         createdAt: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })
       };
       accounts.push(user);
       saveAccounts(accounts);
-      setSession({ email: user.email, firstName: user.firstName, lastName: user.lastName, createdAt: user.createdAt });
+      setSession({ email: user.email, firstName: user.firstName, lastName: user.lastName, avatar: user.avatar, createdAt: user.createdAt });
 
       showMessage('Account created successfully!', 'success');
-      setTimeout(() => renderView(), 800);
+      setTimeout(() => {
+        renderView();
+        if (typeof updateCartUI === 'function') updateCartUI();
+      }, 800);
       this.reset();
     });
 
@@ -651,9 +895,12 @@
         return;
       }
 
-      setSession({ email: user.email, firstName: user.firstName, lastName: user.lastName, createdAt: user.createdAt });
+      setSession({ email: user.email, firstName: user.firstName, lastName: user.lastName, avatar: user.avatar || 'fox', createdAt: user.createdAt });
       showMessage('Welcome back, ' + user.firstName + '!', 'success');
-      setTimeout(() => renderView(), 800);
+      setTimeout(() => {
+        renderView();
+        if (typeof updateCartUI === 'function') updateCartUI();
+      }, 800);
       this.reset();
     });
 
@@ -661,9 +908,113 @@
     document.getElementById('btnLogout').addEventListener('click', () => {
       clearSession();
       renderView();
+      if (typeof updateCartUI === 'function') updateCartUI();
     });
 
-    /* ── Delete Account ───────────────────────────────────── */
+    /* ── Edit Profile ─────────────────────────────────────── */
+    document.getElementById('btnEditProfile').addEventListener('click', () => {
+      const session = getSession();
+      if (!session) return;
+
+      document.getElementById('editFirstName').value = session.firstName;
+      document.getElementById('editLastName').value = session.lastName;
+      document.getElementById('editEmail').value = session.email;
+      document.getElementById('editNewPassword').value = '';
+      document.getElementById('editConfirmPassword').value = '';
+      document.getElementById('editCurrentPassword').value = '';
+      // Pre-select current avatar
+      const editPicker = document.getElementById('editAvatarPicker');
+      editPicker.querySelectorAll('.avatar-option').forEach(o => o.classList.remove('selected'));
+      const currentAvatarOpt = editPicker.querySelector('[data-avatar="' + (session.avatar || 'fox') + '"]');
+      if (currentAvatarOpt) currentAvatarOpt.classList.add('selected');
+      hideEditMessage();
+
+      document.getElementById('editSection').style.display = '';
+      document.getElementById('btnEditProfile').style.display = 'none';
+    });
+
+    document.getElementById('btnCancelEdit').addEventListener('click', () => {
+      document.getElementById('editSection').style.display = 'none';
+      document.getElementById('btnEditProfile').style.display = '';
+    });
+
+    document.getElementById('editForm').addEventListener('submit', function (e) {
+      e.preventDefault();
+      hideEditMessage();
+
+      const session = getSession();
+      if (!session) return;
+
+      const newFirst = document.getElementById('editFirstName').value.trim();
+      const newLast = document.getElementById('editLastName').value.trim();
+      const newEmail = document.getElementById('editEmail').value.trim().toLowerCase();
+      const newPass = document.getElementById('editNewPassword').value;
+      const newConfirm = document.getElementById('editConfirmPassword').value;
+      const currentPass = document.getElementById('editCurrentPassword').value;
+
+      const accounts = getAccounts();
+      const userIdx = accounts.findIndex(a => a.email === session.email);
+      if (userIdx === -1) { showEditMessage('Account not found.', 'error'); return; }
+
+      // Verify current password
+      if (accounts[userIdx].password !== currentPass) {
+        showEditMessage('Current password is incorrect.', 'error');
+        return;
+      }
+
+      // Check new password match if provided
+      if (newPass || newConfirm) {
+        if (newPass !== newConfirm) {
+          showEditMessage('New passwords do not match.', 'error');
+          return;
+        }
+        if (newPass.length < 6) {
+          showEditMessage('New password must be at least 6 characters.', 'error');
+          return;
+        }
+      }
+
+      // Check email uniqueness if changed
+      const oldEmail = session.email;
+      if (newEmail !== oldEmail && accounts.find(a => a.email === newEmail)) {
+        showEditMessage('An account with this email already exists.', 'error');
+        return;
+      }
+
+      // Update the account
+      accounts[userIdx].firstName = newFirst;
+      accounts[userIdx].lastName = newLast;
+      accounts[userIdx].email = newEmail;
+      accounts[userIdx].avatar = getSelectedAvatar('editAvatarPicker');
+      if (newPass) accounts[userIdx].password = newPass;
+
+      // If email changed, migrate per-account data keys
+      if (newEmail !== oldEmail) {
+        const dataKeys = ['ott_cart', 'ott_wishlist', 'ott_orders', 'ott_points'];
+        dataKeys.forEach(base => {
+          const oldKey = base + '_' + oldEmail;
+          const newKey = base + '_' + newEmail;
+          const data = localStorage.getItem(oldKey);
+          if (data !== null) {
+            localStorage.setItem(newKey, data);
+            localStorage.removeItem(oldKey);
+          }
+        });
+      }
+
+      saveAccounts(accounts);
+      setSession({ email: newEmail, firstName: newFirst, lastName: newLast, avatar: accounts[userIdx].avatar, createdAt: accounts[userIdx].createdAt });
+
+      showEditMessage('Profile updated successfully!', 'success');
+      setTimeout(() => {
+        document.getElementById('editSection').style.display = 'none';
+        document.getElementById('btnEditProfile').style.display = '';
+        renderView();
+        if (typeof updateCartUI === 'function') updateCartUI();
+      }, 800);
+    });
+
+    /* ── Delete Account (cascades per-account data) ───────── */
     document.getElementById('btnShowDelete').addEventListener('click', () => {
       document.getElementById('deleteConfirm').style.display = '';
     });
@@ -686,10 +1037,17 @@
         return;
       }
 
-      const updated = accounts.filter(a => a.email !== session.email);
+      // Remove all per-account data
+      const email = session.email;
+      ['ott_cart', 'ott_wishlist', 'ott_orders', 'ott_points'].forEach(base => {
+        localStorage.removeItem(base + '_' + email);
+      });
+
+      const updated = accounts.filter(a => a.email !== email);
       saveAccounts(updated);
       clearSession();
       renderView();
+      if (typeof updateCartUI === 'function') updateCartUI();
     });
 
     /* ── Render view based on session ─────────────────────── */
@@ -704,12 +1062,18 @@
         document.getElementById('profileName').textContent = session.firstName + ' ' + session.lastName;
         document.getElementById('profileEmail').textContent = session.email;
         document.getElementById('profileSince').textContent = session.createdAt;
+        document.getElementById('profileAvatar').innerHTML = ANIMAL_SVGS[session.avatar || 'fox'] || ANIMAL_SVGS.fox;
         document.getElementById('deleteConfirm').style.display = 'none';
+        document.getElementById('editSection').style.display = 'none';
+        document.getElementById('btnEditProfile').style.display = '';
       } else {
         guestView.style.display = '';
         userView.style.display = 'none';
         hideMessage();
       }
+
+      // Refresh animal theme colors
+      if (typeof initAnimalTheme === 'function') initAnimalTheme();
     }
 
     /* ── Handle deep-link from dropdown (data-action param) ── */

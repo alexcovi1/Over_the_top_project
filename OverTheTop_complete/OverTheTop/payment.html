@@ -395,7 +395,16 @@
           <a href="contact.html">Contact</a>
         </nav>
         <div class="nav-actions">
-          <button class="cart-btn" aria-label="Cart" onclick="window.location.href='index.html'">
+          <button class="ambient-btn" id="ambientBtn" aria-label="Toggle ambient mode">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round">
+              <path d="M9.59 4.59A2 2 0 1111 8H2" />
+              <path d="M12.59 19.41A2 2 0 1014 16H2" />
+              <path d="M17.73 7.73A2.5 2.5 0 1119.5 12H2" />
+            </svg>
+            <span>Ambient</span>
+          </button>
+          <button class="cart-btn" aria-label="Cart">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
               stroke-linecap="round">
               <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z" />
@@ -646,57 +655,9 @@
     </div>
   </footer>
 
+  <script src="js/app.js"></script>
   <script>
-    /* ── Read cart from localStorage ──────────────────────────── */
-    const CART_KEY = 'ott_cart';
-
-    function getCart() {
-      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
-      catch { return []; }
-    }
-    function saveCart(cart) {
-      localStorage.setItem(CART_KEY, JSON.stringify(cart));
-    }
-    function getTotal() {
-      return getCart().reduce((s, i) => s + i.price * i.qty, 0);
-    }
-    function getItemCount() {
-      return getCart().reduce((s, i) => s + i.qty, 0);
-    }
-
-    /* ── Order History & Points ────────────────────────────────── */
-    const ORDERS_KEY = 'ott_orders';
-    const POINTS_KEY = 'ott_points';
-
-    function getOrders() {
-      try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
-      catch { return []; }
-    }
-    function saveOrder(order) {
-      const orders = getOrders();
-      orders.unshift(order);
-      localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-    }
-    function getPoints() {
-      try { return parseInt(localStorage.getItem(POINTS_KEY)) || 0; }
-      catch { return 0; }
-    }
-    function addPoints(amount) {
-      const pts = getPoints() + Math.floor(amount);
-      localStorage.setItem(POINTS_KEY, String(pts));
-      return pts;
-    }
-
-    /* ── Update cart badge ────────────────────────────────────── */
-    function updateCartUI() {
-      const count = getItemCount();
-      document.querySelectorAll('.cart-count').forEach(el => {
-        el.textContent = count;
-        el.classList.toggle('visible', count > 0);
-      });
-    }
-
-    /* ── Render order summary ─────────────────────────────────── */
+    /* ── Render order summary (payment-page specific) ─────────── */
     function renderOrderSummary() {
       const container = document.getElementById('orderItems');
       const cart = getCart();
@@ -822,21 +783,7 @@
       window.location.href = 'index.html';
     });
 
-    /* ── Navbar scroll shadow ─────────────────────────────────── */
-    window.addEventListener('scroll', () => {
-      document.querySelector('.navbar')?.classList.toggle('scrolled', window.scrollY > 10);
-    });
-
-    /* ── Hamburger ────────────────────────────────────────────── */
-    const hamburger = document.getElementById('hamburger');
-    const mobileMenu = document.getElementById('mobileMenu');
-    hamburger?.addEventListener('click', () => {
-      hamburger.classList.toggle('open');
-      mobileMenu?.classList.toggle('open');
-    });
-
     /* ── Init ─────────────────────────────────────────────────── */
-    updateCartUI();
     renderOrderSummary();
   </script>
 </body>

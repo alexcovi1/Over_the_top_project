@@ -4,15 +4,126 @@
    product filters, checkout modal, newsletter
    ============================================================ */
 
-// ── Cart State (localStorage) ────────────────────────────────
+// ── Per-account data helper ──────────────────────────────────
+function getSessionEmail() {
+  try {
+    const s = JSON.parse(localStorage.getItem('ott_session'));
+    return s ? s.email : '';
+  } catch { return ''; }
+}
+function userKey(base) {
+  const email = getSessionEmail();
+  return email ? base + '_' + email : base;
+}
+
+// ── Animal Theme System ──────────────────────────────────────
+const ANIMAL_THEMES = {
+  fox: {
+    gold: '#e8914c',
+    goldDark: '#c46d2e',
+    particleA: 'rgba(232,145,76,0.9)',
+    particleB: 'rgba(196,109,46,0.4)',
+    glowColor: 'rgba(232,145,76,0.15)',
+    emoji: '🦊',
+    name: 'Fox',
+    personality: 'Clever'
+  },
+  panda: {
+    gold: '#4ECDC4',
+    goldDark: '#36a89f',
+    particleA: 'rgba(78,205,196,0.9)',
+    particleB: 'rgba(54,168,159,0.4)',
+    glowColor: 'rgba(78,205,196,0.15)',
+    emoji: '🐼',
+    name: 'Panda',
+    personality: 'Zen'
+  },
+  owl: {
+    gold: '#9B7FCC',
+    goldDark: '#7B5EA7',
+    particleA: 'rgba(155,127,204,0.9)',
+    particleB: 'rgba(123,94,167,0.4)',
+    glowColor: 'rgba(155,127,204,0.15)',
+    emoji: '🦉',
+    name: 'Owl',
+    personality: 'Wise'
+  },
+  bunny: {
+    gold: '#FF6B9D',
+    goldDark: '#e04a7e',
+    particleA: 'rgba(255,107,157,0.9)',
+    particleB: 'rgba(224,74,126,0.4)',
+    glowColor: 'rgba(255,107,157,0.15)',
+    emoji: '🐰',
+    name: 'Bunny',
+    personality: 'Happy'
+  },
+  parrot: {
+    gold: '#2ECC71',
+    goldDark: '#27ae60',
+    particleA: 'rgba(46,204,113,0.9)',
+    particleB: 'rgba(39,174,96,0.4)',
+    glowColor: 'rgba(46,204,113,0.15)',
+    emoji: '🦜',
+    name: 'Parrot',
+    personality: 'Adventurous'
+  }
+};
+
+let activeAnimalTheme = null;
+
+function getAnimalTheme() {
+  const email = getSessionEmail();
+  if (!email) return null;
+  try {
+    const session = JSON.parse(localStorage.getItem('ott_session'));
+    return session && session.avatar ? ANIMAL_THEMES[session.avatar] || null : null;
+  } catch { return null; }
+}
+
+function initAnimalTheme() {
+  activeAnimalTheme = getAnimalTheme();
+  const root = document.documentElement;
+  if (!activeAnimalTheme) {
+    // Reset to defaults when not logged in
+    root.style.removeProperty('--gold');
+    root.style.removeProperty('--gold-dark');
+    updateParticleStyles(null);
+    return;
+  }
+  const t = activeAnimalTheme;
+  root.style.setProperty('--gold', t.gold);
+  root.style.setProperty('--gold-dark', t.goldDark);
+  updateParticleStyles(t);
+}
+
+function updateParticleStyles(theme) {
+  let styleEl = document.getElementById('animalThemeStyle');
+  if (!theme) {
+    if (styleEl) styleEl.remove();
+    return;
+  }
+  if (!styleEl) {
+    styleEl = document.createElement('style');
+    styleEl.id = 'animalThemeStyle';
+    document.head.appendChild(styleEl);
+  }
+  styleEl.textContent = `
+    .cursor-particle { background: radial-gradient(circle, ${theme.particleA}, ${theme.particleB}) !important; }
+    .cursor-glow { background: radial-gradient(circle, ${theme.glowColor}, transparent 70%) !important; }
+    .toast { border-left-color: ${theme.gold} !important; }
+  `;
+}
+
+// ── Cart State (localStorage, per-account) ───────────────────
 const CART_KEY = 'ott_cart';
 
 function getCart() {
-  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  try { return JSON.parse(localStorage.getItem(userKey(CART_KEY))) || []; }
   catch { return []; }
 }
 function saveCart(cart) {
-  localStorage.setItem(CART_KEY, JSON.stringify(cart));
+  localStorage.setItem(userKey(CART_KEY), JSON.stringify(cart));
 }
 
 function addToCart(name, price, category, size, image) {
@@ -124,7 +235,9 @@ function showToast(msg) {
     toast.className = 'toast';
     document.body.appendChild(toast);
   }
-  toast.textContent = msg;
+  const theme = activeAnimalTheme || getAnimalTheme();
+  const prefix = theme ? theme.emoji + ' ' : '';
+  toast.textContent = prefix + msg;
   clearTimeout(toastTimer);
   toast.classList.remove('show');
   requestAnimationFrame(() => {
@@ -686,15 +799,15 @@ function initViewDetails() {
   });
 }
 
-// ── Wishlist (persistent) ────────────────────────────────────
+// ── Wishlist (persistent, per-account) ───────────────────────
 const WISH_KEY = 'ott_wishlist';
 
 function getWishlist() {
-  try { return JSON.parse(localStorage.getItem(WISH_KEY)) || []; }
+  try { return JSON.parse(localStorage.getItem(userKey(WISH_KEY))) || []; }
   catch { return []; }
 }
 function saveWishlist(list) {
-  localStorage.setItem(WISH_KEY, JSON.stringify(list));
+  localStorage.setItem(userKey(WISH_KEY), JSON.stringify(list));
 }
 function addToWishlist(name, price, category, image) {
   const list = getWishlist();
@@ -718,7 +831,7 @@ function initWishlist() {
     }
     btn.addEventListener('click', function () {
       this.classList.toggle('wished');
-      const n = this.closest('.product-card')?.querySelector('.product-name')?.textContent;
+      const n = this.closest('.product-card')?.querySelector('.product-name')?.textContent?.trim();
       const priceEl = this.closest('.product-card')?.querySelector('.product-price')?.textContent || '€0';
       const price = parseFloat(priceEl.replace(/[^0-9.]/g, '')) || 0;
       const cat = this.closest('.product-card')?.querySelector('.product-category')?.textContent?.trim() || '';
@@ -735,27 +848,27 @@ function initWishlist() {
   });
 }
 
-// ── Order History & Loyalty Points ───────────────────────────
+// ── Order History & Loyalty Points (per-account) ────────────
 const ORDERS_KEY = 'ott_orders';
 const POINTS_KEY = 'ott_points';
 
 function getOrders() {
-  try { return JSON.parse(localStorage.getItem(ORDERS_KEY)) || []; }
+  try { return JSON.parse(localStorage.getItem(userKey(ORDERS_KEY))) || []; }
   catch { return []; }
 }
 function saveOrder(order) {
   const orders = getOrders();
   orders.unshift(order);
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+  localStorage.setItem(userKey(ORDERS_KEY), JSON.stringify(orders));
 }
 function getPoints() {
-  try { return parseInt(localStorage.getItem(POINTS_KEY)) || 0; }
+  try { return parseInt(localStorage.getItem(userKey(POINTS_KEY))) || 0; }
   catch { return 0; }
 }
 function addPoints(amount) {
   // 1 point per €1 spent
   const pts = getPoints() + Math.floor(amount);
-  localStorage.setItem(POINTS_KEY, String(pts));
+  localStorage.setItem(userKey(POINTS_KEY), String(pts));
   return pts;
 }
 
@@ -1213,10 +1326,19 @@ function initCompareNav() {
   });
 }
 
+// ── Fix footer Assistance links ─────────────────────────────
+function initFooterLinks() {
+  document.querySelectorAll('.footer-col a[href="#"]').forEach(function(a) {
+    a.href = 'contact.html';
+  });
+}
+
 // ── Boot ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initAnimalTheme();
   initLoader();
   initCompareNav();
+  initFooterLinks();
   initLogoMenu();
   initNavbar();
   initAmbient();
