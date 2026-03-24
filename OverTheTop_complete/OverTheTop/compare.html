@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Compare — Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Compare Page Styles ──────────────────────────────── */
+
+    /* Hero */
+    .cmp-hero {
+      position: relative; overflow: hidden;
+      min-height: 420px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 32px 60px;
+      background: var(--black); color: #fff;
+    }
+    .cmp-hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .cmp-hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.35);
+    }
+    .cmp-hero-topo {
+      position: absolute; inset: 0; z-index: 1;
+      opacity: 0.08; pointer-events: none;
+    }
+    .cmp-hero::after {
+      content: ''; position: absolute; inset: 0; z-index: 1;
+      background: radial-gradient(ellipse 60% 80% at 50% 40%, rgba(200,168,130,0.1), transparent 70%);
+      pointer-events: none;
+    }
+    .cmp-hero-content { position: relative; z-index: 2; max-width: 600px; }
+    .cmp-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 20px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .cmp-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      line-height: 1.1; margin-bottom: 14px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .cmp-hero p {
+      font-size: clamp(14px, 1.4vw, 16px);
+      color: rgba(255,255,255,0.6); line-height: 1.7;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+
+    /* ── Selector Section ─────────────────────────────────── */
+    .cmp-selector {
+      background: var(--off-white);
+      padding: 60px 32px 50px;
+    }
+    .cmp-selector-inner {
+      max-width: 1100px; margin: 0 auto;
+    }
+    .cmp-selector-header {
+      text-align: center; margin-bottom: 40px;
+    }
+    .cmp-selector-header h2 {
+      font-size: 22px; margin-bottom: 8px;
+    }
+    .cmp-selector-header p {
+      font-size: 14px; color: var(--text-muted);
+    }
+
+    /* Shoe picker grid */
+    .cmp-picker {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-bottom: 32px;
+    }
+    .cmp-shoe {
+      background: var(--white);
+      border: 2px solid transparent;
+      border-radius: 14px;
+      padding: 16px; text-align: center;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative; overflow: hidden;
+    }
+    .cmp-shoe:hover {
+      border-color: rgba(200,168,130,0.3);
+      transform: translateY(-3px);
+      box-shadow: 0 6px 24px rgba(0,0,0,0.05);
+    }
+    .cmp-shoe.selected {
+      border-color: var(--gold);
+      box-shadow: 0 6px 28px rgba(200,168,130,0.15);
+      transform: translateY(-3px);
+    }
+    .cmp-shoe.selected::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+    }
+    .cmp-shoe-check {
+      position: absolute; top: 10px; right: 10px;
+      width: 24px; height: 24px;
+      background: var(--gold); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; opacity: 0; transform: scale(0);
+      transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+      font-size: 12px;
+    }
+    .cmp-shoe.selected .cmp-shoe-check {
+      opacity: 1; transform: scale(1);
+    }
+    .cmp-shoe-badge {
+      display: inline-block;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold-dark);
+      background: rgba(200,168,130,0.1);
+      padding: 3px 10px; border-radius: 20px;
+      margin-bottom: 10px;
+    }
+    .cmp-shoe img {
+      width: 100%; height: 120px;
+      object-fit: contain; margin-bottom: 10px;
+      transition: transform 0.3s ease;
+    }
+    .cmp-shoe:hover img { transform: scale(1.05); }
+    .cmp-shoe-name {
+      font-size: 14px; font-weight: 600;
+      color: var(--text); margin-bottom: 4px;
+    }
+    .cmp-shoe-price {
+      font-size: 13px; color: var(--text-muted);
+    }
+
+    /* Selection count bar */
+    .cmp-count-bar {
+      display: flex; align-items: center; justify-content: center;
+      gap: 16px; padding: 16px;
+      background: var(--white); border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+    }
+    .cmp-count-text {
+      font-size: 13px; color: var(--text-muted);
+    }
+    .cmp-count-text strong { color: var(--gold-dark); }
+    .cmp-compare-btn {
+      padding: 12px 32px; border-radius: 10px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      font-family: 'Inter', sans-serif;
+      background: var(--black); color: #fff; border: none;
+      box-shadow: 0 4px 16px rgba(10,10,10,0.15);
+    }
+    .cmp-compare-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(10,10,10,0.25);
+    }
+    .cmp-compare-btn:disabled {
+      opacity: 0.3; cursor: not-allowed; transform: none !important;
+      box-shadow: none !important;
+    }
+    .cmp-clear-btn {
+      padding: 10px 20px; border-radius: 8px;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      cursor: pointer; border: 1.5px solid var(--border);
+      background: transparent; color: var(--text-muted);
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+    .cmp-clear-btn:hover { border-color: var(--text); color: var(--text); }
+
+    /* ── Comparison Results ────────────────────────────────── */
+    .cmp-results {
+      display: none;
+      padding: 70px 32px 90px;
+      background: var(--white);
+    }
+    .cmp-results.visible { display: block; }
+    .cmp-results-inner {
+      max-width: 1100px; margin: 0 auto;
+    }
+    .cmp-results-header {
+      text-align: center; margin-bottom: 50px;
+    }
+    .cmp-results-header h2 {
+      font-size: clamp(24px, 3vw, 36px); margin-bottom: 10px;
+    }
+    .cmp-results-header p {
+      font-size: 14px; color: var(--text-muted);
+    }
+
+    /* Radar Chart Area */
+    .cmp-chart-area {
+      display: flex; justify-content: center;
+      margin-bottom: 56px;
+    }
+    .cmp-chart-wrap {
+      width: 420px; height: 420px;
+      position: relative;
+    }
+    .cmp-chart-wrap canvas {
+      width: 100%; height: 100%;
+    }
+
+    /* Chart Legend */
+    .cmp-legend {
+      display: flex; justify-content: center;
+      gap: 28px; margin-bottom: 56px;
+    }
+    .cmp-legend-item {
+      display: flex; align-items: center; gap: 8px;
+      font-size: 13px; font-weight: 600; color: var(--text);
+    }
+    .cmp-legend-dot {
+      width: 12px; height: 12px; border-radius: 50%;
+    }
+
+    /* Specs Table */
+    .cmp-table-wrap {
+      overflow-x: auto;
+    }
+    .cmp-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .cmp-table thead th {
+      padding: 18px 16px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted);
+      border-bottom: 2px solid var(--border);
+      text-align: left;
+    }
+    .cmp-table thead th:first-child {
+      width: 160px;
+    }
+    .cmp-table thead th.cmp-th-product {
+      text-align: center;
+    }
+    .cmp-table thead th .cmp-th-img {
+      width: 60px; height: 40px;
+      object-fit: contain;
+      display: block; margin: 0 auto 6px;
+    }
+    .cmp-table thead th .cmp-th-name {
+      font-size: 13px; font-weight: 700;
+      color: var(--text); letter-spacing: 0;
+      text-transform: none;
+    }
+    .cmp-table tbody tr {
+      transition: background 0.2s ease;
+    }
+    .cmp-table tbody tr:hover { background: rgba(245,242,238,0.5); }
+    .cmp-table tbody td {
+      padding: 16px; font-size: 14px;
+      color: var(--text); border-bottom: 1px solid var(--border);
+      text-align: center;
+    }
+    .cmp-table tbody td:first-child {
+      font-weight: 600; font-size: 12px;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--text-muted); text-align: left;
+    }
+    /* Stat bar in table */
+    .cmp-stat-bar {
+      display: flex; align-items: center; gap: 8px;
+      justify-content: center;
+    }
+    .cmp-stat-track {
+      width: 80px; height: 6px;
+      background: var(--off-white); border-radius: 3px;
+      overflow: hidden;
+    }
+    .cmp-stat-fill {
+      height: 100%; border-radius: 3px;
+      transition: width 1s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .cmp-stat-val {
+      font-size: 13px; font-weight: 700;
+      min-width: 20px;
+    }
+    /* Winner highlight */
+    .cmp-winner {
+      color: var(--gold-dark);
+    }
+    .cmp-winner .cmp-stat-fill { background: linear-gradient(90deg, var(--gold), var(--gold-dark)) !important; }
+
+    /* Verdict section */
+    .cmp-verdict {
+      margin-top: 56px; padding: 36px;
+      background: linear-gradient(135deg, rgba(245,242,238,0.7), rgba(232,224,213,0.4));
+      border-radius: 16px; text-align: center;
+      border: 1px solid rgba(200,168,130,0.1);
+    }
+    .cmp-verdict h3 { font-size: 22px; margin-bottom: 8px; }
+    .cmp-verdict p {
+      font-size: 14px; color: var(--text-muted); line-height: 1.7;
+      max-width: 540px; margin: 0 auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .cmp-picker { grid-template-columns: repeat(2, 1fr); }
+      .cmp-chart-wrap { width: 320px; height: 320px; }
+    }
+    @media (max-width: 600px) {
+      .cmp-hero { min-height: 320px; padding: 90px 24px 50px; }
+      .cmp-picker { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .cmp-shoe img { height: 80px; }
+      .cmp-chart-wrap { width: 280px; height: 280px; }
+      .cmp-count-bar { flex-direction: column; gap: 10px; }
+      .cmp-legend { flex-direction: column; align-items: center; gap: 10px; }
+    }
+  </style>
+</head>
+<body class="page-body">
+
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><span class="logo-text">Over The Top</span></button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories"><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a></nav>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links"><a href="index.html">Home</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+        <div class="nav-actions">
+          <button class="ambient-btn" id="ambientBtn" aria-label="Toggle ambient mode"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9.59 4.59A2 2 0 1111 8H2"/><path d="M12.59 19.41A2 2 0 1014 16H2"/><path d="M17.73 7.73A2.5 2.5 0 1119.5 12H2"/></svg><span>Ambient</span></button>
+          <button class="cart-btn" aria-label="Cart"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg><span class="cart-count" id="cartCount">0</span></button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger"><span></span><span></span><span></span></button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+  </header>
+
+  <!-- ═══ HERO ═══ -->
+  <section class="cmp-hero">
+    <div class="cmp-hero-bg">
+      <img src="images/00_HERO_Comparison.png" alt="" />
+    </div>
+    <svg class="cmp-hero-topo" viewBox="0 0 1440 480" preserveAspectRatio="none" fill="none" stroke="#fff" stroke-width="1">
+      <path d="M0 340c120-20 240 30 360 10s240-50 360-20 240 40 360 10"/>
+      <path d="M0 300c140-30 280 20 420 0s280-40 300-10 280 30 300 10"/>
+      <path d="M0 380c100-10 200 25 300 15s200-35 300-15 200 30 300 10 200-20 240-5"/>
+      <path d="M0 260c160-25 320 15 480 5s320-30 480-10 320 20 480 5"/>
+    </svg>
+    <div class="cmp-hero-content">
+      <div class="cmp-hero-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 3h5v5"/><path d="M4 20L21 3"/><path d="M21 16v5h-5"/><path d="M15 15l6 6"/><path d="M4 4l5 5"/></svg>
+        COMPARE SHOES
+      </div>
+      <h1>Find Your Perfect Match</h1>
+      <p>Select up to 3 shoes to compare side-by-side with interactive radar charts and detailed specs.</p>
+    </div>
+  </section>
+
+  <!-- ═══ SELECTOR ═══ -->
+  <section class="cmp-selector">
+    <div class="cmp-selector-inner">
+      <div class="cmp-selector-header">
+        <h2>Choose Your Shoes</h2>
+        <p>Click to select 2 or 3 shoes you'd like to compare</p>
+      </div>
+      <div class="cmp-picker" id="cmpPicker"></div>
+      <div class="cmp-count-bar">
+        <span class="cmp-count-text"><strong id="cmpCount">0</strong> of 3 selected</span>
+        <button class="cmp-clear-btn" id="cmpClear">Clear All</button>
+        <button class="cmp-compare-btn" id="cmpGoBtn" disabled>Compare Now</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ RESULTS ═══ -->
+  <section class="cmp-results" id="cmpResults">
+    <div class="cmp-results-inner">
+      <div class="cmp-results-header">
+        <h2>Head-to-Head Comparison</h2>
+        <p>Radar chart and detailed breakdown of your selected shoes</p>
+      </div>
+
+      <div class="cmp-chart-area">
+        <div class="cmp-chart-wrap">
+          <canvas id="cmpRadar"></canvas>
+        </div>
+      </div>
+
+      <div class="cmp-legend" id="cmpLegend"></div>
+
+      <div class="cmp-table-wrap">
+        <table class="cmp-table" id="cmpTable">
+          <thead id="cmpThead"></thead>
+          <tbody id="cmpTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="cmp-verdict" id="cmpVerdict"></div>
+    </div>
+  </section>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+          <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+          <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+        </svg>
+        <p class="footer-logo-text">Over The Top</p>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h3>Shop</h3>
+          <ul>
+            <li><a href="newCollection.html">New Collection</a></li>
+            <li><a href="hiking.html">Hiking</a></li>
+            <li><a href="running.html">Running</a></li>
+            <li><a href="trail.html">Trail</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Assistance</h3>
+          <ul>
+            <li><a href="#">Shipping & Delivery</a></li>
+            <li><a href="#">Returns & Exchanges</a></li>
+            <li><a href="#">Size Guide</a></li>
+            <li><a href="contact.html">Contact Us</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Company</h3>
+          <ul>
+            <li><a href="about.html">About Us</a></li>
+            <li><a href="#">Mission & Vision</a></li>
+            <li><a href="#">Careers</a></li>
+            <li><a href="compare.html">Compare Shoes</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" />
+                <circle cx="12" cy="12" r="5" />
+                <circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+            <a href="#" aria-label="Facebook">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z" />
+              </svg>
+            </a>
+            <a href="#" aria-label="YouTube">
+              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z" />
+                <polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none" />
+              </svg>
+            </a>
+          </div>
+          <ul>
+            <li><a href="#">Events</a></li>
+            <li><a href="#">Community Forum</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="footer-bottom-inner">
+        <p>&copy; 2026 Over The Top. All rights reserved.</p>
+        <p>Privacy Policy</p>
+        <p>Terms of Service</p>
+        <p>Cookie Policy</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Cart Sidebar -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar">
+    <div class="cart-header">
+      <h3>Your Cart</h3>
+      <button class="cart-close" id="cartClose"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+    </div>
+    <div class="cart-body" id="cartBody"><p class="cart-empty">Your cart is empty</p></div>
+    <div class="cart-footer" id="cartFooter">
+      <div class="cart-total"><span>Total</span><strong id="cartTotal">€0</strong></div>
+      <a href="payment.html" class="btn-checkout">Checkout</a>
+    </div>
+  </aside>
+
+  <script src="js/app.js"></script>
+  <script>
+  (function() {
+    // ── Product Database with Stats ──────────────────────
+    const PRODUCTS = [
+      {
+        name: 'Summit Explorer', category: 'Hiking', price: 155,
+        image: 'images/01_HIKING_Summit_Explorer_01_Hero.png',
+        stats: { grip: 9, comfort: 7, weight: 5, durability: 9, waterproof: 10 },
+        desc: 'Waterproof membrane, reinforced toe cap, Vibram outsole'
+      },
+      {
+        name: 'Mountain Guardian', category: 'Hiking', price: 170,
+        image: 'images/02_HIKING_Mountain_Guardian_01_Hero.png',
+        stats: { grip: 10, comfort: 8, weight: 4, durability: 10, waterproof: 9 },
+        desc: 'Full leather upper, ankle support, Gore-Tex lining'
+      },
+      {
+        name: 'Trail Voyager', category: 'Hiking', price: 145,
+        image: 'images/03_HIKING_Trail_Voyager_01_Hero.png',
+        stats: { grip: 8, comfort: 8, weight: 7, durability: 7, waterproof: 8 },
+        desc: 'Lightweight mesh, EVA midsole, all-terrain tread'
+      },
+      {
+        name: 'Marathon Elite', category: 'Running', price: 145,
+        image: 'images/04_RUNNING_Marathon_Elite_01_Hero.png',
+        stats: { grip: 6, comfort: 9, weight: 9, durability: 6, waterproof: 3 },
+        desc: 'Carbon plate, responsive foam, race-day geometry'
+      },
+      {
+        name: 'Urban Pace', category: 'Running', price: 110,
+        image: 'images/05_RUNNING_Urban_Pace_01_Hero.png',
+        stats: { grip: 5, comfort: 8, weight: 8, durability: 6, waterproof: 2 },
+        desc: 'Breathable knit, soft cushion, everyday versatility'
+      },
+      {
+        name: 'Tempo Racer', category: 'Running', price: 130,
+        image: 'images/06_RUNNING_Tempo_Racer_01_Hero.png',
+        stats: { grip: 6, comfort: 8, weight: 10, durability: 5, waterproof: 2 },
+        desc: 'Ultra-light design, propulsive plate, speed mesh'
+      },
+      {
+        name: 'Mountain Grip', category: 'Trail', price: 140,
+        image: 'images/07_TRAIL_Mountain_Grip_01_Hero.png',
+        stats: { grip: 10, comfort: 7, weight: 6, durability: 8, waterproof: 7 },
+        desc: 'Aggressive lugs, rock guard, trail-specific geometry'
+      },
+      {
+        name: 'Rock Climber', category: 'Trail', price: 130,
+        image: 'images/08_TRAIL_Rock_Climber_01_Hero.png',
+        stats: { grip: 9, comfort: 6, weight: 7, durability: 9, waterproof: 6 },
+        desc: 'Reinforced sole plate, toe protection, sticky rubber'
+      },
+      {
+        name: 'Summit Apex', category: 'Trail', price: 165,
+        image: 'images/09_TRAIL_Summit_Apex_01_Hero.png',
+        stats: { grip: 10, comfort: 8, weight: 5, durability: 10, waterproof: 9 },
+        desc: 'Premium build, hybrid terrain, waterproof membrane'
+      }
+    ];
+
+    const STAT_LABELS = ['Grip', 'Comfort', 'Lightweight', 'Durability', 'Waterproof'];
+    const STAT_KEYS = ['grip', 'comfort', 'weight', 'durability', 'waterproof'];
+    const COLORS = [
+      { fill: 'rgba(200,168,130,0.25)', stroke: '#c8a882' },
+      { fill: 'rgba(10,10,10,0.12)', stroke: '#0a0a0a' },
+      { fill: 'rgba(90,155,181,0.18)', stroke: '#5a9bb5' }
+    ];
+
+    let selected = [];
+
+    // ── Render Picker Grid ───────────────────────────────
+    const picker = document.getElementById('cmpPicker');
+    PRODUCTS.forEach(function(p, i) {
+      const div = document.createElement('div');
+      div.className = 'cmp-shoe';
+      div.dataset.index = i;
+      div.innerHTML =
+        '<div class="cmp-shoe-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>' +
+        '<div class="cmp-shoe-badge">' + p.category + '</div>' +
+        '<img src="' + p.image + '" alt="' + p.name + '">' +
+        '<div class="cmp-shoe-name">' + p.name + '</div>' +
+        '<div class="cmp-shoe-price">&euro;' + p.price + '</div>';
+      div.addEventListener('click', function() { toggleShoe(i); });
+      picker.appendChild(div);
+    });
+
+    function toggleShoe(idx) {
+      var pos = selected.indexOf(idx);
+      if (pos > -1) {
+        selected.splice(pos, 1);
+      } else if (selected.length < 3) {
+        selected.push(idx);
+      }
+      updatePickerUI();
+    }
+
+    function updatePickerUI() {
+      var shoes = picker.querySelectorAll('.cmp-shoe');
+      shoes.forEach(function(el) {
+        var idx = parseInt(el.dataset.index);
+        el.classList.toggle('selected', selected.indexOf(idx) > -1);
+      });
+      document.getElementById('cmpCount').textContent = selected.length;
+      document.getElementById('cmpGoBtn').disabled = selected.length < 2;
+    }
+
+    document.getElementById('cmpClear').addEventListener('click', function() {
+      selected = [];
+      updatePickerUI();
+      document.getElementById('cmpResults').classList.remove('visible');
+    });
+
+    document.getElementById('cmpGoBtn').addEventListener('click', function() {
+      if (selected.length < 2) return;
+      var results = document.getElementById('cmpResults');
+      results.classList.add('visible');
+      // Delay render so the section is laid out and canvas has real dimensions
+      requestAnimationFrame(function() {
+        renderComparison();
+        results.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    // ── Radar Chart (Pure Canvas) ────────────────────────
+    function renderComparison() {
+      var items = selected.map(function(i) { return PRODUCTS[i]; });
+      drawRadar(items);
+      drawLegend(items);
+      drawTable(items);
+      drawVerdict(items);
+    }
+
+    function drawRadar(items) {
+      var canvas = document.getElementById('cmpRadar');
+      var ctx = canvas.getContext('2d');
+      var dpr = window.devicePixelRatio || 1;
+      var size = canvas.parentElement.clientWidth;
+      canvas.width = size * dpr;
+      canvas.height = size * dpr;
+      canvas.style.width = size + 'px';
+      canvas.style.height = size + 'px';
+      ctx.scale(dpr, dpr);
+
+      var cx = size / 2, cy = size / 2;
+      var maxR = size * 0.38;
+      var n = STAT_KEYS.length;
+      var angleStep = (Math.PI * 2) / n;
+      var startAngle = -Math.PI / 2;
+
+      ctx.clearRect(0, 0, size, size);
+
+      // Draw grid rings
+      for (var ring = 1; ring <= 5; ring++) {
+        var r = (ring / 5) * maxR;
+        ctx.beginPath();
+        for (var j = 0; j < n; j++) {
+          var a = startAngle + j * angleStep;
+          var x = cx + Math.cos(a) * r;
+          var y = cy + Math.sin(a) * r;
+          if (j === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.closePath();
+        ctx.strokeStyle = ring === 5 ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.04)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+
+      // Draw axis lines & labels
+      ctx.font = '600 11px Inter, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      for (var j = 0; j < n; j++) {
+        var a = startAngle + j * angleStep;
+        var x1 = cx + Math.cos(a) * maxR;
+        var y1 = cy + Math.sin(a) * maxR;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(x1, y1);
+        ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+
+        // Label
+        var lx = cx + Math.cos(a) * (maxR + 22);
+        var ly = cy + Math.sin(a) * (maxR + 22);
+        ctx.fillStyle = '#6b6560';
+        ctx.fillText(STAT_LABELS[j], lx, ly);
+      }
+
+      // Animate data polygons
+      var frame = { t: 0 };
+      var totalFrames = 40;
+
+      function animate() {
+        frame.t++;
+        var progress = Math.min(frame.t / totalFrames, 1);
+        var ease = 1 - Math.pow(1 - progress, 3);
+
+        // Clear only data area
+        ctx.clearRect(0, 0, size, size);
+
+        // Redraw grid
+        for (var ring = 1; ring <= 5; ring++) {
+          var r = (ring / 5) * maxR;
+          ctx.beginPath();
+          for (var j = 0; j < n; j++) {
+            var a = startAngle + j * angleStep;
+            var x = cx + Math.cos(a) * r;
+            var y = cy + Math.sin(a) * r;
+            if (j === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.strokeStyle = ring === 5 ? 'rgba(0,0,0,0.08)' : 'rgba(0,0,0,0.04)';
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+        for (var j = 0; j < n; j++) {
+          var a = startAngle + j * angleStep;
+          ctx.beginPath();
+          ctx.moveTo(cx, cy);
+          ctx.lineTo(cx + Math.cos(a) * maxR, cy + Math.sin(a) * maxR);
+          ctx.strokeStyle = 'rgba(0,0,0,0.06)';
+          ctx.stroke();
+          var lx = cx + Math.cos(a) * (maxR + 22);
+          var ly = cy + Math.sin(a) * (maxR + 22);
+          ctx.fillStyle = '#6b6560';
+          ctx.font = '600 11px Inter, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText(STAT_LABELS[j], lx, ly);
+        }
+
+        // Draw data polygons
+        items.forEach(function(item, idx) {
+          var color = COLORS[idx];
+          ctx.beginPath();
+          for (var j = 0; j < n; j++) {
+            var a = startAngle + j * angleStep;
+            var val = (item.stats[STAT_KEYS[j]] / 10) * maxR * ease;
+            var x = cx + Math.cos(a) * val;
+            var y = cy + Math.sin(a) * val;
+            if (j === 0) ctx.moveTo(x, y);
+            else ctx.lineTo(x, y);
+          }
+          ctx.closePath();
+          ctx.fillStyle = color.fill;
+          ctx.fill();
+          ctx.strokeStyle = color.stroke;
+          ctx.lineWidth = 2;
+          ctx.stroke();
+
+          // Draw dots
+          for (var j = 0; j < n; j++) {
+            var a = startAngle + j * angleStep;
+            var val = (item.stats[STAT_KEYS[j]] / 10) * maxR * ease;
+            ctx.beginPath();
+            ctx.arc(cx + Math.cos(a) * val, cy + Math.sin(a) * val, 4, 0, Math.PI * 2);
+            ctx.fillStyle = color.stroke;
+            ctx.fill();
+          }
+        });
+
+        if (progress < 1) requestAnimationFrame(animate);
+      }
+      animate();
+    }
+
+    // ── Legend ────────────────────────────────────────────
+    function drawLegend(items) {
+      var legend = document.getElementById('cmpLegend');
+      legend.innerHTML = '';
+      items.forEach(function(item, idx) {
+        var div = document.createElement('div');
+        div.className = 'cmp-legend-item';
+        div.innerHTML = '<span class="cmp-legend-dot" style="background:' + COLORS[idx].stroke + '"></span>' + item.name;
+        legend.appendChild(div);
+      });
+    }
+
+    // ── Specs Table ──────────────────────────────────────
+    function drawTable(items) {
+      var thead = document.getElementById('cmpThead');
+      var tbody = document.getElementById('cmpTbody');
+
+      // Header
+      var headerHtml = '<tr><th>Specification</th>';
+      items.forEach(function(item) {
+        headerHtml += '<th class="cmp-th-product"><img class="cmp-th-img" src="' + item.image + '" alt="' + item.name + '"><span class="cmp-th-name">' + item.name + '</span></th>';
+      });
+      headerHtml += '</tr>';
+      thead.innerHTML = headerHtml;
+
+      // Body rows
+      var rows = [
+        { label: 'Category', key: 'category', type: 'text' },
+        { label: 'Price', key: 'price', type: 'price' },
+        { label: 'Description', key: 'desc', type: 'text' }
+      ];
+      STAT_KEYS.forEach(function(key, i) {
+        rows.push({ label: STAT_LABELS[i], key: key, type: 'stat' });
+      });
+      rows.push({ label: 'Overall Score', key: 'overall', type: 'overall' });
+
+      var bodyHtml = '';
+      rows.forEach(function(row) {
+        bodyHtml += '<tr><td>' + row.label + '</td>';
+
+        // Find winner for stats
+        var maxVal = 0;
+        if (row.type === 'stat' || row.type === 'overall') {
+          items.forEach(function(item) {
+            var v = row.type === 'overall' ? getOverall(item) : item.stats[row.key];
+            if (v > maxVal) maxVal = v;
+          });
+        }
+
+        items.forEach(function(item, idx) {
+          if (row.type === 'text') {
+            bodyHtml += '<td>' + item[row.key] + '</td>';
+          } else if (row.type === 'price') {
+            bodyHtml += '<td>&euro;' + item.price + '</td>';
+          } else if (row.type === 'stat') {
+            var val = item.stats[row.key];
+            var isWinner = val === maxVal && items.length > 1;
+            var cls = isWinner ? ' cmp-winner' : '';
+            bodyHtml += '<td class="' + cls + '"><div class="cmp-stat-bar"><div class="cmp-stat-track"><div class="cmp-stat-fill" style="width:' + (val * 10) + '%;background:' + COLORS[idx].stroke + '"></div></div><span class="cmp-stat-val">' + val + '</span></div></td>';
+          } else if (row.type === 'overall') {
+            var val = getOverall(item);
+            var isWinner = val === maxVal && items.length > 1;
+            var cls = isWinner ? ' cmp-winner' : '';
+            bodyHtml += '<td class="' + cls + '"><strong>' + val.toFixed(1) + '</strong> / 10</td>';
+          }
+        });
+        bodyHtml += '</tr>';
+      });
+      tbody.innerHTML = bodyHtml;
+    }
+
+    function getOverall(item) {
+      var sum = 0;
+      STAT_KEYS.forEach(function(k) { sum += item.stats[k]; });
+      return sum / STAT_KEYS.length;
+    }
+
+    // ── Verdict ──────────────────────────────────────────
+    function drawVerdict(items) {
+      var best = items[0], bestScore = getOverall(items[0]);
+      items.forEach(function(item) {
+        var s = getOverall(item);
+        if (s > bestScore) { best = item; bestScore = s; }
+      });
+
+      // Find what each shoe is best at
+      var verdictParts = items.map(function(item) {
+        var topStat = '', topVal = 0;
+        STAT_KEYS.forEach(function(k, i) {
+          if (item.stats[k] > topVal) { topVal = item.stats[k]; topStat = STAT_LABELS[i]; }
+        });
+        return '<strong>' + item.name + '</strong> excels in ' + topStat.toLowerCase();
+      });
+
+      document.getElementById('cmpVerdict').innerHTML =
+        '<h3>Our Verdict</h3>' +
+        '<p>' + verdictParts.join(', while ') + '. ' +
+        'With an overall score of <strong>' + bestScore.toFixed(1) + '/10</strong>, the <strong>' + best.name + '</strong> leads this comparison.</p>';
+    }
+  })();
+  </script>
+</body>
+</html>

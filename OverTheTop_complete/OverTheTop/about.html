@@ -35,82 +35,196 @@
   </header>
 
   <!-- HERO -->
-  <section class="about-hero" style="position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;z-index:0;">
-      <img src="images/00_ABOUT_Story.png" alt="" style="width:100%;height:100%;object-fit:cover;" />
-      <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(10,10,10,0.6) 0%,rgba(10,10,10,0.75) 100%);"></div>
+  <section class="about-hero">
+    <div class="about-hero-bg">
+      <img src="images/00_ABOUT_Story.png" alt="Mountain landscape" />
     </div>
-    <h1 style="position:relative;z-index:1;">We Are Over The Top</h1>
-    <p style="position:relative;z-index:1;">Born from a passion for mountains, built for those who never stop climbing.</p>
+    <!-- Topographic SVG overlay -->
+    <svg class="about-hero-topo" viewBox="0 0 800 400" preserveAspectRatio="none">
+      <path d="M0 200 Q100 180 200 200 T400 190 T600 210 T800 195" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M0 220 Q150 200 300 225 T600 215 T800 230" fill="none" stroke="white" stroke-width="0.8"/>
+      <path d="M0 180 Q200 165 400 180 T800 170" fill="none" stroke="white" stroke-width="0.6"/>
+      <path d="M0 245 Q100 235 250 248 T500 240 T800 250" fill="none" stroke="white" stroke-width="0.5"/>
+      <path d="M0 160 Q180 148 350 162 T700 155 T800 160" fill="none" stroke="white" stroke-width="0.4"/>
+    </svg>
+    <div class="about-hero-content">
+      <div class="about-hero-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        OUR STORY
+      </div>
+      <h1>We Are Over The Top</h1>
+      <p>Born from a passion for mountains, built for those who never stop climbing.</p>
+    </div>
+    <div class="about-hero-scroll">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
   </section>
 
-  <!-- STORY -->
-  <div class="about-section">
-    <div class="about-text">
-      <h2>Our Story</h2>
-      <p>Over The Top was founded in 2018 by a group of trail runners and mountain enthusiasts who were frustrated by footwear that promised performance but couldn't survive the first real season in the mountains.</p>
-      <p>We started in a small workshop in the Alps, testing every prototype on the trails we loved most. Every stitch, every compound, every lacing system was refined on actual terrain — not in a lab.</p>
-      <p>Today, Over The Top shoes are trusted by thousands of adventurers across Europe and beyond. We've never lost sight of our origins: real shoes, for real mountains.</p>
-    </div>
-    <div class="about-img-wrap">
-      <img src="images/00_ABOUT_Story.png" alt="Our Story — artisan workshop in the Alps" style="width:100%;height:100%;object-fit:cover;" />
-    </div>
-  </div>
+  <!-- ══ RIVER JOURNEY ═══════════════════════════════════════ -->
+  <div class="river-journey">
 
-  <!-- STATS -->
-  <div class="about-stats">
-    <div class="stat-item">
-      <p class="stat-num">2018</p>
-      <p class="stat-label">Founded</p>
-    </div>
-    <div class="stat-item">
-      <p class="stat-num">47+</p>
-      <p class="stat-label">Countries Reached</p>
-    </div>
-    <div class="stat-item">
-      <p class="stat-num">120k</p>
-      <p class="stat-label">Happy Customers</p>
-    </div>
-    <div class="stat-item">
-      <p class="stat-num">100%</p>
-      <p class="stat-label">Field Tested</p>
-    </div>
-  </div>
+    <!-- Flowing SVG river path -->
+    <svg class="river-svg" viewBox="0 0 200 3200" preserveAspectRatio="none" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path class="river-path" d="M100 0 C100 100, 40 200, 60 350 S160 500, 140 650 S30 800, 60 950 S170 1100, 130 1250 S40 1400, 80 1550 S160 1700, 120 1850 S50 2000, 80 2150 S150 2300, 110 2450 S60 2600, 90 2750 S130 2900, 100 3200" stroke="url(#riverGrad)" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path class="river-glow" d="M100 0 C100 100, 40 200, 60 350 S160 500, 140 650 S30 800, 60 950 S170 1100, 130 1250 S40 1400, 80 1550 S160 1700, 120 1850 S50 2000, 80 2150 S150 2300, 110 2450 S60 2600, 90 2750 S130 2900, 100 3200" stroke="url(#riverGrad)" stroke-width="12" fill="none" stroke-linecap="round" opacity="0.15"/>
+      <defs>
+        <linearGradient id="riverGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#7fb5c9"/>
+          <stop offset="30%" stop-color="#5a9bb5"/>
+          <stop offset="60%" stop-color="#4a8da8"/>
+          <stop offset="100%" stop-color="#3a7d98"/>
+        </linearGradient>
+      </defs>
+    </svg>
 
-  <!-- MISSION -->
-  <div class="about-section reverse">
-    <div class="about-text">
-      <h2>Our Mission</h2>
-      <p>We believe the best shoe is the one that disappears on your foot — that lets you focus entirely on the mountain ahead, not the gear on your feet.</p>
-      <p>Our mission is to build footwear that performs at the highest level without compromise: durable enough for the harshest conditions, light enough that you forget you're wearing them, and comfortable enough for the longest days.</p>
-      <p>We test every model on real trails in real conditions, with real athletes. No exceptions.</p>
-    </div>
-    <div class="about-img-wrap">
-      <img src="images/00_ABOUT_Mission.png" alt="Our Mission — trail runner on a mountain ridge" style="width:100%;height:100%;object-fit:cover;" />
-    </div>
-  </div>
-
-  <!-- VALUES -->
-  <div class="about-values">
-    <h2>What We Stand For</h2>
-    <div class="values-grid">
-      <div class="value-card">
-        <div class="value-icon">🏔️</div>
-        <h3>Performance First</h3>
-        <p>Every design decision starts and ends with performance. We never sacrifice function for fashion — though we believe you shouldn't have to choose between the two.</p>
+    <!-- CHAPTER 1 — THE SOURCE -->
+    <div class="river-chapter" data-side="left">
+      <div class="river-card">
+        <span class="river-year">2018</span>
+        <h2>The Source</h2>
+        <p>Over The Top was founded by a group of trail runners and mountain enthusiasts in a small workshop in the Alps. Frustrated by footwear that couldn't survive a real season in the mountains, they set out to build something different.</p>
+        <p>Every prototype was tested on the trails they loved most. Every stitch, every compound, every lacing system — refined on actual terrain, not in a lab.</p>
       </div>
-      <div class="value-card">
-        <div class="value-icon">🌿</div>
-        <h3>Sustainable by Design</h3>
-        <p>We use recycled materials wherever possible, minimise waste in our production process, and partner only with suppliers who share our commitment to the planet we love.</p>
+      <div class="river-marker">
+        <div class="river-marker-ring"></div>
+        <svg class="river-marker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 22h20L12 2z"/><path d="M8 14l4-6 4 6"/></svg>
       </div>
-      <div class="value-card">
-        <div class="value-icon">🤝</div>
-        <h3>Community Driven</h3>
-        <p>Our best ideas come from the trail community. We partner with athletes, guide our product roadmap with customer feedback, and reinvest in the trails we all share.</p>
+      <div class="river-aside">
+        <div class="river-aside-img">
+          <img src="images/00_ABOUT_Story.png" alt="Workshop in the Alps" />
+        </div>
+        <blockquote class="river-quote">"Real shoes, born on real mountains."</blockquote>
       </div>
     </div>
-  </div>
+
+    <!-- CHAPTER 2 — FIRST RAPIDS -->
+    <div class="river-chapter" data-side="right">
+      <div class="river-aside">
+        <div class="river-aside-visual">
+          <svg class="river-aside-nature" viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M100 10 L40 120 H70 L30 200 H170 L130 120 H160 Z" fill="rgba(90,155,181,0.07)" stroke="rgba(90,155,181,0.2)" stroke-width="1"/>
+            <path d="M100 60 L60 140 H80 L55 210 H145 L120 140 H140 Z" fill="rgba(200,168,130,0.06)" stroke="rgba(200,168,130,0.15)" stroke-width="1"/>
+          </svg>
+          <div class="river-aside-fact">
+            <span class="aside-fact-num">2x</span>
+            <span class="aside-fact-text">Workshop capacity<br>in just 18 months</span>
+          </div>
+        </div>
+        <blockquote class="river-quote">"Word spread from trail to trail — not through ads, but through trust."</blockquote>
+      </div>
+      <div class="river-marker">
+        <div class="river-marker-ring"></div>
+        <svg class="river-marker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="river-card">
+        <span class="river-year">2020</span>
+        <h2>First Rapids</h2>
+        <p>Within two years, word spread from trail to trail. Athletes across the Alps began reaching out — not for sponsorship, but because the shoes simply worked where others failed.</p>
+        <p>We expanded our workshop and brought on material scientists who shared our obsession with performance. Every shoe became a collaboration between craftsmen and the mountains themselves.</p>
+      </div>
+    </div>
+
+    <!-- STATS RIVER STONES -->
+    <div class="river-stones">
+      <div class="river-stone">
+        <p class="stone-num">47+</p>
+        <p class="stone-label">Countries</p>
+      </div>
+      <div class="river-stone">
+        <p class="stone-num">120k</p>
+        <p class="stone-label">Happy Customers</p>
+      </div>
+      <div class="river-stone">
+        <p class="stone-num">100%</p>
+        <p class="stone-label">Field Tested</p>
+      </div>
+      <div class="river-stone">
+        <p class="stone-num">0%</p>
+        <p class="stone-label">Compromise</p>
+      </div>
+    </div>
+
+    <!-- CHAPTER 3 — DEEP CURRENT -->
+    <div class="river-chapter" data-side="left">
+      <div class="river-card">
+        <span class="river-year">Our Mission</span>
+        <h2>Deep Current</h2>
+        <p>We believe the best shoe is the one that disappears on your foot — that lets you focus entirely on the mountain ahead, not the gear on your feet.</p>
+        <p>Our mission is to build footwear that performs at the highest level without compromise: durable enough for the harshest conditions, light enough that you forget you're wearing them, and comfortable enough for the longest days.</p>
+      </div>
+      <div class="river-marker">
+        <div class="river-marker-ring"></div>
+        <svg class="river-marker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22c-4-4-8-8-8-13a8 8 0 0116 0c0 5-4 9-8 13z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <div class="river-aside">
+        <div class="river-aside-img">
+          <img src="images/00_ABOUT_Mission.png" alt="Trail runner on a mountain ridge" />
+        </div>
+        <blockquote class="river-quote">"The best shoe is the one you forget you're wearing."</blockquote>
+      </div>
+    </div>
+
+    <!-- CHAPTER 4 — THE DELTA -->
+    <div class="river-chapter" data-side="right">
+      <div class="river-aside">
+        <div class="river-aside-visual">
+          <svg class="river-aside-nature" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="100" cy="100" r="80" fill="none" stroke="rgba(90,155,181,0.12)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="55" fill="none" stroke="rgba(200,168,130,0.12)" stroke-width="1"/>
+            <circle cx="100" cy="100" r="30" fill="none" stroke="rgba(90,155,181,0.12)" stroke-width="1"/>
+            <path d="M100 20V180 M20 100H180" stroke="rgba(90,155,181,0.08)" stroke-width="1" stroke-dasharray="4 6"/>
+          </svg>
+          <div class="river-aside-fact">
+            <span class="aside-fact-num">47+</span>
+            <span class="aside-fact-text">Countries trust<br>Over The Top</span>
+          </div>
+        </div>
+        <blockquote class="river-quote">"The mountains don't compromise — neither do we."</blockquote>
+      </div>
+      <div class="river-marker">
+        <div class="river-marker-ring"></div>
+        <svg class="river-marker-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V12"/><path d="M12 12C12 6 18 2 24 2c0 6-6 10-12 10z"/><path d="M12 16C12 10 6 6 0 6c0 6 6 10 12 10z"/></svg>
+      </div>
+      <div class="river-card">
+        <span class="river-year">Today</span>
+        <h2>The Delta</h2>
+        <p>Today, Over The Top shoes are trusted by thousands of adventurers across Europe and beyond. We've never lost sight of our origins: real shoes, for real mountains.</p>
+        <p>We test every model on real trails in real conditions, with real athletes. No exceptions. The mountains don't compromise — neither do we.</p>
+      </div>
+    </div>
+
+    <!-- VALUES — RIVER TRIBUTARIES -->
+    <div class="river-values">
+      <h2 class="river-values-title">What We Stand For</h2>
+      <div class="river-tributaries">
+        <div class="tributary">
+          <div class="tributary-flow"></div>
+          <div class="tributary-content">
+            <svg class="tributary-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 4L4 44h40L24 4z"/><path d="M16 28l8-12 8 12"/><circle cx="34" cy="14" r="4"/></svg>
+            <h3>Performance First</h3>
+            <p>Every design decision starts and ends with performance. We never sacrifice function for fashion — though we believe you shouldn't have to choose between the two.</p>
+          </div>
+        </div>
+        <div class="tributary">
+          <div class="tributary-flow"></div>
+          <div class="tributary-content">
+            <svg class="tributary-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M24 44V22"/><path d="M24 22C24 12 34 4 44 4c0 10-10 18-20 18z"/><path d="M24 30C24 22 14 16 4 16c0 8 10 14 20 14z"/></svg>
+            <h3>Sustainable by Design</h3>
+            <p>We use recycled materials wherever possible, minimise waste in our production process, and partner only with suppliers who share our commitment to the planet.</p>
+          </div>
+        </div>
+        <div class="tributary">
+          <div class="tributary-flow"></div>
+          <div class="tributary-content">
+            <svg class="tributary-icon" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="24" cy="16" r="8"/><path d="M8 44c0-8.8 7.2-16 16-16s16 7.2 16 16"/></svg>
+            <h3>Community Driven</h3>
+            <p>Our best ideas come from the trail community. We partner with athletes, guide our product roadmap with customer feedback, and reinvest in the trails we all share.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /river-journey -->
 
   <!-- NEWSLETTER -->
   <section class="newsletter">
@@ -127,9 +241,9 @@
       <div class="footer-logo"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><p class="footer-logo-text">Over The Top</p></div>
       <div class="footer-columns">
         <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
-        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns &amp; Exchanges</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
         <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="#">Mission &amp; Vision</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
-        <div class="footer-col"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a><a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a></div><ul><li><a href="#">Events</a></li><li><a href="#">Forum</a></li></ul></div>
+        <div class="footer-col"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a><a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a><a href="#" aria-label="YouTube"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a></div><ul><li><a href="#">Events</a></li><li><a href="#">Community Forum</a></li></ul></div>
       </div>
     </div>
     <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top. All rights reserved.</p><p>Privacy Policy</p><p>Terms of Service</p><p>Cookie Policy</p></div></div>

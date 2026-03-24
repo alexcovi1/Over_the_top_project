@@ -696,10 +696,10 @@ function getWishlist() {
 function saveWishlist(list) {
   localStorage.setItem(WISH_KEY, JSON.stringify(list));
 }
-function addToWishlist(name, price, category) {
+function addToWishlist(name, price, category, image) {
   const list = getWishlist();
   if (!list.find(i => i.name === name)) {
-    list.push({ name, price, category });
+    list.push({ name, price, category, image: image || '' });
     saveWishlist(list);
   }
 }
@@ -722,8 +722,10 @@ function initWishlist() {
       const priceEl = this.closest('.product-card')?.querySelector('.product-price')?.textContent || '€0';
       const price = parseFloat(priceEl.replace(/[^0-9.]/g, '')) || 0;
       const cat = this.closest('.product-card')?.querySelector('.product-category')?.textContent?.trim() || '';
+      const imgEl = this.closest('.product-card')?.querySelector('.product-image img');
+      const image = imgEl ? imgEl.getAttribute('src') : '';
       if (this.classList.contains('wished')) {
-        addToWishlist(n, price, cat);
+        addToWishlist(n, price, cat, image);
         showToast(`${n} saved to wishlist`);
       } else {
         removeFromWishlist(n);
@@ -773,13 +775,7 @@ function initNewsletter() {
 
 // ── Contact Form ─────────────────────────────────────────────
 function initContactForm() {
-  const form = document.getElementById('contactForm');
-  form?.addEventListener('submit', e => {
-    e.preventDefault();
-    document.getElementById('formSuccess')?.classList.add('visible');
-    form.reset();
-    setTimeout(() => document.getElementById('formSuccess')?.classList.remove('visible'), 4000);
-  });
+  // Contact form logic is now handled inline in contact.html (multi-step trail form)
 }
 
 // ── Scroll reveal ─────────────────────────────────────────────
@@ -789,16 +785,50 @@ function initScrollReveal() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.style.animationPlayState = 'running';
+        entry.target.classList.add('revealed');
         observer.unobserve(entry.target);
       }
     });
   }, { threshold: 0.1 });
 
-  document.querySelectorAll('.product-card, .value-card, .stat-item, .feature-item').forEach(el => {
+  document.querySelectorAll('.product-card, .value-card, .stat-item, .feature-item, .river-chapter, .river-stones, .river-values').forEach(el => {
     el.style.animationPlayState = 'paused';
     el.classList.add('fade-up');
     observer.observe(el);
   });
+
+  // ── River path draw-on-scroll ──
+  initRiverScroll();
+}
+
+function initRiverScroll() {
+  const riverPath = document.querySelector('.river-path');
+  const riverGlow = document.querySelector('.river-glow');
+  const journey = document.querySelector('.river-journey');
+  if (!riverPath || !journey) return;
+
+  const totalLen = riverPath.getTotalLength();
+  riverPath.style.strokeDasharray = totalLen;
+  riverPath.style.strokeDashoffset = totalLen;
+  if (riverGlow) {
+    riverGlow.style.strokeDasharray = totalLen;
+    riverGlow.style.strokeDashoffset = totalLen;
+  }
+
+  function onScroll() {
+    const rect = journey.getBoundingClientRect();
+    const winH = window.innerHeight;
+    const journeyTop = -rect.top;
+    const journeyH = rect.height - winH;
+    if (journeyH <= 0) return;
+    const pct = Math.min(Math.max(journeyTop / journeyH, 0), 1);
+    const offset = totalLen * (1 - pct);
+    riverPath.style.strokeDashoffset = offset;
+    if (riverGlow) riverGlow.style.strokeDashoffset = offset;
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
 }
 
 // ── Logo Dropdown Menu ───────────────────────────────────────
@@ -996,8 +1026,197 @@ function initTerrain() {
   draw();
 }
 
+// ── Page Loading Animation ───────────────────────────────────
+function initLoader() {
+  // Only show once per session
+  if (sessionStorage.getItem('ott_loaded')) return;
+
+  // Inject loader HTML
+  const loader = document.createElement('div');
+  loader.className = 'ott-loader';
+  loader.innerHTML =
+    '<div class="ott-loader-mountain">' +
+      '<svg viewBox="0 0 120 80" fill="none">' +
+        '<path class="peak-line" d="M10 70 L40 20 L55 45 L70 25 L110 70" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<path class="peak-line-2" d="M25 70 L50 35 L65 50" stroke="rgba(200,168,130,0.5)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>' +
+        '<circle class="peak-sun" cx="90" cy="22" r="6" stroke="rgba(200,168,130,0.8)" stroke-width="1.5" fill="none"/>' +
+      '</svg>' +
+    '</div>' +
+    '<div class="ott-loader-text">Over The Top</div>' +
+    '<div class="ott-loader-bar"><div class="ott-loader-bar-fill"></div></div>';
+
+  document.body.prepend(loader);
+
+  // Prevent scroll while loading
+  document.body.style.overflow = 'hidden';
+
+  // Dismiss after animation completes
+  setTimeout(function() {
+    loader.classList.add('hidden');
+    document.body.style.overflow = '';
+    sessionStorage.setItem('ott_loaded', '1');
+    // Remove from DOM after fade
+    setTimeout(function() { loader.remove(); }, 600);
+  }, 2000);
+}
+
+// ── Magnetic Cursor & Golden Particle Trail ──────────────────
+function initCursorEffects() {
+  // Skip on touch-only devices
+  if (window.matchMedia('(hover: none)').matches) return;
+
+  // --- Golden Particle Trail on Hero Sections ---
+  const heroSelectors = '.home-hero, .ct-hero, .about-hero, .product-hero, .category-hero';
+  const POOL_SIZE = 40;
+  const pool = [];
+  let poolIdx = 0;
+  let lastX = 0, lastY = 0;
+  let trailActive = false;
+  let rafId = null;
+
+  // Pre-create particle pool
+  for (let i = 0; i < POOL_SIZE; i++) {
+    const p = document.createElement('div');
+    p.className = 'cursor-particle';
+    p.style.opacity = '0';
+    document.body.appendChild(p);
+    pool.push({ el: p, active: false, x: 0, y: 0, vx: 0, vy: 0, life: 0, size: 0 });
+  }
+
+  // Cursor glow follower
+  const glow = document.createElement('div');
+  glow.className = 'cursor-glow';
+  glow.style.opacity = '0';
+  document.body.appendChild(glow);
+
+  function spawnParticle(x, y) {
+    const p = pool[poolIdx];
+    poolIdx = (poolIdx + 1) % POOL_SIZE;
+    const size = 3 + Math.random() * 5;
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 0.3 + Math.random() * 0.8;
+    p.x = x;
+    p.y = y;
+    p.vx = Math.cos(angle) * speed;
+    p.vy = Math.sin(angle) * speed - 0.5;
+    p.life = 1;
+    p.size = size;
+    p.active = true;
+    p.el.style.width = size + 'px';
+    p.el.style.height = size + 'px';
+  }
+
+  function animateParticles() {
+    let anyActive = false;
+    for (let i = 0; i < POOL_SIZE; i++) {
+      const p = pool[i];
+      if (!p.active) continue;
+      anyActive = true;
+      p.life -= 0.025;
+      if (p.life <= 0) {
+        p.active = false;
+        p.el.style.opacity = '0';
+        continue;
+      }
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.02;
+      const scale = p.life;
+      p.el.style.transform = 'translate(' + (p.x - p.size / 2) + 'px,' + (p.y - p.size / 2) + 'px) scale(' + scale + ')';
+      p.el.style.opacity = String(p.life * 0.7);
+    }
+    if (anyActive || trailActive) {
+      rafId = requestAnimationFrame(animateParticles);
+    } else {
+      rafId = null;
+    }
+  }
+
+  document.addEventListener('mousemove', function(e) {
+    const overHero = e.target.closest && e.target.closest(heroSelectors);
+    if (overHero) {
+      trailActive = true;
+      glow.style.opacity = '1';
+      glow.style.transform = 'translate(' + e.clientX + 'px,' + e.clientY + 'px) translate(-50%,-50%)';
+      const dx = e.clientX - lastX;
+      const dy = e.clientY - lastY;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist > 4) {
+        const count = Math.min(Math.floor(dist / 6), 3);
+        for (let i = 0; i < count; i++) {
+          spawnParticle(
+            e.clientX + (Math.random() - 0.5) * 8,
+            e.clientY + (Math.random() - 0.5) * 8
+          );
+        }
+        lastX = e.clientX;
+        lastY = e.clientY;
+      }
+      if (!rafId) rafId = requestAnimationFrame(animateParticles);
+    } else {
+      trailActive = false;
+      glow.style.opacity = '0';
+    }
+  });
+
+  // --- Magnetic Buttons ---
+  function addMagnetic(selector) {
+    document.querySelectorAll(selector).forEach(function(btn) {
+      if (btn.dataset.magneticBound) return;
+      btn.dataset.magneticBound = '1';
+      btn.dataset.magnetic = '';
+
+      btn.addEventListener('mousemove', function(e) {
+        const rect = btn.getBoundingClientRect();
+        const cx = rect.left + rect.width / 2;
+        const cy = rect.top + rect.height / 2;
+        const dx = e.clientX - cx;
+        const dy = e.clientY - cy;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        const maxDist = Math.max(rect.width, rect.height);
+        const strength = Math.max(0, 1 - dist / maxDist) * 0.35;
+        btn.style.transform = 'translate(' + (dx * strength) + 'px,' + (dy * strength) + 'px)';
+      });
+
+      btn.addEventListener('mouseleave', function() {
+        btn.style.transform = '';
+      });
+    });
+  }
+
+  // Apply magnetic to key interactive elements
+  addMagnetic('.btn-primary, .btn-secondary, .ct-btn, .ct-btn-new, .cart-btn, .ambient-btn, .logo');
+  addMagnetic('.home-hero-actions a, .ct-info-card-icon, .ct-faq-toggle');
+
+  // Re-apply after dynamic content loads
+  const observer = new MutationObserver(function() {
+    addMagnetic('.btn-primary, .btn-secondary, .ct-btn, .ct-btn-new');
+  });
+  observer.observe(document.body, { childList: true, subtree: true });
+}
+
+// ── Inject Compare nav link ──────────────────────────────────
+function initCompareNav() {
+  var isCompare = window.location.pathname.indexOf('compare') > -1;
+  document.querySelectorAll('.nav-links').forEach(function(nav) {
+    var a = document.createElement('a');
+    a.href = 'compare.html';
+    a.textContent = 'Compare';
+    if (isCompare) a.className = 'active';
+    nav.appendChild(a);
+  });
+  document.querySelectorAll('.mobile-menu').forEach(function(nav) {
+    var a = document.createElement('a');
+    a.href = 'compare.html';
+    a.textContent = 'Compare';
+    nav.appendChild(a);
+  });
+}
+
 // ── Boot ─────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', () => {
+  initLoader();
+  initCompareNav();
   initLogoMenu();
   initNavbar();
   initAmbient();
@@ -1011,4 +1230,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initContactForm();
   updateCartUI();
   initScrollReveal();
+  initCursorEffects();
 });

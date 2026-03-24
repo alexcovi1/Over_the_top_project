@@ -800,7 +800,7 @@
         const order = {
           id: 'OTT-' + Date.now().toString(36).toUpperCase(),
           date: new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' }),
-          items: cart.map(i => ({ name: i.name, category: i.category, size: i.size, qty: i.qty, price: i.price })),
+          items: cart.map(i => ({ name: i.name, category: i.category, size: i.size, qty: i.qty, price: i.price, image: i.image || '' })),
           subtotal: subtotal,
           shipping: shipping,
           total: subtotal + shipping

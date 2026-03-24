@@ -5,6 +5,731 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Contact — Over The Top</title>
   <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ── Contact Page — Trail to Connection ────────────────── */
+
+    /* Hero */
+    .ct-hero {
+      position: relative; overflow: hidden;
+      min-height: 480px; display: flex; flex-direction: column;
+      align-items: center; justify-content: center; text-align: center;
+      padding: 100px 32px 80px;
+    }
+    .ct-hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .ct-hero-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      filter: brightness(0.35);
+    }
+    .ct-hero-topo {
+      position: absolute; inset: 0; z-index: 1;
+      opacity: 0.08; pointer-events: none;
+    }
+    .ct-hero-content { position: relative; z-index: 2; max-width: 700px; }
+    .ct-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--gold);
+      margin-bottom: 20px;
+      animation: fadeUp 0.7s ease both;
+    }
+    .ct-hero-label svg { opacity: 0.7; }
+    .ct-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(40px, 7vw, 80px);
+      color: #fff; line-height: 1.05; margin-bottom: 18px;
+      animation: fadeUp 0.7s 0.1s ease both;
+    }
+    .ct-hero p {
+      font-size: clamp(15px, 1.6vw, 18px);
+      color: rgba(255,255,255,0.7); line-height: 1.7;
+      max-width: 520px; margin: 0 auto;
+      animation: fadeUp 0.7s 0.2s ease both;
+    }
+    .ct-hero-scroll {
+      position: absolute; bottom: 28px; left: 50%; transform: translateX(-50%);
+      z-index: 2; color: rgba(255,255,255,0.4);
+      animation: ctBounce 2s ease infinite;
+    }
+    @keyframes ctBounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    /* Floating leaves in hero */
+    .ct-leaf {
+      position: absolute; z-index: 1; opacity: 0;
+      animation: ctLeafFall linear infinite;
+      pointer-events: none;
+    }
+    @keyframes ctLeafFall {
+      0%   { opacity: 0; transform: translateY(-40px) rotate(0deg); }
+      10%  { opacity: 0.6; }
+      90%  { opacity: 0.3; }
+      100% { opacity: 0; transform: translateY(500px) rotate(360deg); }
+    }
+
+    /* Contact Info Cards Band */
+    .ct-info-band {
+      background: var(--black);
+      padding: 0 32px;
+      position: relative;
+      z-index: 3;
+    }
+    .ct-info-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+    .ct-info-card {
+      padding: 40px 28px;
+      border-right: 1px solid rgba(255,255,255,0.06);
+      transition: background 0.35s ease, transform 0.35s ease;
+      cursor: default; position: relative; overflow: hidden;
+    }
+    .ct-info-card:last-child { border-right: none; }
+    .ct-info-card::before {
+      content: ''; position: absolute;
+      bottom: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .ct-info-card:hover::before { transform: scaleX(1); }
+    .ct-info-card:hover { background: rgba(255,255,255,0.03); }
+    .ct-info-card-icon {
+      width: 44px; height: 44px;
+      border: 1.5px solid rgba(200,168,130,0.3);
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      color: var(--gold); margin-bottom: 18px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .ct-info-card:hover .ct-info-card-icon {
+      border-color: var(--gold);
+      background: rgba(200,168,130,0.08);
+    }
+    .ct-info-card h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.5); margin-bottom: 10px;
+    }
+    .ct-info-card p {
+      font-size: 14px; color: rgba(255,255,255,0.85);
+      line-height: 1.7; margin: 0;
+    }
+    .ct-info-card a {
+      color: var(--gold); text-decoration: none;
+      transition: color 0.2s ease;
+    }
+    .ct-info-card a:hover { color: #fff; }
+
+    /* ── Trail Form Section ─────────────────────────────── */
+    .ct-form-section {
+      background: linear-gradient(165deg, #f7f4f0 0%, var(--off-white) 40%, #efe9e1 100%);
+      padding: 100px 32px 110px;
+      position: relative; overflow: hidden;
+    }
+    .ct-form-section::before {
+      content: ''; position: absolute; top: -1px; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, var(--black), transparent);
+      pointer-events: none; opacity: 0.04;
+    }
+    /* Decorative topographic lines in background */
+    .ct-form-section::after {
+      content: ''; position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 600px 400px at 10% 20%, rgba(200,168,130,0.06), transparent),
+        radial-gradient(ellipse 500px 500px at 90% 80%, rgba(200,168,130,0.04), transparent);
+      pointer-events: none;
+    }
+
+    .ct-form-wrap {
+      max-width: 800px; margin: 0 auto;
+      position: relative; z-index: 1;
+    }
+    .ct-form-deco {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 0;
+    }
+    .ct-form-header { text-align: center; margin-bottom: 56px; }
+    .ct-form-header h2 {
+      font-size: clamp(28px, 4vw, 46px); margin-bottom: 14px;
+      background: linear-gradient(135deg, var(--text) 0%, var(--gold-dark) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .ct-form-header p {
+      color: var(--text-muted); font-size: 15px; line-height: 1.7;
+      max-width: 480px; margin: 0 auto;
+    }
+
+    /* Trail Progress Bar — elevated */
+    .ct-trail-progress {
+      display: flex; align-items: center; justify-content: center;
+      gap: 0; margin-bottom: 52px; position: relative;
+    }
+    .ct-trail-step {
+      display: flex; flex-direction: column; align-items: center;
+      position: relative; z-index: 2; cursor: pointer;
+      transition: all 0.4s ease;
+    }
+    .ct-trail-step.disabled { pointer-events: none; opacity: 0.6; }
+    .ct-trail-dot {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--white);
+      border: 2.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Playfair Display', serif;
+      font-size: 16px; font-weight: 700; color: var(--text-muted);
+      transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+      position: relative;
+    }
+    .ct-trail-step.active .ct-trail-dot {
+      background: var(--black); color: #fff;
+      border-color: var(--black);
+      box-shadow: 0 6px 28px rgba(10,10,10,0.25), 0 0 0 6px rgba(10,10,10,0.06);
+      transform: scale(1.15);
+    }
+    .ct-trail-step.active .ct-trail-dot::after {
+      content: ''; position: absolute; inset: -8px;
+      border: 1.5px solid rgba(10,10,10,0.08);
+      border-radius: 50%;
+      animation: ctDotPulse 2s ease-in-out infinite;
+    }
+    @keyframes ctDotPulse {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.15); opacity: 0; }
+    }
+    .ct-trail-step.completed .ct-trail-dot {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #fff; border-color: var(--gold);
+      box-shadow: 0 4px 20px rgba(200,168,130,0.3);
+    }
+    .ct-trail-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--text-muted); margin-top: 12px;
+      transition: color 0.4s ease;
+    }
+    .ct-trail-step.active .ct-trail-label { color: var(--text); }
+    .ct-trail-step.completed .ct-trail-label { color: var(--gold-dark); }
+
+    .ct-trail-line {
+      width: 100px; height: 3px; background: var(--border);
+      position: relative; z-index: 1;
+      margin: 0 -4px; margin-bottom: 28px;
+      border-radius: 3px; overflow: hidden;
+    }
+    .ct-trail-line-fill {
+      height: 100%; width: 0%;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      border-radius: 3px;
+      transition: width 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ct-trail-line.filled .ct-trail-line-fill { width: 100%; }
+
+    /* Form Steps */
+    .ct-step {
+      display: none;
+      animation: ctStepIn 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ct-step.active { display: block; }
+    @keyframes ctStepIn {
+      from { opacity: 0; transform: translateY(28px) scale(0.98); }
+      to   { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    /* Form Card — elevated glass-like */
+    .ct-form-card {
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-radius: 20px;
+      padding: 52px 48px;
+      box-shadow:
+        0 1px 0 rgba(255,255,255,0.8) inset,
+        0 8px 40px rgba(0,0,0,0.06),
+        0 2px 8px rgba(0,0,0,0.03);
+      border: 1px solid rgba(255,255,255,0.6);
+      position: relative;
+      overflow: hidden;
+    }
+    /* Decorative corner accent */
+    .ct-form-card::before {
+      content: ''; position: absolute;
+      top: -1px; right: -1px;
+      width: 100px; height: 100px;
+      background: linear-gradient(225deg, rgba(200,168,130,0.12), transparent 70%);
+      border-radius: 0 20px 0 0;
+      pointer-events: none;
+    }
+    .ct-form-card::after {
+      content: ''; position: absolute;
+      bottom: -1px; left: -1px;
+      width: 80px; height: 80px;
+      background: linear-gradient(45deg, rgba(200,168,130,0.08), transparent 70%);
+      border-radius: 0 0 0 20px;
+      pointer-events: none;
+    }
+    .ct-step-title {
+      font-size: 22px; margin-bottom: 6px;
+      position: relative;
+    }
+    .ct-step-title::after {
+      content: ''; display: block;
+      width: 36px; height: 2.5px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      border-radius: 2px; margin-top: 12px;
+    }
+    .ct-step-sub {
+      font-size: 14px; color: var(--text-muted);
+      margin-bottom: 34px; margin-top: 16px; line-height: 1.65;
+    }
+
+    /* Form fields — floating label effect */
+    .ct-row { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    .ct-field {
+      margin-bottom: 24px; position: relative;
+    }
+    .ct-field label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--text-muted); margin-bottom: 10px;
+      transition: color 0.3s ease;
+    }
+    .ct-field:focus-within label { color: var(--gold-dark); }
+    .ct-field input, .ct-field textarea {
+      width: 100%;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 15px 18px;
+      font-size: 15px; color: var(--text);
+      background: rgba(245,242,238,0.5);
+      outline: none;
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+      font-family: 'Inter', sans-serif;
+    }
+    .ct-field input::placeholder, .ct-field textarea::placeholder {
+      color: var(--border); font-weight: 300;
+    }
+    .ct-field input:focus, .ct-field textarea:focus {
+      border-color: var(--gold);
+      background: var(--white);
+      box-shadow: 0 0 0 4px rgba(200,168,130,0.1), 0 4px 16px rgba(200,168,130,0.06);
+      transform: translateY(-1px);
+    }
+    .ct-field input.error, .ct-field textarea.error {
+      border-color: #e74c3c;
+      box-shadow: 0 0 0 4px rgba(231,76,60,0.06);
+      animation: ctShake 0.4s ease;
+    }
+    @keyframes ctShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(2px); }
+    }
+    .ct-field .ct-error-msg {
+      font-size: 12px; color: #e74c3c;
+      margin-top: 8px; display: none;
+      padding-left: 2px;
+    }
+    .ct-field input.error ~ .ct-error-msg,
+    .ct-field textarea.error ~ .ct-error-msg { display: block; }
+    .ct-field textarea {
+      resize: vertical; min-height: 160px;
+      line-height: 1.7;
+    }
+    /* Character hint for textarea */
+    .ct-field-hint {
+      font-size: 11px; color: var(--border);
+      text-align: right; margin-top: 6px;
+      transition: color 0.3s ease;
+    }
+    .ct-field:focus-within .ct-field-hint { color: var(--text-muted); }
+
+    /* Topic Cards — immersive selection */
+    .ct-topics {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 16px; margin-bottom: 8px;
+    }
+    .ct-topic {
+      background: rgba(245,242,238,0.6);
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 26px 18px 22px; text-align: center;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      position: relative; overflow: hidden;
+    }
+    .ct-topic::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, transparent 40%, rgba(200,168,130,0.06));
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .ct-topic:hover::before { opacity: 1; }
+    .ct-topic:hover {
+      border-color: rgba(200,168,130,0.3);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(0,0,0,0.05);
+    }
+    .ct-topic.selected {
+      border-color: var(--gold);
+      background: rgba(255,255,255,0.95);
+      box-shadow: 0 8px 32px rgba(200,168,130,0.15), 0 0 0 4px rgba(200,168,130,0.06);
+      transform: translateY(-4px);
+    }
+    .ct-topic.selected::before { opacity: 1; }
+    .ct-topic.selected::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+      border-radius: 3px 3px 0 0;
+    }
+    /* Checkmark badge */
+    .ct-topic-check {
+      position: absolute; top: 10px; right: 10px;
+      width: 22px; height: 22px;
+      background: var(--gold); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; opacity: 0; transform: scale(0);
+      transition: all 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .ct-topic.selected .ct-topic-check {
+      opacity: 1; transform: scale(1);
+    }
+    .ct-topic-icon {
+      width: 44px; height: 44px; margin: 0 auto 12px;
+      color: var(--text-muted);
+      transition: all 0.4s ease;
+      padding: 4px;
+    }
+    .ct-topic:hover .ct-topic-icon { color: var(--gold-dark); transform: scale(1.08); }
+    .ct-topic.selected .ct-topic-icon { color: var(--gold-dark); }
+    .ct-topic-name {
+      font-size: 13px; font-weight: 600;
+      color: var(--text); line-height: 1.35;
+      transition: color 0.3s ease;
+    }
+    .ct-topic.selected .ct-topic-name { color: var(--gold-dark); }
+
+    /* Navigation Buttons — refined */
+    .ct-nav {
+      display: flex; justify-content: space-between;
+      align-items: center; margin-top: 40px;
+      position: relative;
+    }
+    .ct-btn {
+      padding: 15px 36px; border-radius: 12px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      font-family: 'Inter', sans-serif;
+      border: none;
+      position: relative; overflow: hidden;
+    }
+    .ct-btn::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+      opacity: 0; transition: opacity 0.3s ease;
+    }
+    .ct-btn:hover::after { opacity: 1; }
+    .ct-btn-back {
+      background: transparent; color: var(--text-muted);
+      border: 1.5px solid var(--border);
+    }
+    .ct-btn-back:hover {
+      border-color: var(--text); color: var(--text);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+      transform: translateY(-1px);
+    }
+    .ct-btn-next {
+      background: var(--black); color: #fff;
+      box-shadow: 0 6px 24px rgba(10,10,10,0.18);
+    }
+    .ct-btn-next:hover {
+      background: #1a1a1a;
+      box-shadow: 0 8px 32px rgba(10,10,10,0.28);
+      transform: translateY(-2px);
+    }
+    .ct-btn-send {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(200,168,130,0.3);
+    }
+    .ct-btn-send:hover {
+      box-shadow: 0 8px 32px rgba(200,168,130,0.4);
+      transform: translateY(-2px);
+    }
+    .ct-btn:disabled {
+      opacity: 0.35; cursor: not-allowed; transform: none !important;
+      box-shadow: none !important;
+    }
+
+    /* Sending overlay */
+    .ct-sending {
+      display: none; text-align: center;
+      padding: 80px 40px;
+      animation: ctStepIn 0.4s ease;
+    }
+    .ct-sending.visible { display: block; }
+    .ct-sending-spinner {
+      width: 56px; height: 56px; margin: 0 auto 28px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: ctSpin 0.8s linear infinite;
+    }
+    @keyframes ctSpin { to { transform: rotate(360deg); } }
+    .ct-sending p {
+      font-size: 15px; color: var(--text-muted);
+      font-style: italic;
+    }
+
+    /* Success state */
+    .ct-success {
+      display: none;
+      animation: ctStepIn 0.6s ease;
+    }
+    .ct-success.visible { display: block; }
+    .ct-success-top {
+      text-align: center; margin-bottom: 36px;
+    }
+    .ct-success-icon {
+      width: 76px; height: 76px; margin: 0 auto 24px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 50%; display: flex;
+      align-items: center; justify-content: center;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(200,168,130,0.3);
+      animation: ctSuccessPop 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.3s both;
+    }
+    @keyframes ctSuccessPop {
+      from { transform: scale(0) rotate(-20deg); }
+      to { transform: scale(1) rotate(0deg); }
+    }
+    .ct-success h3 {
+      font-size: 28px; margin-bottom: 10px;
+    }
+    .ct-success-top > p {
+      color: var(--text-muted); font-size: 14px;
+      line-height: 1.7; max-width: 420px; margin: 0 auto;
+    }
+
+    /* Summary card */
+    .ct-summary {
+      background: linear-gradient(135deg, rgba(245,242,238,0.7), rgba(232,224,213,0.4));
+      border-radius: 16px;
+      padding: 28px 32px; margin-bottom: 28px;
+      border: 1px solid rgba(200,168,130,0.1);
+    }
+    .ct-summary-row {
+      display: flex; gap: 16px; align-items: flex-start;
+      padding: 16px 0;
+      border-bottom: 1px solid rgba(200,168,130,0.1);
+    }
+    .ct-summary-row:last-child { border-bottom: none; }
+    .ct-summary-icon {
+      width: 38px; height: 38px; flex-shrink: 0;
+      background: var(--white); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gold-dark);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.04);
+    }
+    .ct-summary-content { flex: 1; min-width: 0; }
+    .ct-summary-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--gold-dark); margin-bottom: 4px;
+    }
+    .ct-summary-value {
+      font-size: 14px; color: var(--text); line-height: 1.5;
+      word-break: break-word;
+    }
+    .ct-summary-msg {
+      font-size: 13px; color: var(--text-muted);
+      line-height: 1.65; font-style: italic;
+      max-height: 80px; overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ct-success-ref {
+      display: inline-block; padding: 11px 28px;
+      background: rgba(245,242,238,0.8); border-radius: 10px;
+      font-family: 'Inter', monospace; font-size: 14px;
+      font-weight: 600; color: var(--text);
+      letter-spacing: 0.08em;
+      margin-bottom: 28px;
+      border: 1px solid rgba(200,168,130,0.15);
+    }
+    .ct-success-footer {
+      text-align: center; padding-top: 8px;
+    }
+    .ct-btn-new {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px; border-radius: 12px;
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+      font-family: 'Inter', sans-serif;
+      background: var(--black); color: #fff; border: none;
+      box-shadow: 0 6px 24px rgba(10,10,10,0.18);
+    }
+    .ct-btn-new:hover {
+      background: #1a1a1a; transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(10,10,10,0.28);
+    }
+
+    /* ── FAQ Section ─────────────────────────────────────── */
+    .ct-faq-section {
+      padding: 90px 32px 100px;
+      background: var(--white);
+    }
+    .ct-faq-inner {
+      max-width: 780px; margin: 0 auto;
+    }
+    .ct-faq-header {
+      text-align: center; margin-bottom: 56px;
+    }
+    .ct-faq-header h2 {
+      font-size: clamp(28px, 4vw, 40px); margin-bottom: 14px;
+    }
+    .ct-faq-header p {
+      color: var(--text-muted); font-size: 15px;
+    }
+
+    .ct-faq-item {
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+    }
+    .ct-faq-item:first-child { border-top: 1px solid var(--border); }
+    .ct-faq-q {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 4px; cursor: pointer;
+      transition: color 0.3s ease;
+      gap: 16px;
+    }
+    .ct-faq-q:hover { color: var(--gold-dark); }
+    .ct-faq-q h4 {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px; font-weight: 600;
+      line-height: 1.4; flex: 1;
+    }
+    .ct-faq-toggle {
+      width: 28px; height: 28px; flex-shrink: 0;
+      border: 1.5px solid var(--border); border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.3s ease;
+    }
+    .ct-faq-toggle svg {
+      transition: transform 0.3s ease;
+    }
+    .ct-faq-item.open .ct-faq-toggle {
+      background: var(--black); border-color: var(--black);
+      color: #fff;
+    }
+    .ct-faq-item.open .ct-faq-toggle svg { transform: rotate(45deg); }
+    .ct-faq-a {
+      max-height: 0; overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.4s ease;
+      padding: 0 4px;
+    }
+    .ct-faq-item.open .ct-faq-a {
+      max-height: 200px; padding: 0 4px 22px;
+    }
+    .ct-faq-a p {
+      font-size: 14px; color: var(--text-muted);
+      line-height: 1.8;
+    }
+
+    /* ── Location Band ──────────────────────────────────── */
+    .ct-location {
+      background: var(--black); padding: 70px 32px;
+      position: relative; overflow: hidden;
+    }
+    .ct-location-topo {
+      position: absolute; inset: 0; opacity: 0.04;
+      pointer-events: none;
+    }
+    .ct-location-inner {
+      max-width: 1000px; margin: 0 auto;
+      display: flex; align-items: center; gap: 60px;
+      position: relative; z-index: 1;
+    }
+    .ct-location-text { flex: 1; }
+    .ct-location-text h3 {
+      font-size: clamp(24px, 3vw, 34px); color: #fff;
+      margin-bottom: 16px;
+    }
+    .ct-location-text p {
+      color: rgba(255,255,255,0.6); font-size: 15px;
+      line-height: 1.8; margin-bottom: 8px;
+    }
+    .ct-coords {
+      display: flex; gap: 32px; margin-top: 28px;
+    }
+    .ct-coord {
+      font-family: 'Inter', monospace;
+    }
+    .ct-coord-label {
+      font-size: 10px; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 4px;
+    }
+    .ct-coord-val {
+      font-size: 22px; font-weight: 300; color: #fff;
+      letter-spacing: 0.04em;
+    }
+    .ct-location-visual {
+      width: 280px; height: 280px; flex-shrink: 0;
+      position: relative; display: flex;
+      align-items: center; justify-content: center;
+    }
+    .ct-compass {
+      width: 100%; height: 100%;
+      animation: ctCompassSpin 60s linear infinite;
+    }
+    @keyframes ctCompassSpin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
+    .ct-location-pin {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      color: var(--gold);
+    }
+
+    /* ── Responsive ─────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .ct-info-inner { grid-template-columns: repeat(2, 1fr); }
+      .ct-info-card { border-right: none; }
+      .ct-topics { grid-template-columns: repeat(2, 1fr); }
+      .ct-location-inner { flex-direction: column; text-align: center; }
+      .ct-coords { justify-content: center; }
+      .ct-location-visual { width: 200px; height: 200px; }
+    }
+    @media (max-width: 600px) {
+      .ct-hero { min-height: 380px; padding: 90px 24px 60px; }
+      .ct-info-inner { grid-template-columns: 1fr; }
+      .ct-form-card { padding: 32px 24px; }
+      .ct-row { grid-template-columns: 1fr; }
+      .ct-topics { grid-template-columns: 1fr 1fr; }
+      .ct-trail-line { width: 60px; }
+      .ct-nav { flex-direction: column; gap: 12px; }
+      .ct-nav .ct-btn { width: 100%; text-align: center; }
+      .ct-location-visual { display: none; }
+    }
+  </style>
 </head>
 <body class="page-body">
 
@@ -34,147 +759,406 @@
     <nav class="mobile-menu" id="mobileMenu"><a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
   </header>
 
-  <!-- HERO -->
-  <section class="hero" style="padding:80px 32px 60px;position:relative;overflow:hidden;">
-    <div style="position:absolute;inset:0;z-index:0;">
-      <img src="images/00_CONTACT_Hero.png" alt="Mountain valley at dawn" style="width:100%;height:100%;object-fit:cover;opacity:0.25;" />
+  <!-- ═══ HERO ═══ -->
+  <section class="ct-hero" id="ctHero">
+    <div class="ct-hero-bg">
+      <img src="images/00_CONTACT_Hero.png" alt="Mountain valley at dawn" />
     </div>
-    <h1 class="hero-title" style="font-size:clamp(36px,6vw,72px);position:relative;z-index:1;">Get In Touch</h1>
-    <p class="hero-subtitle" style="position:relative;z-index:1;">We're here to help — on and off the trail.</p>
+    <!-- Topographic SVG overlay -->
+    <svg class="ct-hero-topo" viewBox="0 0 800 400" preserveAspectRatio="none">
+      <path d="M0 200 Q100 180 200 200 T400 190 T600 210 T800 195" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M0 220 Q150 200 300 225 T600 215 T800 230" fill="none" stroke="white" stroke-width="0.8"/>
+      <path d="M0 180 Q200 165 400 180 T800 170" fill="none" stroke="white" stroke-width="0.6"/>
+      <path d="M0 245 Q100 235 250 248 T500 240 T800 250" fill="none" stroke="white" stroke-width="0.5"/>
+      <path d="M0 160 Q180 148 350 162 T700 155 T800 160" fill="none" stroke="white" stroke-width="0.4"/>
+    </svg>
+    <div class="ct-hero-content">
+      <div class="ct-hero-label">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        CONNECT WITH US
+      </div>
+      <h1>Every Trail Starts With a Conversation</h1>
+      <p>Whether about gear, orders, or your next adventure — reach out and we'll guide you through.</p>
+    </div>
+    <div class="ct-hero-scroll">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+    </div>
   </section>
 
-  <!-- CONTACT CONTENT -->
-  <div class="contact-wrap">
-
-    <!-- Left: Info -->
-    <div class="contact-info">
-      <h2>How Can We Help?</h2>
-      <p>Whether you have a question about sizing, an order, a return, or just want to talk about trails — we'd love to hear from you. Our team typically responds within one business day.</p>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+  <!-- ═══ CONTACT INFO BAND ═══ -->
+  <section class="ct-info-band">
+    <div class="ct-info-inner">
+      <div class="ct-info-card">
+        <div class="ct-info-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
         </div>
-        <div class="contact-detail-text">
-          <h4>Email</h4>
-          <p>hello@overtheshoe.com</p>
-          <p>returns@overtheshoe.com</p>
-        </div>
+        <h4>Email</h4>
+        <p><a href="mailto:hello@overtheshoe.com">hello@overtheshoe.com</a></p>
+        <p><a href="mailto:returns@overtheshoe.com">returns@overtheshoe.com</a></p>
       </div>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012.18 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.45-1.45a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
+      <div class="ct-info-card">
+        <div class="ct-info-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.7A2 2 0 012.18 1h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L6.91 8.09a16 16 0 006 6l1.45-1.45a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 14.92z"/></svg>
         </div>
-        <div class="contact-detail-text">
-          <h4>Phone</h4>
-          <p>+39 02 1234 5678</p>
-          <p>Mon – Fri, 9:00 – 18:00 CET</p>
-        </div>
+        <h4>Phone</h4>
+        <p>+39 02 1234 5678</p>
+        <p>Mon – Fri, 9 – 18 CET</p>
       </div>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      <div class="ct-info-card">
+        <div class="ct-info-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
         </div>
-        <div class="contact-detail-text">
-          <h4>Headquarters</h4>
-          <p>Via delle Alpi 42</p>
-          <p>20121 Milano, Italy</p>
-        </div>
+        <h4>Headquarters</h4>
+        <p>Via delle Alpi 42</p>
+        <p>20121 Milano, Italy</p>
       </div>
-
-      <div class="contact-detail">
-        <div class="contact-detail-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <div class="ct-info-card">
+        <div class="ct-info-card-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
         </div>
-        <div class="contact-detail-text">
-          <h4>Business Hours</h4>
-          <p>Monday – Friday: 9:00 – 18:00</p>
-          <p>Saturday: 10:00 – 14:00</p>
-        </div>
+        <h4>Hours</h4>
+        <p>Mon – Fri: 9:00 – 18:00</p>
+        <p>Saturday: 10:00 – 14:00</p>
       </div>
     </div>
+  </section>
 
-    <!-- Right: Form -->
-    <div>
-      <form class="contact-form" id="contactForm" novalidate>
-        <div class="form-row">
-          <div class="form-group">
-            <label for="fname">First Name</label>
-            <input type="text" id="fname" name="fname" placeholder="Marco" required>
+  <!-- ═══ TRAIL FORM ═══ -->
+  <section class="ct-form-section">
+    <!-- Decorative topographic background lines -->
+    <svg class="ct-form-deco" viewBox="0 0 1200 600" fill="none" preserveAspectRatio="none" aria-hidden="true">
+      <path d="M0 150 Q200 120 400 160 T800 140 T1200 170" stroke="rgba(200,168,130,0.07)" stroke-width="1.5"/>
+      <path d="M0 250 Q300 220 600 260 T1200 240" stroke="rgba(200,168,130,0.05)" stroke-width="1.2"/>
+      <path d="M0 350 Q150 330 400 360 T800 340 T1200 370" stroke="rgba(200,168,130,0.06)" stroke-width="1"/>
+      <path d="M0 450 Q250 430 500 455 T1000 440 T1200 460" stroke="rgba(200,168,130,0.04)" stroke-width="0.8"/>
+      <circle cx="180" cy="120" r="80" stroke="rgba(200,168,130,0.03)" stroke-width="1" fill="none"/>
+      <circle cx="1020" cy="480" r="100" stroke="rgba(200,168,130,0.03)" stroke-width="1" fill="none"/>
+    </svg>
+    <div class="ct-form-wrap">
+      <div class="ct-form-header">
+        <h2>Begin Your Trail</h2>
+        <p>Three simple waypoints to get your message to the right team.</p>
+      </div>
+
+      <!-- Trail Progress -->
+      <div class="ct-trail-progress">
+        <div class="ct-trail-step active" data-step="1">
+          <div class="ct-trail-dot">1</div>
+          <span class="ct-trail-label">You</span>
+        </div>
+        <div class="ct-trail-line" id="trailLine1">
+          <div class="ct-trail-line-fill"></div>
+        </div>
+        <div class="ct-trail-step disabled" data-step="2">
+          <div class="ct-trail-dot">2</div>
+          <span class="ct-trail-label">Topic</span>
+        </div>
+        <div class="ct-trail-line" id="trailLine2">
+          <div class="ct-trail-line-fill"></div>
+        </div>
+        <div class="ct-trail-step disabled" data-step="3">
+          <div class="ct-trail-dot">3</div>
+          <span class="ct-trail-label">Message</span>
+        </div>
+      </div>
+
+      <form id="contactForm" novalidate>
+        <!-- Step 1: Personal Info -->
+        <div class="ct-step active" id="step1">
+          <div class="ct-form-card">
+            <h3 class="ct-step-title">Who's on the trail?</h3>
+            <p class="ct-step-sub">Tell us a bit about yourself so we can get back to you.</p>
+            <div class="ct-row">
+              <div class="ct-field">
+                <label for="ctFname">First Name</label>
+                <input type="text" id="ctFname" placeholder="Marco" required>
+                <span class="ct-error-msg">Please enter your first name</span>
+              </div>
+              <div class="ct-field">
+                <label for="ctLname">Last Name</label>
+                <input type="text" id="ctLname" placeholder="Rossi" required>
+                <span class="ct-error-msg">Please enter your last name</span>
+              </div>
+            </div>
+            <div class="ct-field">
+              <label for="ctEmail">Email Address</label>
+              <input type="email" id="ctEmail" placeholder="marco@example.com" required>
+              <span class="ct-error-msg">Please enter a valid email address</span>
+            </div>
+            <div class="ct-nav">
+              <div></div>
+              <button type="button" class="ct-btn ct-btn-next" id="toStep2">
+                Continue
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:6px;vertical-align:middle;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="lname">Last Name</label>
-            <input type="text" id="lname" name="lname" placeholder="Rossi" required>
+        </div>
+
+        <!-- Step 2: Topic Selection -->
+        <div class="ct-step" id="step2">
+          <div class="ct-form-card">
+            <h3 class="ct-step-title">What brings you here?</h3>
+            <p class="ct-step-sub">Choose the topic that best matches your inquiry.</p>
+            <div class="ct-topics" id="topicGrid">
+              <div class="ct-topic" data-topic="Order & Shipping">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                </div>
+                <div class="ct-topic-name">Order &amp; Shipping</div>
+              </div>
+              <div class="ct-topic" data-topic="Returns & Exchanges">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>
+                </div>
+                <div class="ct-topic-name">Returns &amp; Exchanges</div>
+              </div>
+              <div class="ct-topic" data-topic="Product Question">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                </div>
+                <div class="ct-topic-name">Product Question</div>
+              </div>
+              <div class="ct-topic" data-topic="Size Advice">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 20h20"/><path d="M5 20V8l4 3V6l3 3V4l3 3v5"/><circle cx="18" cy="13" r="3"/></svg>
+                </div>
+                <div class="ct-topic-name">Size Advice</div>
+              </div>
+              <div class="ct-topic" data-topic="Wholesale / Partnership">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+                </div>
+                <div class="ct-topic-name">Wholesale / Partnership</div>
+              </div>
+              <div class="ct-topic" data-topic="Other">
+                <div class="ct-topic-check"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg></div>
+                <div class="ct-topic-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="ct-topic-name">Other</div>
+              </div>
+            </div>
+            <div class="ct-nav">
+              <button type="button" class="ct-btn ct-btn-back" id="backTo1">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;vertical-align:middle;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button type="button" class="ct-btn ct-btn-next" id="toStep3" disabled>
+                Continue
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:6px;vertical-align:middle;"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="email">Email Address</label>
-          <input type="email" id="email" name="email" placeholder="marco@example.com" required>
+
+        <!-- Step 3: Message -->
+        <div class="ct-step" id="step3">
+          <div class="ct-form-card">
+            <h3 class="ct-step-title">Share your message</h3>
+            <p class="ct-step-sub">We read every message and typically respond within one business day.</p>
+            <div class="ct-field">
+              <label for="ctMessage">Your Message</label>
+              <textarea id="ctMessage" placeholder="Tell us how we can help you…" required></textarea>
+              <span class="ct-error-msg">Please write your message</span>
+            </div>
+            <div class="ct-nav">
+              <button type="button" class="ct-btn ct-btn-back" id="backTo2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-right:6px;vertical-align:middle;"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+                Back
+              </button>
+              <button type="submit" class="ct-btn ct-btn-send">
+                Send Message
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="margin-left:6px;vertical-align:middle;"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="subject">Subject</label>
-          <select id="subject" name="subject">
-            <option value="">Select a topic…</option>
-            <option>Order &amp; Shipping</option>
-            <option>Returns &amp; Exchanges</option>
-            <option>Product Question</option>
-            <option>Size Advice</option>
-            <option>Wholesale / Partnership</option>
-            <option>Other</option>
-          </select>
+
+        <!-- Sending State -->
+        <div class="ct-sending" id="ctSending">
+          <div class="ct-form-card">
+            <div class="ct-sending-spinner"></div>
+            <p>Sending your message along the trail…</p>
+          </div>
         </div>
-        <div class="form-group">
-          <label for="message">Message</label>
-          <textarea id="message" name="message" placeholder="How can we help you?" required></textarea>
+
+        <!-- Success State -->
+        <div class="ct-success" id="ctSuccess">
+          <div class="ct-form-card">
+            <div class="ct-success-top">
+              <div class="ct-success-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+              </div>
+              <h3>Message Received!</h3>
+              <p>We've got your message. Our team will get back to you within one business day.</p>
+            </div>
+
+            <!-- Summary of submitted data -->
+            <div class="ct-summary">
+              <div class="ct-summary-row">
+                <div class="ct-summary-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4-4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="ct-summary-content">
+                  <div class="ct-summary-label">From</div>
+                  <div class="ct-summary-value" id="sumName">—</div>
+                  <div class="ct-summary-value" id="sumEmail" style="font-size:13px;color:var(--text-muted);">—</div>
+                </div>
+              </div>
+              <div class="ct-summary-row">
+                <div class="ct-summary-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                </div>
+                <div class="ct-summary-content">
+                  <div class="ct-summary-label">Topic</div>
+                  <div class="ct-summary-value" id="sumTopic">—</div>
+                </div>
+              </div>
+              <div class="ct-summary-row">
+                <div class="ct-summary-icon">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                </div>
+                <div class="ct-summary-content">
+                  <div class="ct-summary-label">Message</div>
+                  <div class="ct-summary-msg" id="sumMessage">—</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="ct-success-footer">
+              <div class="ct-success-ref" id="ctRef">OTT-000000</div>
+              <br>
+              <button type="button" class="ct-btn-new" id="ctNewMsg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                Send Another Message
+              </button>
+            </div>
+          </div>
         </div>
-        <div class="form-success" id="formSuccess">
-          ✓ Your message has been sent! We'll get back to you within one business day.
-        </div>
-        <button type="submit" class="btn-submit">Send Message</button>
       </form>
     </div>
+  </section>
 
-  </div>
+  <!-- ═══ FAQ SECTION ═══ -->
+  <section class="ct-faq-section">
+    <div class="ct-faq-inner">
+      <div class="ct-faq-header">
+        <h2>Trail Guide</h2>
+        <p>Answers to the most common questions from our community.</p>
+      </div>
 
-  <!-- FAQ Strip -->
-  <section style="background:var(--off-white);padding:70px 32px;">
-    <div style="max-width:900px;margin:0 auto;">
-      <div class="section-header" style="padding:0 0 48px;"><h2>Frequently Asked Questions</h2><div class="section-divider"></div></div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;" class="faq-grid">
-        <div>
-          <h4 style="font-size:16px;margin-bottom:8px;">What's your return policy?</h4>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">You can return unworn items within 30 days of purchase for a full refund. Simply contact us to initiate the process.</p>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>What's your return policy?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
         </div>
-        <div>
-          <h4 style="font-size:16px;margin-bottom:8px;">How long does shipping take?</h4>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">Standard shipping within Europe takes 3–5 business days. Express options are available at checkout.</p>
+        <div class="ct-faq-a"><p>You can return unworn items within 30 days of purchase for a full refund. Simply contact us to initiate the process — we'll provide a prepaid return label.</p></div>
+      </div>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>How long does shipping take?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
         </div>
-        <div>
-          <h4 style="font-size:16px;margin-bottom:8px;">How do I find my size?</h4>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">Our shoes run true to European sizing. If you're between sizes, we recommend sizing up for hiking and trail styles.</p>
+        <div class="ct-faq-a"><p>Standard shipping within Europe takes 3–5 business days. Express delivery (1–2 days) is available at checkout for an additional fee.</p></div>
+      </div>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>How do I find my size?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
         </div>
-        <div>
-          <h4 style="font-size:16px;margin-bottom:8px;">Do you ship internationally?</h4>
-          <p style="font-size:14px;color:var(--text-muted);line-height:1.7;">Yes! We ship to over 47 countries. International shipping times and costs vary — see checkout for details.</p>
+        <div class="ct-faq-a"><p>Our shoes run true to European sizing. If you're between sizes, we recommend sizing up for hiking and trail styles for extra toe room on descents.</p></div>
+      </div>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>Do you ship internationally?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
         </div>
+        <div class="ct-faq-a"><p>Yes! We ship to over 47 countries worldwide. International shipping times and costs vary by destination — see checkout for specific details.</p></div>
+      </div>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>Can I change or cancel my order?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="ct-faq-a"><p>If your order hasn't shipped yet, we can usually make changes. Contact us as soon as possible and we'll do our best to accommodate your request.</p></div>
+      </div>
+      <div class="ct-faq-item">
+        <div class="ct-faq-q">
+          <h4>Are your shoes sustainable?</h4>
+          <div class="ct-faq-toggle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></div>
+        </div>
+        <div class="ct-faq-a"><p>We use recycled materials wherever possible, source responsibly, and offset our carbon footprint. Every pair is built to last — the most sustainable shoe is one you don't replace.</p></div>
       </div>
     </div>
   </section>
 
-  <style>
-    @media (max-width: 600px) { .faq-grid { grid-template-columns: 1fr !important; } }
-  </style>
+  <!-- ═══ LOCATION BAND ═══ -->
+  <section class="ct-location">
+    <svg class="ct-location-topo" viewBox="0 0 800 300" preserveAspectRatio="none">
+      <path d="M0 150 Q100 130 200 150 T400 140 T600 160 T800 145" fill="none" stroke="white" stroke-width="1"/>
+      <path d="M0 170 Q150 155 300 172 T600 165 T800 175" fill="none" stroke="white" stroke-width="0.8"/>
+      <path d="M0 130 Q200 118 400 132 T800 125" fill="none" stroke="white" stroke-width="0.6"/>
+    </svg>
+    <div class="ct-location-inner">
+      <div class="ct-location-text">
+        <h3>Find Us at Base Camp</h3>
+        <p>Via delle Alpi 42, 20121 Milano, Italy</p>
+        <p>Nestled in the heart of Milan, where alpine ambition meets Italian craftsmanship.</p>
+        <div class="ct-coords">
+          <div class="ct-coord">
+            <div class="ct-coord-label">Latitude</div>
+            <div class="ct-coord-val">45.4642° N</div>
+          </div>
+          <div class="ct-coord">
+            <div class="ct-coord-label">Longitude</div>
+            <div class="ct-coord-val">9.1900° E</div>
+          </div>
+          <div class="ct-coord">
+            <div class="ct-coord-label">Elevation</div>
+            <div class="ct-coord-val">120m</div>
+          </div>
+        </div>
+      </div>
+      <div class="ct-location-visual">
+        <!-- Compass rose -->
+        <svg class="ct-compass" viewBox="0 0 200 200" fill="none">
+          <circle cx="100" cy="100" r="90" stroke="rgba(200,168,130,0.15)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="70" stroke="rgba(200,168,130,0.1)" stroke-width="0.8"/>
+          <circle cx="100" cy="100" r="50" stroke="rgba(200,168,130,0.08)" stroke-width="0.6"/>
+          <!-- Cardinal ticks -->
+          <line x1="100" y1="10" x2="100" y2="25" stroke="rgba(200,168,130,0.4)" stroke-width="1.5"/>
+          <line x1="100" y1="175" x2="100" y2="190" stroke="rgba(200,168,130,0.4)" stroke-width="1.5"/>
+          <line x1="10" y1="100" x2="25" y2="100" stroke="rgba(200,168,130,0.4)" stroke-width="1.5"/>
+          <line x1="175" y1="100" x2="190" y2="100" stroke="rgba(200,168,130,0.4)" stroke-width="1.5"/>
+          <!-- Ordinal ticks -->
+          <line x1="36" y1="36" x2="46" y2="46" stroke="rgba(200,168,130,0.2)" stroke-width="1"/>
+          <line x1="164" y1="36" x2="154" y2="46" stroke="rgba(200,168,130,0.2)" stroke-width="1"/>
+          <line x1="36" y1="164" x2="46" y2="154" stroke="rgba(200,168,130,0.2)" stroke-width="1"/>
+          <line x1="164" y1="164" x2="154" y2="154" stroke="rgba(200,168,130,0.2)" stroke-width="1"/>
+          <!-- N marker -->
+          <text x="100" y="42" text-anchor="middle" fill="rgba(200,168,130,0.6)" font-size="10" font-family="Inter, sans-serif" font-weight="600">N</text>
+        </svg>
+        <div class="ct-location-pin">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3" fill="#fff"/></svg>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <footer class="footer">
     <div class="footer-inner">
       <div class="footer-logo"><svg class="logo-icon" viewBox="0 0 50 40" fill="none"><path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none"/><path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none"/><circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none"/></svg><p class="footer-logo-text">Over The Top</p></div>
       <div class="footer-columns">
         <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
-        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns &amp; Exchanges</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
         <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="#">Mission &amp; Vision</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
-        <div class="footer-col"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a><a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a></div><ul><li><a href="#">Events</a></li><li><a href="#">Forum</a></li></ul></div>
+        <div class="footer-col"><h3>Follow Us</h3><div class="social-icons"><a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a><a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a><a href="#" aria-label="YouTube"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a></div><ul><li><a href="#">Events</a></li><li><a href="#">Community Forum</a></li></ul></div>
       </div>
     </div>
     <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top. All rights reserved.</p><p>Privacy Policy</p><p>Terms of Service</p><p>Cookie Policy</p></div></div>
@@ -184,5 +1168,209 @@
   <aside class="cart-sidebar" id="cartSidebar"><div class="cart-header"><h2>Your Cart</h2><button class="cart-close" id="cartClose"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><div class="cart-items" id="cartItems"></div><div class="cart-footer" id="cartFooter" style="display:none;"><div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">€0</span></div><p class="cart-note">Shipping calculated at checkout.</p><button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button><button class="btn-continue" id="continueBtn">Continue Shopping</button></div></aside>
   <div class="checkout-modal" id="checkoutModal"><div class="checkout-box"><div class="checkout-icon">🎉</div><h2>Order Confirmed!</h2><p>Thank you! A confirmation email is on its way.</p><button class="btn-close-modal" id="closeCheckout">Continue Shopping</button></div></div>
   <script src="js/app.js"></script>
+  <script>
+  (function() {
+    'use strict';
+
+    /* ── Floating Leaves in Hero ─────────────────── */
+    const hero = document.getElementById('ctHero');
+    if (hero) {
+      const leafSVGs = [
+        `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="rgba(200,168,130,0.5)" stroke-width="1.5"><path d="M17 8C8 10 5.9 16.17 3.82 21.34L5.71 22l1-2.3A4.49 4.49 0 008 20c4 0 8.5-3 11-8a2.42 2.42 0 00-2-3z"/></svg>`,
+        `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"><circle cx="12" cy="12" r="3"/></svg>`,
+        `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(200,168,130,0.4)" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/></svg>`
+      ];
+      for (let i = 0; i < 8; i++) {
+        const leaf = document.createElement('div');
+        leaf.className = 'ct-leaf';
+        leaf.innerHTML = leafSVGs[i % leafSVGs.length];
+        leaf.style.left = Math.random() * 100 + '%';
+        leaf.style.animationDuration = (8 + Math.random() * 12) + 's';
+        leaf.style.animationDelay = (Math.random() * 10) + 's';
+        hero.appendChild(leaf);
+      }
+    }
+
+    /* ── Multi-Step Form Logic ───────────────────── */
+    const steps = document.querySelectorAll('.ct-step');
+    const trailSteps = document.querySelectorAll('.ct-trail-step');
+    const trailLine1 = document.getElementById('trailLine1');
+    const trailLine2 = document.getElementById('trailLine2');
+    let currentStep = 1;
+    let selectedTopic = '';
+
+    function goToStep(n) {
+      // Hide all steps
+      steps.forEach(s => s.classList.remove('active'));
+      // Show target
+      const target = document.getElementById('step' + n);
+      if (target) target.classList.add('active');
+      // Update trail indicator
+      trailSteps.forEach((ts, i) => {
+        const stepNum = i + 1;
+        ts.classList.remove('active', 'completed', 'disabled');
+        if (stepNum < n) ts.classList.add('completed');
+        else if (stepNum === n) ts.classList.add('active');
+        else ts.classList.add('disabled');
+      });
+      // Update lines
+      if (n > 1) trailLine1.classList.add('filled');
+      else trailLine1.classList.remove('filled');
+      if (n > 2) trailLine2.classList.add('filled');
+      else trailLine2.classList.remove('filled');
+      currentStep = n;
+      // Scroll to form
+      document.querySelector('.ct-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Step navigation clicks on trail dots
+    trailSteps.forEach(ts => {
+      ts.addEventListener('click', function() {
+        const n = parseInt(this.dataset.step);
+        if (n < currentStep) goToStep(n);
+      });
+    });
+
+    // Validate step 1
+    function validateStep1() {
+      let valid = true;
+      const fname = document.getElementById('ctFname');
+      const lname = document.getElementById('ctLname');
+      const email = document.getElementById('ctEmail');
+      [fname, lname].forEach(f => {
+        if (!f.value.trim()) { f.classList.add('error'); valid = false; }
+        else f.classList.remove('error');
+      });
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRe.test(email.value.trim())) { email.classList.add('error'); valid = false; }
+      else email.classList.remove('error');
+      return valid;
+    }
+
+    // Real-time validation
+    ['ctFname','ctLname','ctEmail'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', () => el.classList.remove('error'));
+    });
+
+    document.getElementById('toStep2').addEventListener('click', () => {
+      if (validateStep1()) goToStep(2);
+    });
+    document.getElementById('backTo1').addEventListener('click', () => goToStep(1));
+
+    // Topic selection
+    const topicCards = document.querySelectorAll('.ct-topic');
+    const toStep3Btn = document.getElementById('toStep3');
+    topicCards.forEach(card => {
+      card.addEventListener('click', function() {
+        topicCards.forEach(c => c.classList.remove('selected'));
+        this.classList.add('selected');
+        selectedTopic = this.dataset.topic;
+        toStep3Btn.disabled = false;
+      });
+    });
+
+    toStep3Btn.addEventListener('click', () => {
+      if (selectedTopic) goToStep(3);
+    });
+    document.getElementById('backTo2').addEventListener('click', () => goToStep(2));
+
+    // Submit
+    document.getElementById('contactForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const msg = document.getElementById('ctMessage');
+      if (!msg.value.trim()) {
+        msg.classList.add('error');
+        return;
+      }
+      msg.classList.remove('error');
+
+      // Collect all data from 3 steps
+      const fname = document.getElementById('ctFname').value.trim();
+      const lname = document.getElementById('ctLname').value.trim();
+      const email = document.getElementById('ctEmail').value.trim();
+      const topic = selectedTopic;
+      const message = msg.value.trim();
+
+      // Generate reference
+      const ref = 'OTT-' + String(Date.now()).slice(-6);
+
+      // Hide form steps, show sending spinner
+      steps.forEach(s => s.classList.remove('active'));
+      trailSteps.forEach(ts => {
+        ts.classList.remove('active', 'disabled');
+        ts.classList.add('completed');
+      });
+      trailLine1.classList.add('filled');
+      trailLine2.classList.add('filled');
+
+      const sendingEl = document.getElementById('ctSending');
+      sendingEl.classList.add('visible');
+
+      // Simulate processing delay, then show success with summary
+      setTimeout(function() {
+        sendingEl.classList.remove('visible');
+
+        // Fill in the summary
+        document.getElementById('sumName').textContent = fname + ' ' + lname;
+        document.getElementById('sumEmail').textContent = email;
+        document.getElementById('sumTopic').textContent = topic;
+        document.getElementById('sumMessage').textContent = message;
+        document.getElementById('ctRef').textContent = ref;
+
+        document.getElementById('ctSuccess').classList.add('visible');
+
+        // Scroll to top of form section
+        document.querySelector('.ct-form-section').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 1800);
+    });
+
+    document.getElementById('ctMessage').addEventListener('input', function() {
+      this.classList.remove('error');
+    });
+
+    // Send Another Message — full reset
+    document.getElementById('ctNewMsg').addEventListener('click', function() {
+      // Hide success
+      document.getElementById('ctSuccess').classList.remove('visible');
+      // Reset form fields
+      document.getElementById('contactForm').reset();
+      // Reset topic selection
+      selectedTopic = '';
+      topicCards.forEach(c => c.classList.remove('selected'));
+      toStep3Btn.disabled = true;
+      // Go back to step 1
+      currentStep = 1;
+      goToStep(1);
+    });
+
+    /* ── FAQ Accordion ───────────────────────────── */
+    document.querySelectorAll('.ct-faq-q').forEach(q => {
+      q.addEventListener('click', function() {
+        const item = this.closest('.ct-faq-item');
+        const wasOpen = item.classList.contains('open');
+        // Close all
+        document.querySelectorAll('.ct-faq-item').forEach(i => i.classList.remove('open'));
+        // Toggle
+        if (!wasOpen) item.classList.add('open');
+      });
+    });
+
+    /* ── IntersectionObserver for sections ────────── */
+    const revealEls = document.querySelectorAll('.ct-info-card, .ct-form-card, .ct-faq-item, .ct-location-inner');
+    revealEls.forEach(el => { el.style.opacity = '0'; el.style.transform = 'translateY(24px)'; el.style.transition = 'opacity 0.6s ease, transform 0.6s ease'; });
+    const revealObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
+          entry.target.style.transform = 'translateY(0)';
+          revealObs.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(el => revealObs.observe(el));
+
+  })();
+  </script>
 </body>
 </html>
