@@ -15,14 +15,15 @@ function saveCart(cart) {
   localStorage.setItem(CART_KEY, JSON.stringify(cart));
 }
 
-function addToCart(name, price, category, size) {
+function addToCart(name, price, category, size, image) {
   const cart = getCart();
   const key = `${name}__${size}`;
   const existing = cart.find(i => i.key === key);
   if (existing) {
     existing.qty += 1;
+    if (image && !existing.image) existing.image = image;
   } else {
-    cart.push({ key, name, price, category, size, qty: 1 });
+    cart.push({ key, name, price, category, size, qty: 1, image: image || '' });
   }
   saveCart(cart);
   updateCartUI();
@@ -86,11 +87,11 @@ function renderCartItems() {
   if (footer) footer.style.display = '';
   container.innerHTML = cart.map(item => `
     <div class="cart-item">
-      <div class="cart-item-img shoe-placeholder" style="width:80px;height:80px;border-radius:4px;overflow:hidden;">
-        <svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <div class="cart-item-img" style="width:80px;height:80px;border-radius:4px;overflow:hidden;background:#1a1a1a;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+        ${item.image ? `<img src="${item.image}" alt="${item.name}" style="width:100%;height:100%;object-fit:cover;"/>` : `<svg viewBox="0 0 100 60" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 45 Q20 20 50 18 Q70 16 90 28 L92 40 Q80 48 60 46 L10 48 Z" stroke="#c8a882" stroke-width="2" fill="none"/>
           <path d="M20 40 Q40 22 65 22" stroke="#c8a882" stroke-width="1.5" fill="none" opacity="0.5"/>
-        </svg>
+        </svg>`}
       </div>
       <div class="cart-item-info">
         <p class="cart-item-name">${item.name}</p>
@@ -640,8 +641,10 @@ function initAddToCart() {
       const cat     = card?.querySelector('.product-category')?.textContent?.trim() || '';
       const sel     = card?.querySelector('.size-select');
       const size    = sel ? sel.value : '42';
+      const imgEl   = card?.querySelector('.product-img-wrapper img, .product-image img');
+      const image   = imgEl ? imgEl.getAttribute('src') : '';
 
-      addToCart(name, price, cat, size);
+      addToCart(name, price, cat, size, image);
 
       this.textContent = 'Added ✓';
       this.classList.add('added');

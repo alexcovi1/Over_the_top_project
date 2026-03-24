@@ -139,10 +139,10 @@
       document.querySelectorAll('.pdp-thumb').forEach(t => t.classList.remove('active'));
       thumb.classList.add('active');
     }
-    const pdpProduct = { name: 'Tempo Racer', price: 130, category: 'RUNNING' };
+    const pdpProduct = { name: 'Tempo Racer', price: 130, category: 'RUNNING', image: 'images/06_RUNNING_Tempo_Racer_01_Hero.png' };
     document.getElementById('pdpAddCart').addEventListener('click', function() {
       const size = document.getElementById('pdpSize').value;
-      addToCart(pdpProduct.name, pdpProduct.price, pdpProduct.category, size);
+      addToCart(pdpProduct.name, pdpProduct.price, pdpProduct.category, size, pdpProduct.image);
       this.textContent = 'Added ✓';
       this.classList.add('added');
       setTimeout(() => { this.textContent = 'Add to Cart'; this.classList.remove('added'); }, 1800);
