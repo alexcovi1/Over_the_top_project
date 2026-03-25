@@ -710,6 +710,7 @@ function initCart() {
   openBtns.forEach(b => b.addEventListener('click', open));
   closeBtn?.addEventListener('click', close);
   overlay?.addEventListener('click', close);
+  document.getElementById('continueBtn')?.addEventListener('click', close);
 
   // Checkout — navigate to payment page
   document.getElementById('checkoutBtn')?.addEventListener('click', () => {
@@ -872,18 +873,135 @@ function addPoints(amount) {
   return pts;
 }
 
-// ── Newsletter ────────────────────────────────────────────────
-function initNewsletter() {
-  document.querySelectorAll('.newsletter-form').forEach(form => {
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      const input = form.querySelector('input');
-      if (input?.value.trim()) {
-        showToast('Thanks for subscribing!');
-        input.value = '';
+// ── Customer Reviews Carousel ─────────────────────────────────
+function initReviews() {
+  const cards = document.querySelectorAll('.review-card');
+  if (!cards.length) return;
+
+  const dotsWrap = document.getElementById('reviewDots');
+  const sparksEl = document.getElementById('reviewSparks');
+  const total = cards.length;
+  let current = 0;
+  let autoTimer = null;
+  let isDragging = false;
+  let dragStartX = 0;
+  let dragDelta = 0;
+
+  // Build dots
+  for (let i = 0; i < total; i++) {
+    const dot = document.createElement('button');
+    dot.className = 'review-dot' + (i === 0 ? ' active' : '');
+    dot.setAttribute('aria-label', 'Review ' + (i + 1));
+    dot.addEventListener('click', () => goTo(i));
+    dotsWrap.appendChild(dot);
+  }
+
+  function positionClass(offset) {
+    if (offset === 0) return 'active';
+    if (offset === 1) return 'next';
+    if (offset === -1) return 'prev';
+    if (offset >= 2) return 'far-next';
+    return 'far-prev';
+  }
+
+  function update() {
+    cards.forEach((card, i) => {
+      card.classList.remove('active', 'prev', 'next', 'far-prev', 'far-next');
+      let offset = i - current;
+      if (offset > total / 2) offset -= total;
+      if (offset < -total / 2) offset += total;
+      card.classList.add(positionClass(offset));
+    });
+    dotsWrap.querySelectorAll('.review-dot').forEach((d, i) => {
+      d.classList.toggle('active', i === current);
+    });
+  }
+
+  function emitSparks() {
+    if (!sparksEl) return;
+    const rect = sparksEl.getBoundingClientRect();
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    for (let i = 0; i < 12; i++) {
+      const spark = document.createElement('div');
+      spark.className = 'review-spark';
+      const angle = Math.random() * Math.PI * 2;
+      const dist = 40 + Math.random() * 80;
+      spark.style.left = cx + 'px';
+      spark.style.top = cy + 'px';
+      spark.style.setProperty('--sx', Math.cos(angle) * dist + 'px');
+      spark.style.setProperty('--sy', Math.sin(angle) * dist + 'px');
+      spark.style.width = (2 + Math.random() * 4) + 'px';
+      spark.style.height = spark.style.width;
+      sparksEl.appendChild(spark);
+      setTimeout(() => spark.remove(), 800);
+    }
+  }
+
+  function goTo(idx) {
+    if (idx === current) return;
+    current = ((idx % total) + total) % total;
+    update();
+    emitSparks();
+    resetAuto();
+  }
+
+  function advance(dir) { goTo(current + dir); }
+
+  // Nav buttons
+  document.getElementById('reviewPrev')?.addEventListener('click', () => advance(-1));
+  document.getElementById('reviewNext')?.addEventListener('click', () => advance(1));
+
+  // Keyboard
+  const section = document.getElementById('reviewsSection');
+  section?.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') advance(-1);
+    if (e.key === 'ArrowRight') advance(1);
+  });
+
+  // Drag / swipe on the stage
+  const stage = document.querySelector('.reviews-stage');
+  if (stage) {
+    stage.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      dragStartX = e.clientX;
+      dragDelta = 0;
+      stage.setPointerCapture(e.pointerId);
+    });
+    stage.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      dragDelta = e.clientX - dragStartX;
+    });
+    stage.addEventListener('pointerup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (Math.abs(dragDelta) > 50) {
+        advance(dragDelta < 0 ? 1 : -1);
       }
+      dragDelta = 0;
+    });
+  }
+
+  // Click on prev/next cards to navigate
+  cards.forEach(card => {
+    card.addEventListener('click', () => {
+      const idx = parseInt(card.dataset.index);
+      if (idx !== current) goTo(idx);
     });
   });
+
+  // Auto-rotate
+  function resetAuto() {
+    clearInterval(autoTimer);
+    autoTimer = setInterval(() => advance(1), 5000);
+  }
+
+  // Pause on hover
+  section?.addEventListener('mouseenter', () => clearInterval(autoTimer));
+  section?.addEventListener('mouseleave', resetAuto);
+
+  update();
+  resetAuto();
 }
 
 // ── Contact Form ─────────────────────────────────────────────
@@ -1348,7 +1466,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initAddToCart();
   initViewDetails();
   initWishlist();
-  initNewsletter();
+  initReviews();
   initContactForm();
   updateCartUI();
   initScrollReveal();

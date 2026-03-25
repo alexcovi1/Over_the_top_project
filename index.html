@@ -460,14 +460,88 @@
     </div>
   </section>
 
-  <!-- ══ NEWSLETTER ════════════════════════════════════════════ -->
-  <section class="newsletter">
-    <h2>Stay in the Loop</h2>
-    <p>Get early access to new drops, exclusive deals, and trail stories.</p>
-    <form class="newsletter-form" onsubmit="return false;">
-      <input type="email" placeholder="Your email address">
-      <button type="submit">Subscribe</button>
-    </form>
+  <!-- ══ CUSTOMER REVIEWS ══════════════════════════════════════ -->
+  <section class="reviews-section" id="reviewsSection">
+    <div class="reviews-header">
+      <span class="reviews-badge">★ Trusted by Adventurers</span>
+      <h2>What Our Customers Say</h2>
+      <p>Real stories from real trails.</p>
+    </div>
+    <div class="reviews-stage">
+      <div class="reviews-track" id="reviewsTrack">
+
+        <div class="review-card" data-index="0">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"The Summit Explorer changed how I hike. Incredible grip on wet rock, and my feet stayed dry through 3 days of rain in the Dolomites."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="--av-hue:35;">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 36c0-8 6-14 14-14s14 6 14 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div><strong>Marco R.</strong><span>Hiking · Bolzano, IT</span></div>
+          </div>
+          <div class="review-product">Summit Explorer</div>
+        </div>
+
+        <div class="review-card" data-index="1">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I ran my first ultra in the Marathon Elite. 80km and zero blisters. The cushioning is on another level — felt fresh at km 60."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="--av-hue:200;">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 36c0-8 6-14 14-14s14 6 14 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div><strong>Sarah K.</strong><span>Running · Munich, DE</span></div>
+          </div>
+          <div class="review-product">Marathon Elite</div>
+        </div>
+
+        <div class="review-card" data-index="2">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Best trail shoes I've ever owned. The Mountain Grip handles loose gravel like nothing else. I've recommended them to my entire trail crew."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="--av-hue:140;">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 36c0-8 6-14 14-14s14 6 14 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div><strong>Liam T.</strong><span>Trail · Chamonix, FR</span></div>
+          </div>
+          <div class="review-product">Mountain Grip</div>
+        </div>
+
+        <div class="review-card" data-index="3">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"I wear my Urban Pace for everything — morning runs, casual Fridays, even short hikes. Versatile, stylish, and absurdly comfortable."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="--av-hue:280;">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 36c0-8 6-14 14-14s14 6 14 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div><strong>Elena V.</strong><span>Running · Vienna, AT</span></div>
+          </div>
+          <div class="review-product">Urban Pace</div>
+        </div>
+
+        <div class="review-card" data-index="4">
+          <div class="review-stars">★★★★★</div>
+          <p class="review-text">"Scrambled up Via Ferrata routes all summer in the Rock Climber. Ankle support is phenomenal and they look great doing it."</p>
+          <div class="review-author">
+            <div class="review-avatar" style="--av-hue:15;">
+              <svg viewBox="0 0 40 40"><circle cx="20" cy="15" r="7" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 36c0-8 6-14 14-14s14 6 14 14" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+            </div>
+            <div><strong>Jonas H.</strong><span>Trail · Innsbruck, AT</span></div>
+          </div>
+          <div class="review-product">Rock Climber</div>
+        </div>
+
+      </div>
+    </div>
+    <div class="reviews-controls">
+      <button class="review-nav review-prev" id="reviewPrev" aria-label="Previous review">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+      </button>
+      <div class="review-dots" id="reviewDots"></div>
+      <button class="review-nav review-next" id="reviewNext" aria-label="Next review">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+    </div>
+    <div class="reviews-spark-canvas" id="reviewSparks"></div>
   </section>
 
   <!-- ══ FOOTER ════════════════════════════════════════════════ -->

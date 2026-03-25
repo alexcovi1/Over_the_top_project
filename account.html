@@ -753,7 +753,7 @@
     /* ═══ Account System (localStorage) ═══════════════════════ */
     const ACCOUNTS_KEY = 'ott_accounts';
     const SESSION_KEY = 'ott_session';
-    const MAX_ACCOUNTS = 10;
+    const MAX_ACCOUNTS = 50;
 
     function getAccounts() {
       try { return JSON.parse(localStorage.getItem(ACCOUNTS_KEY)) || []; }
