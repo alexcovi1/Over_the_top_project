@@ -73,7 +73,7 @@ h1, h2, h3, h4 { font-family: 'Playfair Display', serif; line-height: 1.15; }
   margin: 0 auto;
 }
 
-.navbar-left, .navbar-right { display: flex; align-items: center; gap: 40px; }
+.navbar-left, .navbar-right { display: flex; align-items: center; gap: 28px; }
 
 .logo { display: flex; align-items: center; gap: 10px; }
 .logo-icon { width: 38px; height: 30px; transition: opacity var(--transition); }
@@ -147,16 +147,17 @@ button.logo { cursor: pointer; }
 .nav-categories, .nav-links {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 18px;
 }
 .nav-categories a, .nav-links a {
   color: rgba(255,255,255,0.78);
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   transition: color var(--transition);
   position: relative;
+  white-space: nowrap;
 }
 .nav-categories a::after, .nav-links a::after {
   content: '';
@@ -177,17 +178,18 @@ button.logo { cursor: pointer; }
 /* ── NEW Badge ──────────────────────────────────────────── */
 .nav-new-badge {
   position: relative;
+  margin-right: 10px;
 }
 .nav-new-badge .badge-new {
   position: absolute;
-  top: -10px; right: -28px;
-  font-size: 8px; font-weight: 800;
-  letter-spacing: .08em; text-transform: uppercase;
+  top: -9px; right: -22px;
+  font-size: 7px; font-weight: 800;
+  letter-spacing: .06em; text-transform: uppercase;
   color: #fff;
   background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-  padding: 2px 6px; border-radius: 4px;
-  line-height: 1.4;
-  box-shadow: 0 2px 8px rgba(168,133,94,.35);
+  padding: 2px 5px; border-radius: 3px;
+  line-height: 1.3;
+  box-shadow: 0 2px 6px rgba(168,133,94,.3);
   animation: badgePulse 2.5s ease-in-out infinite;
   pointer-events: none;
 }
@@ -504,6 +506,12 @@ button.logo { cursor: pointer; }
 }
 .mobile-menu a:last-child { border-bottom: none; }
 .mobile-menu a:hover { color: var(--gold); }
+.mobile-menu .nav-new-badge { display: flex; align-items: center; gap: 8px; }
+.mobile-menu .nav-new-badge .badge-new {
+  position: static;
+  display: inline-block;
+  margin-left: 4px;
+}
 
 /* Ambient mode overlays */
 .ambient-canvas {
@@ -2031,6 +2039,13 @@ button.logo { cursor: pointer; }
 
 /* ── Responsive ───────────────────────────────────────────── */
 @media (max-width: 1024px) {
+  .navbar-left, .navbar-right { gap: 20px; }
+  .nav-categories, .nav-links { gap: 14px; }
+  .nav-categories a, .nav-links a { font-size: 11px; letter-spacing: 0.04em; }
+  .nav-new-badge { margin-right: 6px; }
+  .nav-new-badge .badge-new { font-size: 6px; right: -18px; padding: 1.5px 4px; }
+  .logo-text { font-size: 13px; letter-spacing: 0.08em; }
+  .navbar-inner { padding: 0 20px; }
   .products-grid { grid-template-columns: repeat(2, 1fr); }
   .footer-inner { grid-template-columns: 1fr; }
   .footer-columns { grid-template-columns: repeat(2, 1fr); }
@@ -2056,10 +2071,13 @@ button.logo { cursor: pointer; }
   .featured-main { height: 360px; }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 900px) {
   .navbar-left .nav-categories, .navbar-right .nav-links { display: none; }
   .hamburger { display: flex; }
   .nav-actions .ambient-btn span { display: none; }
+}
+
+@media (max-width: 768px) {
   .home-hero { padding: 60px 32px; }
   .home-hero h1 { font-size: clamp(38px, 10vw, 64px); }
   .about-hero { min-height: 380px; padding: 90px 24px 60px; }

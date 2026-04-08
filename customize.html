@@ -1,0 +1,2253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shoe Studio &mdash; Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ══════════════════════════════════════
+       SHOE STUDIO — Build Your Dream Shoe
+       ══════════════════════════════════════ */
+
+    .studio-page {
+      background: var(--black, #0a0a0a);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(200,168,130,.04) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 0% 35%, rgba(107,168,160,.03) 0%, transparent 50%),
+        radial-gradient(ellipse 60% 40% at 100% 55%, rgba(212,149,106,.03) 0%, transparent 50%),
+        radial-gradient(ellipse 70% 30% at 50% 100%, rgba(184,115,71,.03) 0%, transparent 40%);
+      min-height: 100vh; overflow-x: hidden;
+      color: #e8e0d5;
+    }
+
+    /* ── Variables ─────────────────────── */
+    :root {
+      --s-gold: #c8a882;
+      --s-gold-dark: #a8855e;
+      --s-bg: #0a0a0a;
+      --s-panel: rgba(255,255,255,.04);
+      --s-border: rgba(255,255,255,.08);
+      --s-text: #e8e0d5;
+      --s-text-muted: #8a8078;
+      --s-glass: rgba(255,255,255,.06);
+      --s-amber: #d4956a;
+      --s-copper: #b87347;
+      --s-teal: #6ba8a0;
+    }
+
+    /* ── Wrapper ───────────────────────── */
+    .studio-wrap {
+      position: relative; z-index: 2;
+      max-width: 1180px; margin: 0 auto;
+      padding: calc(var(--nav-h, 70px) + 28px) 24px 20px;
+    }
+
+    /* ── Top Header ────────────────────── */
+    .studio-hero {
+      text-align: center; margin-bottom: 36px;
+      position: relative;
+    }
+    .studio-hero::before {
+      content: '';
+      position: absolute;
+      top: -80px; left: 50%; transform: translateX(-50%);
+      width: 600px; height: 400px;
+      background: radial-gradient(ellipse at center, rgba(212,149,106,.06) 0%, rgba(184,115,71,.03) 40%, transparent 70%);
+      pointer-events: none;
+      z-index: -1;
+    }
+    .studio-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 16px; border-radius: 50px;
+      background: linear-gradient(135deg, rgba(200,168,130,.12), rgba(168,133,94,.06));
+      border: 1px solid rgba(200,168,130,.18);
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--s-gold);
+      margin-bottom: 14px;
+    }
+    .studio-badge svg { width: 12px; height: 12px; }
+    .studio-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 5vw, 56px);
+      color: #fff; line-height: 1.1;
+      margin-bottom: 8px;
+    }
+    .studio-subtitle {
+      font-size: 15px; color: var(--s-text-muted);
+      max-width: 480px; margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    /* ── Layout: Preview + Builder ──────── */
+    .studio-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* ── Shoe Preview (left) ────────────── */
+    .studio-preview {
+      position: sticky; top: calc(var(--nav-h, 70px) + 20px);
+      background: linear-gradient(168deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.02) 50%, rgba(0,0,0,.1) 100%);
+      border: 1px solid rgba(200,168,130,.12);
+      border-radius: 28px;
+      padding: 40px 32px;
+      min-height: 540px;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      box-shadow: 0 0 60px rgba(200,168,130,.04), inset 0 1px 0 rgba(255,255,255,.05);
+      overflow: hidden;
+    }
+    .studio-preview::before {
+      content: '';
+      position: absolute; top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: conic-gradient(from 0deg at 50% 50%, transparent 0deg, rgba(200,168,130,.03) 90deg, transparent 180deg, rgba(200,168,130,.02) 270deg, transparent 360deg);
+      animation: previewRotate 20s linear infinite;
+      pointer-events: none;
+    }
+    @keyframes previewRotate { to { transform: rotate(360deg); } }
+    .studio-preview-label {
+      position: relative; z-index: 1;
+      font-size: 9px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--s-gold); margin-bottom: 20px;
+      padding: 4px 14px;
+      background: rgba(200,168,130,.08);
+      border: 1px solid rgba(200,168,130,.15);
+      border-radius: 20px;
+    }
+    .shoe-canvas {
+      position: relative; z-index: 1;
+      width: 420px; height: 360px;
+      margin: 0 auto;
+      perspective: 800px;
+    }
+    .shoe-canvas svg {
+      width: 100%; height: 100%;
+      filter: drop-shadow(0 25px 40px rgba(0,0,0,.55)) drop-shadow(0 8px 16px rgba(0,0,0,.35));
+      transition: transform .6s cubic-bezier(.22,1,.36,1);
+    }
+    .shoe-canvas:hover svg {
+      transform: rotateY(-4deg) rotateX(2deg) scale(1.04);
+    }
+    /* Floating animation */
+    .shoe-canvas svg {
+      animation: shoeFloat 4s ease-in-out infinite;
+    }
+    @keyframes shoeFloat {
+      0%, 100% { transform: translateY(0) rotateY(0deg); }
+      50% { transform: translateY(-10px) rotateY(-2deg); }
+    }
+    .shoe-canvas:hover svg {
+      animation: none;
+      transform: rotateY(-4deg) rotateX(2deg) scale(1.04);
+    }
+    /* Ground shadow */
+    .shoe-ground-shadow {
+      position: relative; z-index: 1;
+      width: 260px; height: 24px;
+      margin: -8px auto 0;
+      background: radial-gradient(ellipse, rgba(200,168,130,.18) 0%, transparent 70%);
+      border-radius: 50%;
+      filter: blur(6px);
+      animation: shadowPulse 4s ease-in-out infinite;
+    }
+    @keyframes shadowPulse {
+      0%, 100% { opacity: 1; transform: scaleX(1); }
+      50% { opacity: .6; transform: scaleX(.88); }
+    }
+    /* Ambient glow behind shoe */
+    .shoe-glow {
+      position: absolute;
+      top: 45%; left: 50%;
+      width: 320px; height: 240px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(ellipse, rgba(200,168,130,.07) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Shoe part colors */
+    .shoe-sole-color { transition: fill .4s ease; }
+    .shoe-upper-color { transition: fill .4s ease; }
+    .shoe-tongue-color { transition: fill .4s ease; }
+    .shoe-laces-color { transition: stroke .4s ease; }
+    .shoe-detail-color { transition: fill .4s ease; }
+
+    .shoe-preview-name {
+      position: relative; z-index: 1;
+      text-align: center; margin-top: 20px;
+    }
+    .shoe-preview-name h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: #fff;
+    }
+    .shoe-preview-name p {
+      font-size: 12px; color: var(--s-text-muted);
+      margin-top: 2px;
+    }
+    .shoe-preview-price {
+      position: relative; z-index: 1;
+      font-size: 30px; font-weight: 800;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-top: 12px;
+      text-align: center;
+    }
+
+    /* ── Builder Panel (right) ──────────── */
+    .studio-builder {
+      display: flex; flex-direction: column; gap: 0;
+    }
+
+    /* ── Progress Steps ─────────────────── */
+    .studio-steps {
+      display: flex; gap: 4px; margin-bottom: 24px;
+    }
+    .studio-step-dot {
+      flex: 1; height: 4px; border-radius: 2px;
+      background: var(--s-border);
+      transition: all .4s ease;
+      cursor: pointer;
+    }
+    .studio-step-dot.active { background: var(--s-gold); }
+    .studio-step-dot.done { background: var(--s-gold-dark); }
+
+    /* ── Step Panel ─────────────────────── */
+    .step-panel {
+      display: none; animation: stepIn .4s ease;
+    }
+    .step-panel.active { display: block; }
+    @keyframes stepIn { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:none} }
+
+    .step-header {
+      display: flex; align-items: center; gap: 10px;
+      margin-bottom: 18px;
+    }
+    .step-number {
+      width: 30px; height: 30px; border-radius: 50%;
+      background: var(--s-gold);
+      color: var(--s-bg); font-size: 13px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .step-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 22px; color: #fff;
+    }
+    .step-desc {
+      font-size: 13px; color: var(--s-text-muted);
+      margin-bottom: 20px; line-height: 1.5;
+    }
+
+    /* ── Category Cards (Step 1) ────────── */
+    .cat-cards {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .cat-card {
+      background: var(--s-panel);
+      border: 2px solid var(--s-border);
+      border-radius: 18px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all .35s cubic-bezier(.22,1,.36,1);
+    }
+    .cat-card:hover {
+      border-color: rgba(200,168,130,.3);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 28px rgba(0,0,0,.3);
+    }
+    .cat-card.selected {
+      border-color: var(--s-gold);
+      background: linear-gradient(135deg, rgba(200,168,130,.1), rgba(168,133,94,.04));
+      box-shadow: 0 0 0 1px var(--s-gold), 0 8px 28px rgba(200,168,130,.12);
+    }
+    .cat-card-icon {
+      width: 48px; height: 48px; margin: 0 auto 10px;
+      border-radius: 14px;
+      background: var(--s-glass);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cat-card-icon svg { width: 22px; height: 22px; color: var(--s-gold); }
+    .cat-card h4 {
+      font-size: 15px; font-weight: 700; color: #fff;
+      margin-bottom: 3px;
+    }
+    .cat-card p {
+      font-size: 11px; color: var(--s-text-muted); line-height: 1.4;
+    }
+
+    /* ── Component Selector ─────────────── */
+    .comp-section { margin-bottom: 22px; }
+    .comp-label {
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--s-gold-dark);
+      margin-bottom: 10px;
+    }
+
+    /* Material Options */
+    .material-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .material-opt {
+      background: var(--s-panel);
+      border: 2px solid var(--s-border);
+      border-radius: 14px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .material-opt:hover { border-color: rgba(200,168,130,.25); }
+    .material-opt.selected {
+      border-color: var(--s-gold);
+      background: rgba(200,168,130,.06);
+    }
+    .material-opt-head {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 4px;
+    }
+    .material-opt h5 {
+      font-size: 13px; font-weight: 700; color: #fff;
+    }
+    .material-tier {
+      font-size: 8px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      padding: 2px 8px; border-radius: 6px;
+    }
+    .tier-premium { background: rgba(200,168,130,.2); color: var(--s-gold); }
+    .tier-standard { background: rgba(255,255,255,.06); color: var(--s-text-muted); }
+    .tier-essential { background: rgba(255,255,255,.04); color: rgba(255,255,255,.3); }
+    .material-opt p {
+      font-size: 11px; color: var(--s-text-muted); line-height: 1.35;
+    }
+    .material-opt .m-price {
+      font-size: 12px; font-weight: 700; color: var(--s-gold);
+      margin-top: 4px;
+    }
+
+    /* Color Picker */
+    .color-picker { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+    .color-swatch {
+      width: 32px; height: 32px; border-radius: 50%;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: all .25s ease;
+      position: relative;
+    }
+    .color-swatch:hover { transform: scale(1.15); }
+    .color-swatch.selected {
+      border-color: var(--s-gold);
+      box-shadow: 0 0 0 2px var(--s-bg), 0 0 0 4px var(--s-gold);
+    }
+    .color-swatch::after {
+      content: '✓'; position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 800; color: #fff;
+      opacity: 0; transition: opacity .2s;
+      text-shadow: 0 1px 3px rgba(0,0,0,.5);
+    }
+    .color-swatch.selected::after { opacity: 1; }
+
+    /* ── Personalization ────────────────── */
+    .personal-group { margin-bottom: 18px; }
+    .personal-label {
+      font-size: 11px; font-weight: 700; color: var(--s-text);
+      margin-bottom: 6px;
+    }
+    .personal-input {
+      width: 100%; padding: 12px 16px;
+      background: var(--s-panel);
+      border: 1px solid var(--s-border);
+      border-radius: 12px;
+      color: #fff; font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color .3s ease;
+    }
+    .personal-input:focus { border-color: var(--s-gold); }
+    .personal-input::placeholder { color: rgba(255,255,255,.2); }
+
+    textarea.personal-input {
+      resize: vertical; min-height: 90px;
+    }
+
+    .char-count {
+      font-size: 10px; color: var(--s-text-muted);
+      text-align: right; margin-top: 3px;
+    }
+
+    /* Symbol Picker */
+    .symbol-grid {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .symbol-btn {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--s-panel);
+      border: 2px solid var(--s-border);
+      color: #fff; font-size: 18px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      transition: all .25s ease;
+    }
+    .symbol-btn:hover { border-color: rgba(200,168,130,.3); transform: scale(1.08); }
+    .symbol-btn.selected {
+      border-color: var(--s-gold);
+      background: rgba(200,168,130,.12);
+    }
+
+    /* Occasion */
+    .occasion-grid {
+      display: flex; gap: 8px; flex-wrap: wrap;
+    }
+    .occasion-btn {
+      padding: 8px 16px; border-radius: 50px;
+      background: var(--s-panel);
+      border: 1px solid var(--s-border);
+      color: var(--s-text-muted); font-size: 12px; font-weight: 600;
+      cursor: pointer;
+      transition: all .3s ease;
+    }
+    .occasion-btn:hover { border-color: rgba(200,168,130,.3); color: var(--s-text); }
+    .occasion-btn.selected {
+      border-color: var(--s-gold);
+      background: rgba(200,168,130,.1);
+      color: var(--s-gold);
+    }
+
+    /* ── Navigation Buttons ─────────────── */
+    .step-nav {
+      display: flex; gap: 12px; margin-top: 24px;
+    }
+    .step-btn {
+      padding: 12px 28px; border-radius: 50px;
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      cursor: pointer;
+      transition: all .3s ease;
+      border: none;
+    }
+    .step-btn-back {
+      background: var(--s-panel);
+      border: 1px solid var(--s-border);
+      color: var(--s-text);
+    }
+    .step-btn-back:hover { border-color: rgba(255,255,255,.2); }
+    .step-btn-next {
+      background: var(--s-gold);
+      color: var(--s-bg);
+      flex: 1;
+    }
+    .step-btn-next:hover { background: var(--s-gold-dark); }
+    .step-btn-next:disabled {
+      opacity: .35; cursor: not-allowed;
+    }
+    /* Step validation error */
+    .step-error {
+      display: none;
+      align-items: center; gap: 8px;
+      padding: 10px 16px;
+      margin-bottom: 16px;
+      border-radius: 12px;
+      background: rgba(220,60,60,.08);
+      border: 1px solid rgba(220,60,60,.20);
+      color: #e06060;
+      font-size: 13px; font-weight: 500;
+      animation: errorShake .4s ease;
+    }
+    .step-error.show { display: flex; }
+    .step-error svg { width: 16px; height: 16px; flex-shrink: 0; }
+    @keyframes errorShake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    /* ── Summary (Step 6) ───────────────── */
+    .summary-card {
+      background: var(--s-panel);
+      border: 1px solid var(--s-border);
+      border-radius: 18px;
+      padding: 24px;
+    }
+    .summary-row {
+      display: flex; justify-content: space-between;
+      padding: 10px 0;
+      border-bottom: 1px solid var(--s-border);
+      font-size: 13px;
+    }
+    .summary-row:last-child { border-bottom: none; }
+    .summary-row .s-label { color: var(--s-text-muted); }
+    .summary-row .s-value { color: #fff; font-weight: 600; text-align: right; }
+    .summary-total {
+      display: flex; justify-content: space-between;
+      padding: 16px 0 0;
+      margin-top: 8px;
+      border-top: 2px solid var(--s-gold);
+      font-size: 18px; font-weight: 800;
+    }
+    .summary-total .s-label { color: var(--s-text); }
+    .summary-total .s-value { color: var(--s-gold); }
+
+    .submit-btn {
+      width: 100%; padding: 16px;
+      margin-top: 20px; border: none;
+      border-radius: 50px;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      color: var(--s-bg);
+      font-size: 15px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .08em;
+      cursor: pointer;
+      transition: all .3s ease;
+      box-shadow: 0 4px 20px rgba(200,168,130,.25);
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(200,168,130,.35);
+    }
+
+    /* Success */
+    .success-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(12px);
+      align-items: center; justify-content: center;
+    }
+    .success-overlay.show { display: flex; }
+    .success-card {
+      text-align: center;
+      background: var(--s-panel);
+      border: 1px solid var(--s-border);
+      border-radius: 28px;
+      padding: 48px 40px;
+      max-width: 420px;
+    }
+    .success-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      animation: successPop .5s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes successPop { from{transform:scale(0)} to{transform:scale(1)} }
+    .success-icon svg { width: 28px; height: 28px; color: var(--s-bg); }
+    .success-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px; color: #fff; margin-bottom: 8px;
+    }
+    .success-card p { font-size: 14px; color: var(--s-text-muted); line-height: 1.5; }
+    .success-close {
+      margin-top: 24px; padding: 12px 32px;
+      border-radius: 50px; border: none;
+      background: var(--s-gold); color: var(--s-bg);
+      font-size: 13px; font-weight: 700;
+      text-transform: uppercase; cursor: pointer;
+      transition: all .3s ease;
+    }
+    .success-close:hover { background: var(--s-gold-dark); }
+
+    /* ── Login Required Modal ────────────── */
+    .login-overlay {
+      display: none;
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(0,0,0,.85);
+      backdrop-filter: blur(12px);
+      align-items: center; justify-content: center;
+    }
+    .login-overlay.show { display: flex; }
+    .login-card {
+      text-align: center;
+      background: linear-gradient(168deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.02) 100%);
+      border: 1px solid rgba(200,168,130,.15);
+      border-radius: 28px;
+      padding: 48px 40px;
+      max-width: 420px;
+      animation: loginSlide .4s cubic-bezier(.22,1,.36,1);
+    }
+    @keyframes loginSlide { from{opacity:0;transform:translateY(20px) scale(.96)} to{opacity:1;transform:none} }
+    .login-lock {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: linear-gradient(135deg, rgba(200,168,130,.15), rgba(200,168,130,.06));
+      border: 1px solid rgba(200,168,130,.20);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+    }
+    .login-lock svg { width: 28px; height: 28px; color: var(--s-gold); }
+    .login-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px; color: #fff; margin-bottom: 8px;
+    }
+    .login-card p {
+      font-size: 14px; color: var(--s-text-muted); line-height: 1.6;
+      margin-bottom: 24px;
+    }
+    .login-card p strong { color: var(--s-gold); font-weight: 600; }
+    .login-actions {
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .login-btn-primary {
+      padding: 14px 32px; border-radius: 50px; border: none;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      color: var(--s-bg); font-size: 13px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      cursor: pointer; transition: all .3s ease;
+      text-decoration: none; display: inline-block;
+    }
+    .login-btn-primary:hover { filter: brightness(1.1); transform: translateY(-1px); }
+    .login-btn-secondary {
+      padding: 12px 32px; border-radius: 50px;
+      border: 1px solid rgba(200,168,130,.25);
+      background: transparent;
+      color: var(--s-gold); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .3s ease;
+      text-decoration: none; display: inline-block;
+    }
+    .login-btn-secondary:hover { border-color: var(--s-gold); background: rgba(200,168,130,.06); }
+    .login-dismiss {
+      margin-top: 16px;
+      font-size: 12px; color: var(--s-text-muted);
+      cursor: pointer; background: none; border: none;
+      transition: color .3s;
+    }
+    .login-dismiss:hover { color: #fff; }
+
+    /* ── Why Section (Manifesto) ─────────── */
+    .studio-why {
+      position: relative;
+      margin: 0 auto 52px;
+      max-width: 920px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    .why-card {
+      position: relative;
+      background: linear-gradient(168deg, rgba(255,255,255,.05) 0%, rgba(255,255,255,.01) 100%);
+      border: 1px solid rgba(200,168,130,.10);
+      border-radius: 22px;
+      padding: 32px 26px 28px;
+      overflow: hidden;
+      transition: transform .4s ease, border-color .4s ease, box-shadow .4s ease;
+    }
+    .why-card:nth-child(1) { border-bottom: 2px solid rgba(200,168,130,.15); }
+    .why-card:nth-child(2) { border-bottom: 2px solid rgba(212,149,106,.15); }
+    .why-card:nth-child(3) { border-bottom: 2px solid rgba(107,168,160,.15); }
+    .why-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(200,168,130,.25);
+    }
+    .why-card:nth-child(1):hover { box-shadow: 0 8px 32px rgba(200,168,130,.08); }
+    .why-card:nth-child(2):hover { box-shadow: 0 8px 32px rgba(212,149,106,.08); }
+    .why-card:nth-child(3):hover { box-shadow: 0 8px 32px rgba(107,168,160,.08); }
+    .why-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--s-gold), transparent);
+      opacity: 0;
+      transition: opacity .4s ease;
+    }
+    .why-card:nth-child(2)::before {
+      background: linear-gradient(90deg, transparent, var(--s-amber), transparent);
+    }
+    .why-card:nth-child(3)::before {
+      background: linear-gradient(90deg, transparent, var(--s-teal), transparent);
+    }
+    .why-card:hover::before { opacity: 1; }
+    .why-icon {
+      width: 44px; height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, rgba(200,168,130,.12), rgba(200,168,130,.04));
+      border: 1px solid rgba(200,168,130,.15);
+      margin-bottom: 18px;
+      color: var(--s-gold);
+    }
+    .why-card:nth-child(2) .why-icon {
+      background: linear-gradient(135deg, rgba(212,149,106,.14), rgba(212,149,106,.04));
+      border-color: rgba(212,149,106,.18);
+      color: var(--s-amber);
+    }
+    .why-card:nth-child(3) .why-icon {
+      background: linear-gradient(135deg, rgba(107,168,160,.12), rgba(107,168,160,.04));
+      border-color: rgba(107,168,160,.15);
+      color: var(--s-teal);
+    }
+    .why-card:nth-child(2) .why-icon svg { stroke: var(--s-amber); }
+    .why-card:nth-child(3) .why-icon svg { stroke: var(--s-teal); }
+    .why-icon svg { width: 22px; height: 22px; }
+    .why-card h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px; color: #fff;
+      margin-bottom: 8px; line-height: 1.2;
+    }
+    .why-card p {
+      font-size: 13px; line-height: 1.65;
+      color: var(--s-text-muted);
+    }
+    .why-card .why-accent {
+      color: var(--s-gold); font-weight: 600;
+    }
+    .why-card:nth-child(2) .why-accent { color: var(--s-amber); }
+    .why-card:nth-child(3) .why-accent { color: var(--s-teal); }
+    .why-intro {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+    .why-intro-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--s-gold-dark);
+      margin-bottom: 10px;
+    }
+    .why-intro-label::before,
+    .why-intro-label::after {
+      content: '';
+      width: 24px; height: 1px;
+      background: linear-gradient(90deg, transparent, var(--s-gold-dark));
+    }
+    .why-intro-label::after {
+      background: linear-gradient(90deg, var(--s-gold-dark), transparent);
+    }
+    .why-intro h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 3.5vw, 32px);
+      color: #fff; line-height: 1.2;
+      margin-bottom: 8px;
+    }
+    .why-intro h2 em {
+      font-style: italic;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .why-intro p {
+      font-size: 14px; color: var(--s-text-muted);
+      max-width: 540px; margin: 0 auto; line-height: 1.6;
+    }
+    .why-stat {
+      display: flex; align-items: baseline; gap: 4px;
+      margin-top: 16px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+    .why-stat strong {
+      font-size: 24px; font-weight: 800;
+      background: linear-gradient(135deg, var(--s-gold), var(--s-gold-dark));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .why-card:nth-child(2) .why-stat strong {
+      background: linear-gradient(135deg, var(--s-amber), var(--s-copper));
+      -webkit-background-clip: text; background-clip: text;
+    }
+    .why-card:nth-child(3) .why-stat strong {
+      background: linear-gradient(135deg, var(--s-teal), #4d8f87);
+      -webkit-background-clip: text; background-clip: text;
+    }
+    .why-stat span {
+      font-size: 11px; color: var(--s-text-muted);
+      letter-spacing: .03em;
+    }
+
+    @media (max-width: 900px) {
+      .studio-why { grid-template-columns: 1fr; max-width: 440px; }
+    }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 900px) {
+      .studio-layout {
+        grid-template-columns: 1fr;
+      }
+      .studio-preview {
+        position: relative; top: auto;
+        min-height: 380px; padding: 28px;
+      }
+      .shoe-canvas { width: 320px; height: 280px; }
+      .cat-cards { grid-template-columns: 1fr; gap: 10px; }
+      .material-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .studio-wrap { padding-left: 14px; padding-right: 14px; }
+      .studio-preview { padding: 18px; min-height: 300px; border-radius: 20px; }
+      .shoe-canvas { width: 240px; height: 210px; }
+      .step-nav { flex-direction: column; }
+    }
+
+    /* ══════════════════════════════════════
+       VISUAL DIVIDER — Smaller chill zone
+       ══════════════════════════════════════ */
+    .studio-visual {
+      position: relative;
+      width: 100%; height: 120px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0a0a0a 0%, #110f0c 50%, #0a0a0a 100%);
+    }
+    .studio-visual::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 60% 40% at 20% 50%, rgba(200,168,130,.05) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 80% 40%, rgba(107,168,160,.04) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 30% at 50% 80%, rgba(212,149,106,.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .visual-canvas {
+      position: absolute; inset: 0;
+    }
+    .visual-particle {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0;
+      animation: particleFloat linear infinite;
+    }
+    @keyframes particleFloat {
+      0% { opacity: 0; transform: translateY(0) scale(.5); }
+      15% { opacity: 1; }
+      85% { opacity: 1; }
+      100% { opacity: 0; transform: translateY(-120px) scale(1.2); }
+    }
+    .visual-shoe-silhouette {
+      position: absolute;
+      width: 80px; height: 34px;
+      opacity: 0;
+    }
+    .visual-shoe-silhouette svg {
+      width: 100%; height: 100%;
+    }
+    @keyframes shoeDrift {
+      0% { opacity: 0; transform: translateX(-40px) rotate(-5deg); }
+      20% { opacity: .1; }
+      50% { transform: translateX(0) rotate(0deg); }
+      80% { opacity: .1; }
+      100% { opacity: 0; transform: translateX(40px) rotate(5deg); }
+    }
+    .visual-line {
+      position: absolute;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(200,168,130,.12), transparent);
+    }
+    @keyframes lineGlow {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* ══════════════════════════════════════
+       STICKMAN ANIMATION — Story Strip
+       ══════════════════════════════════════ */
+    .stickman-strip {
+      position: relative;
+      width: 100%; height: 260px;
+      overflow: hidden;
+      background: linear-gradient(180deg, #0a0a0a 0%, #0f0d0a 30%, #13100c 50%, #0f0d0a 70%, #0a0a0a 100%);
+      border-top: 1px solid rgba(200,168,130,.06);
+      border-bottom: 1px solid rgba(200,168,130,.04);
+    }
+    .stickman-strip::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 30% 60% at 12% 60%, rgba(107,168,160,.04) 0%, transparent 70%),
+        radial-gradient(ellipse 25% 50% at 40% 50%, rgba(212,149,106,.04) 0%, transparent 60%),
+        radial-gradient(ellipse 25% 50% at 70% 60%, rgba(200,168,130,.04) 0%, transparent 60%),
+        radial-gradient(ellipse 30% 60% at 92% 50%, rgba(184,115,71,.04) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .stickman-canvas {
+      width: 100%; height: 100%;
+      position: relative; z-index: 1;
+    }
+    .stickman-canvas line, .stickman-canvas circle {
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    @media (max-width: 900px) {
+      .studio-visual { height: 80px; }
+      .stickman-strip { height: 220px; }
+    }
+    @media (max-width: 500px) {
+      .studio-visual { height: 60px; }
+      .stickman-strip { height: 180px; }
+    }
+  </style>
+</head>
+
+<body class="page-body studio-page">
+
+  <!-- ═══ NAVBAR ═════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu">
+            <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+              <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+              <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+            </svg>
+            <span class="logo-text">Over The Top</span>
+          </button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories">
+          <a href="newCollection.html">New Collection</a>
+          <div class="cat-dropdown-wrap">
+            <button class="cat-dropdown-btn" aria-expanded="false" aria-label="Categories">
+              Categories
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cat-radial">
+              <div class="cat-orbit-ring"></div>
+              <div class="cat-hub">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="cat-connector" style="transform: rotate(-90deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(30deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(150deg) translateX(-0.5px);"></div>
+              <div class="cat-item" style="top: 15%; left: 50%;">
+                <a href="hiking.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg>
+                  <span class="cat-item-label">Hiking</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 19%;">
+                <a href="running.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13 4v16"/><path d="M17 4v16"/><path d="M19 4H9.5a4.5 4.5 0 000 9H13"/><circle cx="9.5" cy="8.5" r="0" fill="currentColor"/><path d="M5 20l4-4 4 4 4-4 4 4"/></svg>
+                  <span class="cat-item-label">Running</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 81%;">
+                <a href="trail.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/><path d="M12 14c-3 0-5 2-7 2"/><path d="M12 14c3 0 5 2 7 2"/></svg>
+                  <span class="cat-item-label">Trail</span>
+                </a>
+              </div>
+              <div class="cat-particle" style="top:20%;left:25%;animation-delay:0s;"></div>
+              <div class="cat-particle" style="top:30%;left:75%;animation-delay:0.8s;"></div>
+              <div class="cat-particle" style="top:70%;left:50%;animation-delay:1.6s;"></div>
+              <div class="cat-particle" style="top:60%;left:15%;animation-delay:2.2s;"></div>
+              <div class="cat-particle" style="top:45%;left:85%;animation-delay:0.4s;"></div>
+            </div>
+          </div>
+          <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
+          <a href="customize.html" class="nav-new-badge">Shoe Studio<span class="badge-new">NEW</span></a>
+        </nav>
+        <div class="cat-backdrop"></div>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="ambient-btn" id="ambientBtn" aria-label="Toggle ambient mode">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M9.59 4.59A2 2 0 1111 8H2"/>
+              <path d="M12.59 19.41A2 2 0 1014 16H2"/>
+              <path d="M17.73 7.73A2.5 2.5 0 1119.5 12H2"/>
+            </svg>
+            <span>Ambient</span>
+          </button>
+          <button class="cart-btn" aria-label="Cart">
+            <svg class="cart-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            <span class="cart-count" id="cartCount" style="display:none;">0</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Mobile menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <nav class="mobile-nav">
+        <a href="index.html">Home</a>
+        <a href="newCollection.html">New Collection</a>
+        <a href="hiking.html">Hiking</a>
+        <a href="running.html">Running</a>
+        <a href="trail.html">Trail</a>
+        <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
+        <a href="customize.html" class="nav-new-badge">Shoe Studio<span class="badge-new">NEW</span></a>
+        <a href="about.html">About</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══ MAIN ══════════════════════════════════════════════ -->
+  <main class="studio-wrap">
+
+    <!-- Hero -->
+    <div class="studio-hero">
+      <div class="studio-badge">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        PREMIUM EXPERIENCE
+      </div>
+      <h1 class="studio-title">Shoe Studio</h1>
+      <p class="studio-subtitle">Design your dream shoe from scratch. Choose every material, color, and detail &mdash; built to your exact vision.</p>
+    </div>
+
+    <!-- Why Section -->
+    <div class="why-intro">
+      <div class="why-intro-label">The Philosophy</div>
+      <h2>Why We Built <em>This</em></h2>
+      <p>Mass production makes shoes for everyone &mdash; and therefore for no one. We believe the shoes you wear should be as unique as the path you walk. So we gave you the tools to create them yourself.</p>
+    </div>
+
+    <div class="studio-why">
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10 10-4.5 10-10S17.5 2 12 2z"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+        </div>
+        <h4>No Two Pairs<br>Are the Same</h4>
+        <p>Every shoe that leaves our studio is <span class="why-accent">one of one</span>. Your choices &mdash; from the rubber compound to the lace weave &mdash; make it yours and nobody else's.</p>
+        <div class="why-stat">
+          <strong>2,400+</strong>
+          <span>possible combinations</span>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 000-7.78z"/></svg>
+        </div>
+        <h4>Crafted With<br>Intention</h4>
+        <p>Premium materials. Zero waste. Every component you pick is <span class="why-accent">ethically sourced</span> and precision-cut only after you confirm your design.</p>
+        <div class="why-stat">
+          <strong>0%</strong>
+          <span>overproduction waste</span>
+        </div>
+      </div>
+
+      <div class="why-card">
+        <div class="why-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <h4>Performance<br>Meets Identity</h4>
+        <p>This isn't just style. Each tier &mdash; Premium, Standard, Essential &mdash; is <span class="why-accent">engineered for the terrain</span> you choose. Your shoe performs because you designed it to.</p>
+        <div class="why-stat">
+          <strong>3</strong>
+          <span>material tiers, your call</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Layout -->
+    <div class="studio-layout">
+
+      <!-- ── Left: Preview ─────────────── -->
+      <div class="studio-preview" id="studioPreview">
+        <div class="studio-preview-label">LIVE PREVIEW</div>
+        <div class="shoe-glow"></div>
+        <div class="shoe-canvas" id="shoeCanvas">
+          <svg viewBox="0 0 500 380" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Lighting gradients -->
+              <linearGradient id="upperLight" x1="0" y1="0" x2="0.3" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,.22)"/>
+                <stop offset="50%" stop-color="rgba(255,255,255,.05)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,.18)"/>
+              </linearGradient>
+              <linearGradient id="soleLight" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,.10)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,.20)"/>
+              </linearGradient>
+              <linearGradient id="tongueLight" x1="0.5" y1="0" x2="0.5" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,.25)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,.10)"/>
+              </linearGradient>
+              <linearGradient id="heelGrad" x1="1" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="rgba(255,255,255,.12)"/>
+                <stop offset="100%" stop-color="rgba(0,0,0,.22)"/>
+              </linearGradient>
+              <!-- Mesh / fabric texture -->
+              <pattern id="meshTex" x="0" y="0" width="6" height="6" patternUnits="userSpaceOnUse">
+                <rect width="6" height="6" fill="none"/>
+                <circle cx="1.5" cy="1.5" r=".4" fill="rgba(255,255,255,.06)"/>
+                <circle cx="4.5" cy="4.5" r=".4" fill="rgba(255,255,255,.06)"/>
+              </pattern>
+              <!-- Sole tread pattern -->
+              <pattern id="treadTex" x="0" y="0" width="16" height="8" patternUnits="userSpaceOnUse">
+                <rect width="16" height="8" fill="none"/>
+                <line x1="0" y1="4" x2="16" y2="4" stroke="rgba(255,255,255,.04)" stroke-width="1.5"/>
+                <line x1="4" y1="0" x2="4" y2="8" stroke="rgba(255,255,255,.03)" stroke-width="1"/>
+                <line x1="12" y1="0" x2="12" y2="8" stroke="rgba(255,255,255,.03)" stroke-width="1"/>
+              </pattern>
+              <!-- Stitching pattern -->
+              <pattern id="stitch" x="0" y="0" width="8" height="2" patternUnits="userSpaceOnUse">
+                <line x1="0" y1="1" x2="4" y2="1" stroke="rgba(255,255,255,.15)" stroke-width=".7" stroke-dasharray="2,2"/>
+              </pattern>
+              <!-- Inner shadow filter -->
+              <filter id="innerShadow" x="-10%" y="-10%" width="130%" height="130%">
+                <feGaussianBlur in="SourceAlpha" stdDeviation="4" result="blur"/>
+                <feOffset dx="2" dy="3"/>
+                <feComposite in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1"/>
+                <feFlood flood-color="rgba(0,0,0,.35)"/>
+                <feComposite in2="SourceGraphic" operator="in"/>
+                <feMerge>
+                  <feMergeNode/>
+                  <feMergeNode in="SourceGraphic"/>
+                </feMerge>
+              </filter>
+              <!-- Soft glow -->
+              <filter id="softGlow">
+                <feGaussianBlur stdDeviation="2" result="glow"/>
+                <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+              </filter>
+              <!-- Clip paths -->
+              <clipPath id="upperClip">
+                <path d="M105 260 L400 260 Q408 260 410 254 L416 218 Q420 178 405 148 L345 98 Q318 80 295 78 L195 84 Q148 92 125 135 L98 218 Q94 248 105 260Z"/>
+              </clipPath>
+              <clipPath id="soleClip">
+                <path d="M72 298 Q72 322 95 328 L370 328 Q418 328 424 304 L430 286 Q432 274 418 272 L98 272 Q72 274 72 298Z"/>
+              </clipPath>
+            </defs>
+
+            <!-- ═══ OUTSOLE (bottom) ═══ -->
+            <path class="shoe-sole-color" id="svgSole"
+              d="M72 298 Q72 322 95 328 L370 328 Q418 328 424 304 L430 286 Q432 274 418 272 L98 272 Q72 274 72 298Z"
+              fill="#3a3a3a" stroke="rgba(255,255,255,.05)" stroke-width="1"/>
+            <!-- Tread texture overlay -->
+            <path d="M72 298 Q72 322 95 328 L370 328 Q418 328 424 304 L430 286 Q432 274 418 272 L98 272 Q72 274 72 298Z"
+              fill="url(#treadTex)" clip-path="url(#soleClip)" opacity=".8"/>
+            <!-- Sole lighting -->
+            <path d="M72 298 Q72 322 95 328 L370 328 Q418 328 424 304 L430 286 Q432 274 418 272 L98 272 Q72 274 72 298Z"
+              fill="url(#soleLight)" opacity=".5"/>
+            <!-- Sole edge highlight -->
+            <path d="M78 296 Q78 274 98 273 L418 273" fill="none" stroke="rgba(255,255,255,.10)" stroke-width="1"/>
+
+            <!-- ═══ MIDSOLE ═══ -->
+            <path class="shoe-detail-color" id="svgMidsole"
+              d="M86 274 L418 274 L424 262 Q426 256 418 254 L92 254 Q82 258 86 274Z"
+              fill="#4a4a4a" stroke="rgba(255,255,255,.06)" stroke-width="1"/>
+            <!-- Midsole foam dots (cushion detail) -->
+            <circle cx="140" cy="265" r="2.5" fill="rgba(255,255,255,.05)"/>
+            <circle cx="180" cy="263" r="3" fill="rgba(255,255,255,.04)"/>
+            <circle cx="220" cy="264" r="2.5" fill="rgba(255,255,255,.05)"/>
+            <circle cx="260" cy="263" r="3" fill="rgba(255,255,255,.04)"/>
+            <circle cx="300" cy="265" r="2.5" fill="rgba(255,255,255,.05)"/>
+            <circle cx="340" cy="264" r="2" fill="rgba(255,255,255,.04)"/>
+            <circle cx="380" cy="263" r="2.5" fill="rgba(255,255,255,.05)"/>
+            <!-- Midsole top highlight line -->
+            <path d="M90 255 L418 255" fill="none" stroke="rgba(255,255,255,.08)" stroke-width=".6"/>
+
+            <!-- ═══ UPPER (main body) ═══ -->
+            <path class="shoe-upper-color" id="svgUpper"
+              d="M105 260 L400 260 Q408 260 410 254 L416 218 Q420 178 405 148 L345 98 Q318 80 295 78 L195 84 Q148 92 125 135 L98 218 Q94 248 105 260Z"
+              fill="#5a5a5a" filter="url(#innerShadow)"/>
+            <!-- Mesh texture on upper -->
+            <path d="M105 260 L400 260 Q408 260 410 254 L416 218 Q420 178 405 148 L345 98 Q318 80 295 78 L195 84 Q148 92 125 135 L98 218 Q94 248 105 260Z"
+              fill="url(#meshTex)" clip-path="url(#upperClip)"/>
+            <!-- Upper lighting overlay -->
+            <path d="M105 260 L400 260 Q408 260 410 254 L416 218 Q420 178 405 148 L345 98 Q318 80 295 78 L195 84 Q148 92 125 135 L98 218 Q94 248 105 260Z"
+              fill="url(#upperLight)" opacity=".7"/>
+
+            <!-- ═══ TOE CAP ═══ -->
+            <path class="shoe-detail-color" id="svgToeCap"
+              d="M105 260 Q94 248 98 218 L118 212 Q128 240 122 260Z"
+              fill="#4a4a4a" stroke="rgba(255,255,255,.06)" stroke-width="0.5"/>
+            <!-- Toe cap stitching -->
+            <path d="M108 256 Q98 244 102 220" fill="none" stroke="rgba(255,255,255,.12)" stroke-width=".7" stroke-dasharray="3,3"/>
+
+            <!-- ═══ TOE BUMPER (rubber tip) ═══ -->
+            <path d="M98 230 Q92 248 100 260 L114 260 Q106 248 108 230Z" fill="rgba(0,0,0,.15)" stroke="rgba(255,255,255,.04)" stroke-width=".5"/>
+
+            <!-- ═══ MID PANEL (side overlay) ═══ -->
+            <path d="M160 255 Q155 220 170 180 L210 168 Q250 165 290 175 L310 190 Q280 210 260 255Z"
+              fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.06)" stroke-width=".5"/>
+            <!-- Mid panel stitching -->
+            <path d="M162 252 Q158 222 172 182" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".6" stroke-dasharray="2.5,2.5"/>
+            <path d="M258 252 Q275 215 308 192" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".6" stroke-dasharray="2.5,2.5"/>
+
+            <!-- ═══ HEEL COUNTER ═══ -->
+            <path class="shoe-detail-color" id="svgHeel"
+              d="M378 260 L400 260 Q408 260 410 254 L416 218 Q420 195 412 170 L394 178 Q404 200 398 225 L388 260Z"
+              fill="#4a4a4a"/>
+            <!-- Heel lighting -->
+            <path d="M378 260 L400 260 Q408 260 410 254 L416 218 Q420 195 412 170 L394 178 Q404 200 398 225 L388 260Z"
+              fill="url(#heelGrad)" opacity=".6"/>
+            <!-- Heel pull tab -->
+            <path d="M396 172 L406 155 Q408 150 404 148 L396 148 Q392 150 394 155Z" fill="rgba(255,255,255,.08)" stroke="rgba(255,255,255,.12)" stroke-width=".6"/>
+            <!-- Heel stitching -->
+            <path d="M382 256 Q396 200 410 174" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".6" stroke-dasharray="3,3"/>
+
+            <!-- ═══ COLLAR / ANKLE PADDING ═══ -->
+            <path class="shoe-tongue-color" id="svgCollar"
+              d="M280 84 Q330 80 370 98 L385 110 Q390 120 385 126 L348 108 Q312 90 285 94Z"
+              fill="#666" opacity=".7"/>
+            <!-- Collar foam edge -->
+            <path d="M282 86 Q328 82 368 100" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="1.2" stroke-linecap="round"/>
+
+            <!-- ═══ TONGUE ═══ -->
+            <path class="shoe-tongue-color" id="svgTongue"
+              d="M220 88 Q228 52 248 38 Q268 52 276 88 L270 130 Q248 122 226 130Z"
+              fill="#666" filter="url(#innerShadow)"/>
+            <!-- Tongue padding lines -->
+            <path d="M232 60 Q248 52 264 60" fill="none" stroke="rgba(255,255,255,.10)" stroke-width=".6"/>
+            <path d="M230 72 Q248 64 266 72" fill="none" stroke="rgba(255,255,255,.08)" stroke-width=".5"/>
+            <!-- Tongue lighting -->
+            <path d="M220 88 Q228 52 248 38 Q268 52 276 88 L270 130 Q248 122 226 130Z"
+              fill="url(#tongueLight)" opacity=".5"/>
+            <!-- Tongue brand label -->
+            <rect x="236" y="54" width="24" height="10" rx="2" fill="rgba(255,255,255,.06)" stroke="rgba(255,255,255,.10)" stroke-width=".4"/>
+            <text x="248" y="62" text-anchor="middle" fill="rgba(255,255,255,.18)" font-size="5" font-weight="700" letter-spacing=".5">OTT</text>
+
+            <!-- ═══ LACES ═══ -->
+            <g class="shoe-laces-color" id="svgLaces" fill="none" stroke="#aaa" stroke-width="2.8" stroke-linecap="round">
+              <!-- Lace holes (eyelets) -->
+              <circle cx="222" cy="102" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="274" cy="102" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="219" cy="118" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="277" cy="118" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="215" cy="134" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="281" cy="134" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="211" cy="150" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <circle cx="285" cy="150" r="3" fill="rgba(0,0,0,.3)" stroke="rgba(255,255,255,.20)" stroke-width="1"/>
+              <!-- Actual laces crossing -->
+              <line x1="222" y1="102" x2="274" y2="102"/>
+              <line x1="219" y1="118" x2="277" y2="118"/>
+              <line x1="215" y1="134" x2="281" y2="134"/>
+              <line x1="211" y1="150" x2="285" y2="150"/>
+              <!-- Cross laces for realism -->
+              <line x1="222" y1="102" x2="277" y2="118" opacity=".3" stroke-width="1.2"/>
+              <line x1="274" y1="102" x2="219" y2="118" opacity=".3" stroke-width="1.2"/>
+              <line x1="219" y1="118" x2="281" y2="134" opacity=".3" stroke-width="1.2"/>
+              <line x1="277" y1="118" x2="215" y2="134" opacity=".3" stroke-width="1.2"/>
+              <line x1="215" y1="134" x2="285" y2="150" opacity=".3" stroke-width="1.2"/>
+              <line x1="281" y1="134" x2="211" y2="150" opacity=".3" stroke-width="1.2"/>
+              <!-- Lace bow at top -->
+              <path d="M222 100 Q208 88 198 92 Q194 96 205 100" stroke-width="2" opacity=".6"/>
+              <path d="M274 100 Q288 88 298 92 Q302 96 291 100" stroke-width="2" opacity=".6"/>
+            </g>
+
+            <!-- ═══ UPPER STITCH DETAILS ═══ -->
+            <!-- Top line stitch -->
+            <path d="M128 140 Q160 120 200 112 Q240 108 280 112 Q320 120 350 140" fill="none" stroke="rgba(255,255,255,.08)" stroke-width=".6" stroke-dasharray="3,2.5"/>
+            <!-- Bottom welt stitch -->
+            <path d="M106 258 L398 258" fill="none" stroke="rgba(255,255,255,.08)" stroke-width=".7" stroke-dasharray="2,2"/>
+            <!-- Foxing tape (where upper meets sole) -->
+            <path d="M104 260 L400 260" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="2"/>
+
+            <!-- ═══ EDGE HIGHLIGHTS ═══ -->
+            <!-- Top edge highlight -->
+            <path d="M196 85 Q148 93 126 135" fill="none" stroke="rgba(255,255,255,.12)" stroke-width=".8" stroke-linecap="round"/>
+            <!-- Sole bottom shine -->
+            <path d="M100 326 L365 326" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1"/>
+
+            <!-- ═══ PERSONALIZATION ═══ -->
+            <!-- Logo area (for personalization text) -->
+            <text id="svgText" x="248" y="215" text-anchor="middle" fill="rgba(255,255,255,.75)" font-family="Inter, sans-serif" font-size="16" font-weight="700" letter-spacing="1.5" filter="url(#softGlow)"></text>
+            <!-- Symbol -->
+            <text id="svgSymbol" x="150" y="200" text-anchor="middle" fill="rgba(255,255,255,.55)" font-size="26" filter="url(#softGlow)"></text>
+          </svg>
+        </div>
+        <div class="shoe-ground-shadow"></div>
+        <div class="shoe-preview-name">
+          <h3 id="previewName">Your Custom Shoe</h3>
+          <p id="previewCat">Select a category to begin</p>
+        </div>
+        <div class="shoe-preview-price" id="previewPrice">&euro;0</div>
+      </div>
+
+      <!-- ── Right: Builder ────────────── -->
+      <div class="studio-builder">
+
+        <!-- Progress -->
+        <div class="studio-steps" id="studioSteps">
+          <div class="studio-step-dot active" data-step="0"></div>
+          <div class="studio-step-dot" data-step="1"></div>
+          <div class="studio-step-dot" data-step="2"></div>
+          <div class="studio-step-dot" data-step="3"></div>
+          <div class="studio-step-dot" data-step="4"></div>
+          <div class="studio-step-dot" data-step="5"></div>
+        </div>
+
+        <!-- STEP 0: Category ──────────── -->
+        <div class="step-panel active" data-panel="0">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <div class="step-title">Choose Category</div>
+          </div>
+          <p class="step-desc">What kind of shoe do you want to build? Each category has unique materials and construction optimized for its terrain.</p>
+
+          <div class="cat-cards" id="catCards">
+            <div class="cat-card" data-cat="hiking">
+              <div class="cat-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg>
+              </div>
+              <h4>Hiking</h4>
+              <p>Rugged builds for mountains &amp; trails</p>
+            </div>
+            <div class="cat-card" data-cat="running">
+              <div class="cat-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+              </div>
+              <h4>Running</h4>
+              <p>Lightweight speed &amp; cushioning</p>
+            </div>
+            <div class="cat-card" data-cat="trail">
+              <div class="cat-card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/></svg>
+              </div>
+              <h4>Trail</h4>
+              <p>Technical grip for any terrain</p>
+            </div>
+          </div>
+
+          <div class="step-nav">
+            <button class="step-btn step-btn-next" id="nextBtn0" disabled>Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 1: Sole ──────────────── -->
+        <div class="step-panel" data-panel="1">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <div class="step-title">Sole &amp; Midsole</div>
+          </div>
+          <p class="step-desc">The foundation of your shoe. Choose the outsole material and midsole cushioning.</p>
+
+          <div class="comp-section">
+            <div class="comp-label">Outsole Material</div>
+            <div class="material-grid" id="soleMaterials"></div>
+          </div>
+          <div class="comp-section">
+            <div class="comp-label">Sole Color</div>
+            <div class="color-picker" id="soleColors"></div>
+          </div>
+
+          <div class="step-error" id="stepError1">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Please select a sole material before continuing.</span>
+          </div>
+          <div class="step-nav">
+            <button class="step-btn step-btn-back" onclick="goStep(0)">Back</button>
+            <button class="step-btn step-btn-next" onclick="validateStep(1, 2)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 2: Upper ─────────────── -->
+        <div class="step-panel" data-panel="2">
+          <div class="step-header">
+            <div class="step-number">3</div>
+            <div class="step-title">Upper &amp; Exterior</div>
+          </div>
+          <p class="step-desc">The main body of your shoe. Pick the material, texture, and color that defines your look.</p>
+
+          <div class="comp-section">
+            <div class="comp-label">Upper Material</div>
+            <div class="material-grid" id="upperMaterials"></div>
+          </div>
+          <div class="comp-section">
+            <div class="comp-label">Upper Color</div>
+            <div class="color-picker" id="upperColors"></div>
+          </div>
+
+          <div class="step-error" id="stepError2">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Please select an upper material before continuing.</span>
+          </div>
+          <div class="step-nav">
+            <button class="step-btn step-btn-back" onclick="goStep(1)">Back</button>
+            <button class="step-btn step-btn-next" onclick="validateStep(2, 3)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 3: Tongue & Laces ────── -->
+        <div class="step-panel" data-panel="3">
+          <div class="step-header">
+            <div class="step-number">4</div>
+            <div class="step-title">Tongue, Laces &amp; Details</div>
+          </div>
+          <p class="step-desc">Fine-tune the finishing touches. Every detail counts when building your perfect shoe.</p>
+
+          <div class="comp-section">
+            <div class="comp-label">Tongue &amp; Collar Material</div>
+            <div class="material-grid" id="tongueMaterials"></div>
+          </div>
+          <div class="comp-section">
+            <div class="comp-label">Tongue Color</div>
+            <div class="color-picker" id="tongueColors"></div>
+          </div>
+          <div class="comp-section">
+            <div class="comp-label">Lace Color</div>
+            <div class="color-picker" id="laceColors"></div>
+          </div>
+
+          <div class="step-error" id="stepError3">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+            <span>Please select a tongue material before continuing.</span>
+          </div>
+          <div class="step-nav">
+            <button class="step-btn step-btn-back" onclick="goStep(2)">Back</button>
+            <button class="step-btn step-btn-next" onclick="validateStep(3, 4)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 4: Personalization ────── -->
+        <div class="step-panel" data-panel="4">
+          <div class="step-header">
+            <div class="step-number">5</div>
+            <div class="step-title">Personalization</div>
+          </div>
+          <p class="step-desc">Make it truly yours. Add text, symbols, and pick an occasion for this special shoe.</p>
+
+          <div class="personal-group">
+            <div class="personal-label">Custom Text (on side panel)</div>
+            <input type="text" class="personal-input" id="customText" maxlength="14" placeholder="e.g. YOUR NAME">
+            <div class="char-count"><span id="charCount">0</span>/14</div>
+          </div>
+
+          <div class="personal-group">
+            <div class="personal-label">Symbol / Emblem</div>
+            <div class="symbol-grid" id="symbolGrid"></div>
+          </div>
+
+          <div class="personal-group">
+            <div class="personal-label">Occasion (optional)</div>
+            <div class="occasion-grid" id="occasionGrid"></div>
+          </div>
+
+          <div class="step-nav">
+            <button class="step-btn step-btn-back" onclick="goStep(3)">Back</button>
+            <button class="step-btn step-btn-next" onclick="goStep(5)">Continue</button>
+          </div>
+        </div>
+
+        <!-- STEP 5: Summary ───────────── -->
+        <div class="step-panel" data-panel="5">
+          <div class="step-header">
+            <div class="step-number">6</div>
+            <div class="step-title">Review &amp; Submit</div>
+          </div>
+          <p class="step-desc">Review your creation. Add any additional notes or ideas you want our craftsmen to know.</p>
+
+          <div class="summary-card" id="summaryCard"></div>
+
+          <div class="personal-group" style="margin-top:20px;">
+            <div class="personal-label">Additional Notes &amp; Ideas</div>
+            <textarea class="personal-input" id="extraNotes" placeholder="Describe any extra customization, special requests, or ideas for our team..."></textarea>
+          </div>
+
+          <div class="step-nav">
+            <button class="step-btn step-btn-back" onclick="goStep(4)">Back</button>
+          </div>
+          <button class="submit-btn" id="submitBtn">Submit My Design</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ═══ VISUAL DIVIDER — Floating particles ══════════════ -->
+    <div class="studio-visual" id="studioVisual">
+      <div class="visual-canvas" id="visualCanvas"></div>
+    </div>
+
+  </main>
+
+  <!-- ═══ SUCCESS OVERLAY ══════════════════════════════════ -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-card">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+      </div>
+      <h2 id="successTitle">Design Submitted!</h2>
+      <p id="successMsg">Our master craftsmen will review your custom shoe design. We'll contact you within 48 hours with a detailed quote and timeline.</p>
+      <button class="success-close" onclick="document.getElementById('successOverlay').classList.remove('show')">Got It</button>
+    </div>
+  </div>
+
+  <!-- ═══ LOGIN REQUIRED OVERLAY ═════════════════════════ -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-lock">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0110 0v4"/><circle cx="12" cy="16" r="1"/></svg>
+      </div>
+      <h2>Members Only</h2>
+      <p>Custom shoe requests are exclusive to <strong>Over The Top</strong> members. Create a free account or log in to submit your design.</p>
+      <div class="login-actions">
+        <a href="account.html" class="login-btn-primary">Create Free Account</a>
+        <a href="account.html" class="login-btn-secondary">I Already Have an Account</a>
+      </div>
+      <button class="login-dismiss" onclick="document.getElementById('loginOverlay').classList.remove('show')">Maybe Later</button>
+    </div>
+  </div>
+
+  <!-- ═══ STICKMAN ANIMATION STRIP ══════════════════════════ -->
+  <div class="stickman-strip" id="stickmanStrip">
+    <svg class="stickman-canvas" id="stickmanCanvas" viewBox="0 0 1200 260" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <!-- Ground -->
+      <line x1="0" y1="230" x2="1200" y2="230" stroke="rgba(200,168,130,.15)" stroke-width="1"/>
+      <!-- Section dividers (dotted) -->
+      <line x1="300" y1="30" x2="300" y2="220" stroke="rgba(200,168,130,.06)" stroke-width="1" stroke-dasharray="4,6"/>
+      <line x1="600" y1="30" x2="600" y2="220" stroke="rgba(200,168,130,.06)" stroke-width="1" stroke-dasharray="4,6"/>
+      <line x1="900" y1="30" x2="900" y2="220" stroke="rgba(200,168,130,.06)" stroke-width="1" stroke-dasharray="4,6"/>
+      <!-- Arrow flow -->
+      <path d="M270 130 L285 130 L280 126 M285 130 L280 134" stroke="rgba(200,168,130,.18)" stroke-width="1.2" fill="none"/>
+      <path d="M570 130 L585 130 L580 126 M585 130 L580 134" stroke="rgba(212,149,106,.18)" stroke-width="1.2" fill="none"/>
+      <path d="M870 130 L885 130 L880 126 M885 130 L880 134" stroke="rgba(107,168,160,.18)" stroke-width="1.2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+          <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+          <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+        </svg>
+        <p class="footer-logo-text">Over The Top</p>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns &amp; Exchanges</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="about.html">Mission &amp; Vision</a></li><li><a href="about.html">Careers</a></li><li><a href="about.html">Press</a></li></ul></div>
+        <div class="footer-col"><h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+          </div>
+          <ul><li><a href="#">Events</a></li><li><a href="#">Community Forum</a></li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top. All rights reserved.</p><p>Privacy Policy</p><p>Terms of Service</p><p>Cookie Policy</p></div></div>
+  </footer>
+
+  <!-- ═══ CART SIDEBAR ══════════════════════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+    <div class="cart-header"><h2>Your Cart</h2><button class="cart-close" id="cartClose" aria-label="Close cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">&euro;0</span></div>
+      <p class="cart-note">Shipping calculated at checkout. Free over &euro;100.</p>
+      <button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button>
+      <button class="btn-continue" id="continueBtn">Continue Shopping</button>
+    </div>
+  </aside>
+
+  <script src="js/app.js"></script>
+  <script>
+  (function() {
+    'use strict';
+
+    /* ══════════════════════════════════
+       DATA — Materials, Colors, Symbols
+       ══════════════════════════════════ */
+
+    var MATERIALS = {
+      hiking: {
+        sole: [
+          { name:'Vibram Megagrip', tier:'premium', desc:'World-class grip, extreme durability', price:45 },
+          { name:'Continental Rubber', tier:'premium', desc:'All-weather traction compound', price:38 },
+          { name:'EVA Trail Compound', tier:'standard', desc:'Lightweight with good grip', price:25 },
+          { name:'Standard Rubber', tier:'essential', desc:'Reliable everyday traction', price:15 }
+        ],
+        upper: [
+          { name:'Full-Grain Leather', tier:'premium', desc:'Waterproof, ages beautifully', price:65 },
+          { name:'Nubuck Leather', tier:'premium', desc:'Soft, durable, water-resistant', price:55 },
+          { name:'Gore-Tex Mesh', tier:'standard', desc:'Waterproof breathable membrane', price:40 },
+          { name:'Synthetic Mesh', tier:'essential', desc:'Light and breathable', price:20 }
+        ],
+        tongue: [
+          { name:'Memory Foam Padded', tier:'premium', desc:'Ultra comfort, perfect fit', price:22 },
+          { name:'Neoprene Gusseted', tier:'standard', desc:'Keeps debris out', price:15 },
+          { name:'Standard Padded', tier:'essential', desc:'Basic comfort and protection', price:8 }
+        ]
+      },
+      running: {
+        sole: [
+          { name:'Carbon Fiber Plate', tier:'premium', desc:'Race-day energy return', price:55 },
+          { name:'React Foam', tier:'premium', desc:'Responsive, springy cushioning', price:40 },
+          { name:'EVA Foam', tier:'standard', desc:'Balanced cushion and weight', price:22 },
+          { name:'Basic Foam', tier:'essential', desc:'Standard lightweight cushion', price:12 }
+        ],
+        upper: [
+          { name:'Flyknit Engineered', tier:'premium', desc:'Seamless, sock-like fit', price:50 },
+          { name:'Primeknit Weave', tier:'premium', desc:'Adaptive stretch zones', price:45 },
+          { name:'Engineered Mesh', tier:'standard', desc:'Breathable with structure', price:28 },
+          { name:'Air Mesh', tier:'essential', desc:'Maximum airflow, ultralight', price:16 }
+        ],
+        tongue: [
+          { name:'Integrated Bootie', tier:'premium', desc:'Sock-like seamless fit', price:20 },
+          { name:'Thin Padded', tier:'standard', desc:'Minimal and lightweight', price:10 },
+          { name:'Classic Tongue', tier:'essential', desc:'Traditional construction', price:6 }
+        ]
+      },
+      trail: {
+        sole: [
+          { name:'Vibram Litebase', tier:'premium', desc:'Thin but incredibly tough', price:48 },
+          { name:'Contagrip MA', tier:'premium', desc:'Multi-surface all-terrain', price:42 },
+          { name:'Trail Rubber', tier:'standard', desc:'Aggressive lugs for grip', price:26 },
+          { name:'Durable Rubber', tier:'essential', desc:'Solid everyday trail grip', price:16 }
+        ],
+        upper: [
+          { name:'Kevlar Reinforced', tier:'premium', desc:'Virtually indestructible', price:60 },
+          { name:'Ripstop Nylon', tier:'premium', desc:'Tear-resistant, lightweight', price:42 },
+          { name:'Trail Mesh', tier:'standard', desc:'Drainage ports, quick-dry', price:30 },
+          { name:'Durable Synthetic', tier:'essential', desc:'Tough and affordable', price:18 }
+        ],
+        tongue: [
+          { name:'Gaiter-Ready Padded', tier:'premium', desc:'Works with trail gaiters', price:18 },
+          { name:'Quick-Dry Padded', tier:'standard', desc:'Moisture-wicking comfort', price:12 },
+          { name:'Basic Padded', tier:'essential', desc:'Standard protection', price:7 }
+        ]
+      }
+    };
+
+    var COLORS = [
+      { name:'Midnight Black', hex:'#1a1a1a' },
+      { name:'Charcoal', hex:'#3a3a3a' },
+      { name:'Storm Grey', hex:'#6b6b6b' },
+      { name:'Pure White', hex:'#f0f0f0' },
+      { name:'Cream', hex:'#e8dcc8' },
+      { name:'Desert Sand', hex:'#c8a882' },
+      { name:'Forest Green', hex:'#2d5a3d' },
+      { name:'Navy Blue', hex:'#1a2f4a' },
+      { name:'Burgundy', hex:'#6b1a2a' },
+      { name:'Burnt Orange', hex:'#b85a20' },
+      { name:'Terracotta', hex:'#b5644e' },
+      { name:'Ocean Blue', hex:'#2a6496' }
+    ];
+
+    var SYMBOLS = [
+      { char:'⚡', name:'Lightning' },
+      { char:'★', name:'Star' },
+      { char:'♦', name:'Diamond' },
+      { char:'▲', name:'Mountain' },
+      { char:'♠', name:'Spade' },
+      { char:'☀', name:'Sun' },
+      { char:'❤', name:'Heart' },
+      { char:'♛', name:'Crown' },
+      { char:'✿', name:'Flower' },
+      { char:'⚔', name:'Swords' },
+      { char:'◆', name:'Gem' },
+      { char:'∞', name:'Infinity' }
+    ];
+
+    var OCCASIONS = ['Birthday', 'Anniversary', 'Graduation', 'Wedding', 'Achievement', 'Gift', 'Just For Me', 'Competition'];
+
+    var BASE_PRICE = 89;
+
+    /* ══════════════════════════════════
+       STATE
+       ══════════════════════════════════ */
+    var state = {
+      step: 0,
+      category: null,
+      sole: { material: null, color: COLORS[0] },
+      upper: { material: null, color: COLORS[3] },
+      tongue: { material: null, color: COLORS[4] },
+      laceColor: COLORS[0],
+      customText: '',
+      symbol: null,
+      occasion: null,
+      notes: ''
+    };
+
+    /* ══════════════════════════════════
+       DOM
+       ══════════════════════════════════ */
+    var dots = document.querySelectorAll('.studio-step-dot');
+    var panels = document.querySelectorAll('.step-panel');
+    var nextBtn0 = document.getElementById('nextBtn0');
+    var catCards = document.querySelectorAll('.cat-card');
+    var customTextInput = document.getElementById('customText');
+    var charCountEl = document.getElementById('charCount');
+    var svgSole = document.getElementById('svgSole');
+    var svgMidsole = document.getElementById('svgMidsole');
+    var svgUpper = document.getElementById('svgUpper');
+    var svgToeCap = document.getElementById('svgToeCap');
+    var svgHeel = document.getElementById('svgHeel');
+    var svgTongue = document.getElementById('svgTongue');
+    var svgCollar = document.getElementById('svgCollar');
+    var svgLaces = document.getElementById('svgLaces');
+    var svgText = document.getElementById('svgText');
+    var svgSymbol = document.getElementById('svgSymbol');
+    var previewName = document.getElementById('previewName');
+    var previewCat = document.getElementById('previewCat');
+    var previewPrice = document.getElementById('previewPrice');
+
+    /* ══════════════════════════════════
+       STEP NAVIGATION
+       ══════════════════════════════════ */
+    window.goStep = function(n) {
+      state.step = n;
+      panels.forEach(function(p) { p.classList.remove('active'); });
+      document.querySelector('[data-panel="' + n + '"]').classList.add('active');
+      dots.forEach(function(d, i) {
+        d.classList.remove('active','done');
+        if (i < n) d.classList.add('done');
+        if (i === n) d.classList.add('active');
+      });
+      if (n === 1 && state.category) buildMaterials('sole', 'soleMaterials');
+      if (n === 2 && state.category) buildMaterials('upper', 'upperMaterials');
+      if (n === 3 && state.category) {
+        buildMaterials('tongue', 'tongueMaterials');
+        buildColors('laceColors', 'lace');
+      }
+      if (n === 4) buildPersonalization();
+      if (n === 5) buildSummary();
+      var builder = document.querySelector('.studio-builder');
+      if (builder) builder.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    /* ── Step Validation ────────────── */
+    function hideAllErrors() {
+      document.querySelectorAll('.step-error').forEach(function(e) { e.classList.remove('show'); });
+    }
+
+    window.validateStep = function(from, to) {
+      hideAllErrors();
+      var errorEl = document.getElementById('stepError' + from);
+      var valid = true;
+
+      if (from === 1 && !state.sole.material) valid = false;
+      if (from === 2 && !state.upper.material) valid = false;
+      if (from === 3 && !state.tongue.material) valid = false;
+
+      if (!valid) {
+        if (errorEl) {
+          errorEl.classList.add('show');
+          errorEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+        return;
+      }
+      goStep(to);
+    };
+
+    dots.forEach(function(d) {
+      d.addEventListener('click', function() {
+        var s = parseInt(this.dataset.step);
+        if (s <= state.step) { goStep(s); return; }
+        /* going forward — validate current step first */
+        if (state.step >= 1 && state.step <= 3 && s > state.step) {
+          validateStep(state.step, s);
+        } else if (s === 0 || state.category) {
+          goStep(s);
+        }
+      });
+    });
+
+    /* ══════════════════════════════════
+       STEP 0 — Category
+       ══════════════════════════════════ */
+    catCards.forEach(function(c) {
+      c.addEventListener('click', function() {
+        catCards.forEach(function(x) { x.classList.remove('selected'); });
+        c.classList.add('selected');
+        state.category = c.dataset.cat;
+        nextBtn0.disabled = false;
+        previewCat.textContent = state.category.charAt(0).toUpperCase() + state.category.slice(1) + ' — Custom Build';
+        updatePrice();
+      });
+    });
+    nextBtn0.addEventListener('click', function() {
+      if (state.category) goStep(1);
+    });
+
+    /* ══════════════════════════════════
+       BUILD MATERIAL GRID
+       ══════════════════════════════════ */
+    function buildMaterials(component, containerId) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      var mats = MATERIALS[state.category][component === 'sole' ? 'sole' : component === 'upper' ? 'upper' : 'tongue'];
+      mats.forEach(function(m, i) {
+        var div = document.createElement('div');
+        div.className = 'material-opt' + (state[component === 'sole' ? 'sole' : component === 'upper' ? 'upper' : 'tongue'].material === m ? ' selected' : '');
+        div.innerHTML = '<div class="material-opt-head"><h5>' + m.name + '</h5><span class="material-tier tier-' + m.tier + '">' + m.tier + '</span></div><p>' + m.desc + '</p><div class="m-price">+&euro;' + m.price + '</div>';
+        div.addEventListener('click', function() {
+          container.querySelectorAll('.material-opt').forEach(function(x) { x.classList.remove('selected'); });
+          div.classList.add('selected');
+          var part = component === 'sole' ? 'sole' : component === 'upper' ? 'upper' : 'tongue';
+          state[part].material = m;
+          hideAllErrors();
+          updatePrice();
+        });
+        container.appendChild(div);
+      });
+
+      /* Also build colors for this component */
+      var colorTarget = component + 'Colors';
+      if (document.getElementById(colorTarget)) {
+        buildColors(colorTarget, component);
+      }
+    }
+
+    function buildColors(containerId, component) {
+      var container = document.getElementById(containerId);
+      container.innerHTML = '';
+      COLORS.forEach(function(c) {
+        var sw = document.createElement('div');
+        sw.className = 'color-swatch';
+        sw.style.background = c.hex;
+        sw.title = c.name;
+        var currentColor = component === 'lace' ? state.laceColor : state[component].color;
+        if (currentColor && currentColor.hex === c.hex) sw.classList.add('selected');
+        sw.addEventListener('click', function() {
+          container.querySelectorAll('.color-swatch').forEach(function(x) { x.classList.remove('selected'); });
+          sw.classList.add('selected');
+          if (component === 'lace') {
+            state.laceColor = c;
+          } else {
+            state[component].color = c;
+          }
+          updatePreview();
+        });
+        container.appendChild(sw);
+      });
+    }
+
+    /* ══════════════════════════════════
+       STEP 4 — Personalization
+       ══════════════════════════════════ */
+    function buildPersonalization() {
+      /* Symbols */
+      var sg = document.getElementById('symbolGrid');
+      sg.innerHTML = '';
+      SYMBOLS.forEach(function(s) {
+        var btn = document.createElement('button');
+        btn.className = 'symbol-btn' + (state.symbol && state.symbol.char === s.char ? ' selected' : '');
+        btn.textContent = s.char;
+        btn.title = s.name;
+        btn.addEventListener('click', function() {
+          sg.querySelectorAll('.symbol-btn').forEach(function(x) { x.classList.remove('selected'); });
+          if (state.symbol && state.symbol.char === s.char) {
+            state.symbol = null;
+          } else {
+            btn.classList.add('selected');
+            state.symbol = s;
+          }
+          updatePreview();
+        });
+        sg.appendChild(btn);
+      });
+
+      /* Occasions */
+      var og = document.getElementById('occasionGrid');
+      og.innerHTML = '';
+      OCCASIONS.forEach(function(o) {
+        var btn = document.createElement('button');
+        btn.className = 'occasion-btn' + (state.occasion === o ? ' selected' : '');
+        btn.textContent = o;
+        btn.addEventListener('click', function() {
+          og.querySelectorAll('.occasion-btn').forEach(function(x) { x.classList.remove('selected'); });
+          if (state.occasion === o) {
+            state.occasion = null;
+          } else {
+            btn.classList.add('selected');
+            state.occasion = o;
+          }
+        });
+        og.appendChild(btn);
+      });
+    }
+
+    /* Custom text input */
+    customTextInput.addEventListener('input', function() {
+      state.customText = this.value;
+      charCountEl.textContent = this.value.length;
+      svgText.textContent = this.value.toUpperCase();
+    });
+
+    /* ══════════════════════════════════
+       STEP 5 — Summary
+       ══════════════════════════════════ */
+    function buildSummary() {
+      state.notes = document.getElementById('extraNotes').value;
+      var card = document.getElementById('summaryCard');
+      var rows = [];
+      rows.push(row('Category', cap(state.category || '—')));
+      rows.push(row('Sole', state.sole.material ? state.sole.material.name + ' · ' + state.sole.color.name : '—'));
+      rows.push(row('Upper', state.upper.material ? state.upper.material.name + ' · ' + state.upper.color.name : '—'));
+      rows.push(row('Tongue', state.tongue.material ? state.tongue.material.name + ' · ' + state.tongue.color.name : '—'));
+      rows.push(row('Laces', state.laceColor.name));
+      if (state.customText) rows.push(row('Custom Text', '"' + state.customText + '"'));
+      if (state.symbol) rows.push(row('Symbol', state.symbol.char + ' ' + state.symbol.name));
+      if (state.occasion) rows.push(row('Occasion', state.occasion));
+      var total = calcPrice();
+      rows.push('<div class="summary-total"><span class="s-label">Total</span><span class="s-value">&euro;' + total + '</span></div>');
+      card.innerHTML = rows.join('');
+    }
+
+    function row(label, value) {
+      return '<div class="summary-row"><span class="s-label">' + label + '</span><span class="s-value">' + value + '</span></div>';
+    }
+    function cap(s) { return s ? s.charAt(0).toUpperCase() + s.slice(1) : ''; }
+
+    /* ══════════════════════════════════
+       PRICE CALCULATION
+       ══════════════════════════════════ */
+    function calcPrice() {
+      var p = BASE_PRICE;
+      if (state.sole.material) p += state.sole.material.price;
+      if (state.upper.material) p += state.upper.material.price;
+      if (state.tongue.material) p += state.tongue.material.price;
+      if (state.customText) p += 10;
+      if (state.symbol) p += 5;
+      return p;
+    }
+
+    function updatePrice() {
+      previewPrice.innerHTML = '&euro;' + calcPrice();
+    }
+
+    /* ══════════════════════════════════
+       LIVE PREVIEW UPDATE
+       ══════════════════════════════════ */
+    function updatePreview() {
+      /* Sole + midsole */
+      svgSole.setAttribute('fill', state.sole.color.hex);
+      svgMidsole.setAttribute('fill', adjustBrightness(state.sole.color.hex, 20));
+
+      /* Upper + details */
+      svgUpper.setAttribute('fill', state.upper.color.hex);
+      svgToeCap.setAttribute('fill', adjustBrightness(state.upper.color.hex, -15));
+      svgHeel.setAttribute('fill', adjustBrightness(state.upper.color.hex, -15));
+
+      /* Tongue + collar */
+      svgTongue.setAttribute('fill', state.tongue.color.hex);
+      svgCollar.setAttribute('fill', state.tongue.color.hex);
+
+      /* Laces (lines + paths) */
+      svgLaces.querySelectorAll('line, path').forEach(function(el) {
+        el.setAttribute('stroke', state.laceColor.hex);
+      });
+
+      /* Text */
+      svgText.textContent = state.customText.toUpperCase();
+
+      /* Symbol */
+      svgSymbol.textContent = state.symbol ? state.symbol.char : '';
+
+      updatePrice();
+    }
+
+    function adjustBrightness(hex, amount) {
+      hex = hex.replace('#', '');
+      var r = Math.max(0, Math.min(255, parseInt(hex.substring(0,2), 16) + amount));
+      var g = Math.max(0, Math.min(255, parseInt(hex.substring(2,4), 16) + amount));
+      var b = Math.max(0, Math.min(255, parseInt(hex.substring(4,6), 16) + amount));
+      return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+    }
+
+    /* ══════════════════════════════════
+       SUBMIT (members only)
+       ══════════════════════════════════ */
+    document.getElementById('submitBtn').addEventListener('click', function() {
+      var session = null;
+      try { session = JSON.parse(localStorage.getItem('ott_session')); } catch(e) {}
+
+      if (!session || !session.email) {
+        /* Not logged in — show login modal */
+        document.getElementById('loginOverlay').classList.add('show');
+        return;
+      }
+
+      /* Logged in — submit the design */
+      state.notes = document.getElementById('extraNotes').value;
+
+      var firstName = session.firstName || session.email.split('@')[0];
+      document.getElementById('successTitle').textContent = 'Thank you, ' + firstName + '!';
+      document.getElementById('successMsg').textContent =
+        'Your custom shoe design has been submitted. Our master craftsmen will review every detail and get back to you within 48 hours. Keep an eye on your inbox!';
+
+      document.getElementById('successOverlay').classList.add('show');
+    });
+
+    /* ══════════════════════════════════
+       INIT
+       ══════════════════════════════════ */
+    updatePreview();
+
+    /* ── Visual Divider: Floating Particles ── */
+    (function initVisual() {
+      var canvas = document.getElementById('visualCanvas');
+      if (!canvas) return;
+      var colors = [
+        'rgba(200,168,130,.35)', 'rgba(107,168,160,.3)',
+        'rgba(212,149,106,.3)', 'rgba(184,115,71,.25)',
+        'rgba(220,190,160,.2)', 'rgba(140,180,170,.2)'
+      ];
+      for (var i = 0; i < 20; i++) {
+        var dot = document.createElement('div');
+        dot.className = 'visual-particle';
+        var size = 2 + Math.random() * 5;
+        var left = Math.random() * 100;
+        var dur = 3 + Math.random() * 6;
+        var delay = Math.random() * dur;
+        dot.style.cssText =
+          'width:' + size + 'px;height:' + size + 'px;' +
+          'left:' + left + '%;bottom:-10px;' +
+          'background:' + colors[Math.floor(Math.random() * colors.length)] + ';' +
+          'animation-duration:' + dur + 's;animation-delay:-' + delay + 's;' +
+          'box-shadow:0 0 ' + (size * 2) + 'px ' + colors[Math.floor(Math.random() * colors.length)] + ';';
+        canvas.appendChild(dot);
+      }
+      for (var l = 0; l < 2; l++) {
+        var line = document.createElement('div');
+        line.className = 'visual-line';
+        line.style.cssText = 'top:' + (35 + l * 30) + '%;left:' + (10 + Math.random() * 40) + '%;width:' + (150 + Math.random() * 300) + 'px;animation:lineGlow ' + (3 + l * 2) + 's ease-in-out -' + (l * 1.5) + 's infinite;';
+        canvas.appendChild(line);
+      }
+    })();
+
+    /* ── Stickman Animation — Story: Design → Build → Deliver → Use ── */
+    (function initStickman() {
+      var svg = document.getElementById('stickmanCanvas');
+      if (!svg) return;
+
+      var NS = 'http://www.w3.org/2000/svg';
+      var ground = 230;
+      var t = 0;
+
+      // Colors for each phase
+      var cTeal = '#6ba8a0';
+      var cGold = '#c8a882';
+      var cAmber = '#d4956a';
+      var cCopper = '#b87347';
+      var cCream = '#e8d5bc';
+      var cMuted = 'rgba(200,168,130,.3)';
+
+      function el(tag, attrs) {
+        var e = document.createElementNS(NS, tag);
+        for (var k in attrs) e.setAttribute(k, attrs[k]);
+        return e;
+      }
+      function txt(x, y, text, color, size) {
+        var t = el('text', { x: x, y: y, 'text-anchor': 'middle', fill: color, 'font-size': size || '9', 'font-family': 'Inter,sans-serif', 'font-weight': '600', 'letter-spacing': '0.08em', opacity: '0.6' });
+        t.textContent = text;
+        return t;
+      }
+
+      // ── SCENE 1: YOU DESIGN (person drawing on tablet) ──
+      function drawDesigner(cx, frame) {
+        var g = el('g', {});
+        var hY = ground - 70;
+        // head
+        g.appendChild(el('circle', { cx: cx, cy: hY, r: 8, fill: 'none', stroke: cTeal, 'stroke-width': 2 }));
+        // body
+        g.appendChild(el('line', { x1: cx, y1: hY + 8, x2: cx, y2: ground - 28, stroke: cTeal, 'stroke-width': 2 }));
+        // legs (standing)
+        g.appendChild(el('line', { x1: cx, y1: ground - 28, x2: cx - 9, y2: ground, stroke: cTeal, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: ground - 28, x2: cx + 9, y2: ground, stroke: cTeal, 'stroke-width': 2 }));
+        // desk
+        g.appendChild(el('rect', { x: cx + 8, y: ground - 38, width: 40, height: 3, rx: 1, fill: 'rgba(107,168,160,.2)' }));
+        g.appendChild(el('line', { x1: cx + 14, y1: ground - 35, x2: cx + 14, y2: ground, stroke: 'rgba(107,168,160,.15)', 'stroke-width': 1.5 }));
+        g.appendChild(el('line', { x1: cx + 42, y1: ground - 35, x2: cx + 42, y2: ground, stroke: 'rgba(107,168,160,.15)', 'stroke-width': 1.5 }));
+        // tablet/screen on desk
+        g.appendChild(el('rect', { x: cx + 16, y: ground - 60, width: 24, height: 22, rx: 2, fill: 'rgba(107,168,160,.08)', stroke: cTeal, 'stroke-width': 1 }));
+        // shoe sketch on screen
+        g.appendChild(el('path', { d: 'M' + (cx + 21) + ',' + (ground - 46) + ' q5,-4 10,-3 q4,1 6,3', fill: 'none', stroke: cCream, 'stroke-width': 0.8 }));
+        // arm drawing — animating pencil hand
+        var pencilY = ground - 48 + Math.sin(frame * 0.1) * 3;
+        g.appendChild(el('line', { x1: cx, y1: ground - 52, x2: cx + 20, y2: pencilY, stroke: cTeal, 'stroke-width': 2 }));
+        // pencil
+        g.appendChild(el('line', { x1: cx + 20, y1: pencilY, x2: cx + 24, y2: pencilY + 4, stroke: cCream, 'stroke-width': 1.5 }));
+        // other arm resting on desk
+        g.appendChild(el('line', { x1: cx, y1: ground - 52, x2: cx + 12, y2: ground - 38, stroke: cTeal, 'stroke-width': 2 }));
+        // little thought bubble with shoe
+        var bubbleX = cx - 14;
+        var bubbleY = hY - 22;
+        g.appendChild(el('ellipse', { cx: bubbleX, cy: bubbleY, rx: 14, ry: 10, fill: 'none', stroke: 'rgba(107,168,160,.2)', 'stroke-width': 0.8 }));
+        g.appendChild(el('circle', { cx: bubbleX + 8, cy: bubbleY + 13, r: 2, fill: 'none', stroke: 'rgba(107,168,160,.15)', 'stroke-width': 0.6 }));
+        g.appendChild(el('path', { d: 'M' + (bubbleX - 6) + ',' + (bubbleY + 2) + ' q4,-3 8,-2 q3,1 4,2', fill: 'none', stroke: cTeal, 'stroke-width': 0.8, opacity: '0.5' }));
+        // label
+        g.appendChild(txt(cx + 10, 28, 'YOU DESIGN', cTeal));
+        return g;
+      }
+
+      // ── SCENE 2: WE BUILD (hammerer + sewer) ──
+      function drawBuilders(cx, frame) {
+        var g = el('g', {});
+
+        // Hammerer (left side of section)
+        var hx = cx - 50;
+        var hY = ground - 65;
+        g.appendChild(el('circle', { cx: hx, cy: hY, r: 7, fill: 'none', stroke: cGold, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: hx, y1: hY + 7, x2: hx, y2: ground - 25, stroke: cGold, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: hx, y1: ground - 25, x2: hx - 8, y2: ground, stroke: cGold, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: hx, y1: ground - 25, x2: hx + 8, y2: ground, stroke: cGold, 'stroke-width': 2 }));
+        // hammer arm
+        var ha = Math.sin(frame * 0.12) * 0.6;
+        var haX = hx + 18 * Math.cos(-0.8 + ha);
+        var haY = (ground - 48) + 18 * Math.sin(-0.8 + ha);
+        g.appendChild(el('line', { x1: hx, y1: ground - 48, x2: haX, y2: haY, stroke: cGold, 'stroke-width': 2 }));
+        g.appendChild(el('rect', { x: haX - 4, y: haY - 3, width: 8, height: 6, rx: 1, fill: cCopper }));
+        g.appendChild(el('line', { x1: hx, y1: ground - 48, x2: hx - 12, y2: ground - 35, stroke: cGold, 'stroke-width': 2 }));
+        // workbench + shoe
+        g.appendChild(el('rect', { x: hx - 18, y: ground - 20, width: 36, height: 3, rx: 1, fill: cMuted }));
+        g.appendChild(el('ellipse', { cx: hx - 4, cy: ground - 23, rx: 10, ry: 4, fill: 'none', stroke: cCream, 'stroke-width': 1.2 }));
+        // sparks
+        if (Math.sin(frame * 0.12) > 0.4) {
+          for (var sp = 0; sp < 3; sp++) {
+            g.appendChild(el('circle', { cx: haX + (Math.random() - .5) * 14, cy: haY + (Math.random() - .5) * 8, r: 1, fill: cCream, opacity: '0.7' }));
+          }
+        }
+
+        // Sewer (right side of section)
+        var sx = cx + 50;
+        var sY = ground - 60;
+        g.appendChild(el('circle', { cx: sx, cy: sY, r: 7, fill: 'none', stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx, y1: sY + 7, x2: sx, y2: ground - 30, stroke: cAmber, 'stroke-width': 2 }));
+        // sitting legs
+        g.appendChild(el('line', { x1: sx, y1: ground - 30, x2: sx + 10, y2: ground - 18, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx + 10, y1: ground - 18, x2: sx + 2, y2: ground, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx, y1: ground - 30, x2: sx - 8, y2: ground - 18, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx - 8, y1: ground - 18, x2: sx - 4, y2: ground, stroke: cAmber, 'stroke-width': 2 }));
+        // sewing arms
+        var nY = ground - 40 + Math.sin(frame * 0.15) * 4;
+        g.appendChild(el('line', { x1: sx, y1: ground - 45, x2: sx + 14, y2: nY, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx, y1: ground - 45, x2: sx + 8, y2: nY + 2, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: sx + 14, y1: nY, x2: sx + 18, y2: nY - 3, stroke: cCream, 'stroke-width': 1 }));
+        // thread
+        g.appendChild(el('path', { d: 'M' + (sx + 18) + ',' + (nY - 3) + ' Q' + (sx + 22) + ',' + (nY - 10) + ' ' + (sx + 26) + ',' + (nY - 5), fill: 'none', stroke: 'rgba(212,149,106,.4)', 'stroke-width': 0.8 }));
+        // shoe on lap
+        g.appendChild(el('ellipse', { cx: sx + 10, cy: ground - 32, rx: 12, ry: 5, fill: 'none', stroke: cCream, 'stroke-width': 1.2 }));
+        // stool
+        g.appendChild(el('rect', { x: sx - 10, y: ground - 15, width: 20, height: 3, rx: 1, fill: 'rgba(212,149,106,.2)' }));
+        g.appendChild(el('line', { x1: sx - 8, y1: ground - 12, x2: sx - 8, y2: ground, stroke: 'rgba(212,149,106,.2)', 'stroke-width': 1.5 }));
+        g.appendChild(el('line', { x1: sx + 8, y1: ground - 12, x2: sx + 8, y2: ground, stroke: 'rgba(212,149,106,.2)', 'stroke-width': 1.5 }));
+
+        // label
+        g.appendChild(txt(cx, 28, 'WE BUILD IT', cGold));
+        return g;
+      }
+
+      // ── SCENE 3: WE DELIVER (walking delivery person) ──
+      function drawDelivery(cx, frame) {
+        var g = el('g', {});
+        var hY = ground - 70;
+        var bob = Math.sin(frame * 0.08) * 2;
+        g.appendChild(el('circle', { cx: cx, cy: hY + bob, r: 8, fill: 'none', stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: hY + 8 + bob, x2: cx, y2: ground - 28 + bob, stroke: cAmber, 'stroke-width': 2 }));
+        // walking legs
+        var ls = Math.sin(frame * 0.08) * 10;
+        g.appendChild(el('line', { x1: cx, y1: ground - 28 + bob, x2: cx - ls, y2: ground, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: ground - 28 + bob, x2: cx + ls, y2: ground, stroke: cAmber, 'stroke-width': 2 }));
+        // arms up holding box
+        g.appendChild(el('line', { x1: cx, y1: ground - 52 + bob, x2: cx - 12, y2: ground - 62 + bob, stroke: cAmber, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: ground - 52 + bob, x2: cx + 12, y2: ground - 62 + bob, stroke: cAmber, 'stroke-width': 2 }));
+        // package box
+        g.appendChild(el('rect', { x: cx - 16, y: ground - 80 + bob, width: 32, height: 20, rx: 2, fill: 'rgba(212,149,106,.12)', stroke: cCopper, 'stroke-width': 1.2 }));
+        // OTT label
+        var label = el('text', { x: cx, y: ground - 67 + bob, 'text-anchor': 'middle', fill: cCream, 'font-size': '8', 'font-family': 'Inter,sans-serif', 'font-weight': '700' });
+        label.textContent = 'OTT';
+        g.appendChild(label);
+        // ribbon on box
+        g.appendChild(el('line', { x1: cx, y1: ground - 80 + bob, x2: cx, y2: ground - 60 + bob, stroke: cGold, 'stroke-width': 0.8, opacity: '0.4' }));
+        // footprints behind
+        var fpOffset = (frame * 2) % 60;
+        for (var f = 0; f < 3; f++) {
+          var fpx = cx - 30 - f * 20 - fpOffset % 20;
+          if (fpx > cx - 80 && fpx < cx - 20) {
+            g.appendChild(el('ellipse', { cx: fpx, cy: ground - 1, rx: 4, ry: 1.5, fill: 'none', stroke: 'rgba(212,149,106,.1)', 'stroke-width': 0.7 }));
+          }
+        }
+        // label
+        g.appendChild(txt(cx, 28, 'WE DELIVER', cAmber));
+        return g;
+      }
+
+      // ── SCENE 4: YOU WEAR IT (happy walker with cool shoes) ──
+      function drawWearer(cx, frame) {
+        var g = el('g', {});
+        var hY = ground - 68;
+        var bob = Math.sin(frame * 0.09) * 1.5;
+
+        // head with smile
+        g.appendChild(el('circle', { cx: cx, cy: hY + bob, r: 8, fill: 'none', stroke: cCopper, 'stroke-width': 2 }));
+        // smile
+        g.appendChild(el('path', { d: 'M' + (cx - 3) + ',' + (hY + bob + 2) + ' q3,3 6,0', fill: 'none', stroke: cCopper, 'stroke-width': 1, opacity: '0.6' }));
+        // body
+        g.appendChild(el('line', { x1: cx, y1: hY + 8 + bob, x2: cx, y2: ground - 26 + bob, stroke: cCopper, 'stroke-width': 2 }));
+        // walking legs
+        var ls = Math.sin(frame * 0.09) * 12;
+        g.appendChild(el('line', { x1: cx, y1: ground - 26 + bob, x2: cx - ls, y2: ground - 5, stroke: cCopper, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: ground - 26 + bob, x2: cx + ls, y2: ground - 5, stroke: cCopper, 'stroke-width': 2 }));
+        // SHOES! (colorful, highlighted)
+        g.appendChild(el('ellipse', { cx: cx - ls + 5, cy: ground - 3, rx: 8, ry: 3.5, fill: cTeal, opacity: '0.7' }));
+        g.appendChild(el('ellipse', { cx: cx + ls + 5, cy: ground - 3, rx: 8, ry: 3.5, fill: cTeal, opacity: '0.7' }));
+        // shoe glow
+        g.appendChild(el('ellipse', { cx: cx - ls + 5, cy: ground - 3, rx: 12, ry: 5, fill: 'none', stroke: 'rgba(107,168,160,.15)', 'stroke-width': 0.5 }));
+        g.appendChild(el('ellipse', { cx: cx + ls + 5, cy: ground - 3, rx: 12, ry: 5, fill: 'none', stroke: 'rgba(107,168,160,.15)', 'stroke-width': 0.5 }));
+        // arms swinging casually
+        var as = Math.sin(frame * 0.09) * 8;
+        g.appendChild(el('line', { x1: cx, y1: ground - 52 + bob, x2: cx + as, y2: ground - 36 + bob, stroke: cCopper, 'stroke-width': 2 }));
+        g.appendChild(el('line', { x1: cx, y1: ground - 52 + bob, x2: cx - as, y2: ground - 36 + bob, stroke: cCopper, 'stroke-width': 2 }));
+        // music notes floating (happy vibes)
+        var noteY = hY - 16 + Math.sin(frame * 0.06) * 4;
+        var noteX = cx + 14 + Math.sin(frame * 0.04) * 3;
+        g.appendChild(el('path', { d: 'M' + noteX + ',' + noteY + ' v-8 l5,-3', fill: 'none', stroke: cCopper, 'stroke-width': 1, opacity: '0.35' }));
+        g.appendChild(el('circle', { cx: noteX, cy: noteY, r: 2, fill: cCopper, opacity: '0.35' }));
+        var noteY2 = hY - 20 + Math.sin(frame * 0.05 + 1) * 3;
+        var noteX2 = cx + 22 + Math.sin(frame * 0.03 + 2) * 2;
+        g.appendChild(el('path', { d: 'M' + noteX2 + ',' + noteY2 + ' v-7 l4,-2', fill: 'none', stroke: cAmber, 'stroke-width': 0.8, opacity: '0.25' }));
+        g.appendChild(el('circle', { cx: noteX2, cy: noteY2, r: 1.5, fill: cAmber, opacity: '0.25' }));
+        // trail of small sparkles behind
+        for (var i = 0; i < 4; i++) {
+          var sx = cx - 20 - i * 14;
+          var sy = ground - 4 + Math.sin(frame * 0.08 + i) * 2;
+          g.appendChild(el('circle', { cx: sx, cy: sy, r: 1, fill: cTeal, opacity: String(0.3 - i * 0.06) }));
+        }
+        // label
+        g.appendChild(txt(cx, 28, 'YOU WEAR IT', cCopper));
+        return g;
+      }
+
+      var items = [];
+      function renderFrame() {
+        items.forEach(function(s) { if (s.parentNode) s.parentNode.removeChild(s); });
+        items = [];
+
+        // 4 scenes centered in each quarter (300px wide each)
+        var s1 = drawDesigner(150, t);
+        var s2 = drawBuilders(450, t);
+        var s3 = drawDelivery(750, t);
+        var s4 = drawWearer(1050, t);
+
+        [s1, s2, s3, s4].forEach(function(e) {
+          svg.appendChild(e);
+          items.push(e);
+        });
+
+        t++;
+        requestAnimationFrame(renderFrame);
+      }
+
+      var running = false;
+      var obs = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting && !running) {
+            running = true;
+            renderFrame();
+          }
+        });
+      }, { threshold: 0.1 });
+      obs.observe(document.getElementById('stickmanStrip'));
+    })();
+
+  })();
+  </script>
+</body>
+</html>
