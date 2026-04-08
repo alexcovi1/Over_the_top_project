@@ -1426,23 +1426,7 @@ function initCursorEffects() {
   observer.observe(document.body, { childList: true, subtree: true });
 }
 
-// ── Inject Compare nav link ──────────────────────────────────
-function initCompareNav() {
-  var isCompare = window.location.pathname.indexOf('compare') > -1;
-  document.querySelectorAll('.nav-links').forEach(function(nav) {
-    var a = document.createElement('a');
-    a.href = 'compare.html';
-    a.textContent = 'Compare';
-    if (isCompare) a.className = 'active';
-    nav.appendChild(a);
-  });
-  document.querySelectorAll('.mobile-menu').forEach(function(nav) {
-    var a = document.createElement('a');
-    a.href = 'compare.html';
-    a.textContent = 'Compare';
-    nav.appendChild(a);
-  });
-}
+
 
 // ── Fix footer Assistance links ─────────────────────────────
 function initFooterLinks() {
@@ -1500,7 +1484,7 @@ function initCatDropdown() {
 document.addEventListener('DOMContentLoaded', () => {
   initAnimalTheme();
   initLoader();
-  initCompareNav();
+
   initFooterLinks();
   initLogoMenu();
   initNavbar();
