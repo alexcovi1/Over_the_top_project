@@ -1452,6 +1452,51 @@ function initFooterLinks() {
 }
 
 // ── Boot ─────────────────────────────────────────────────────
+// ── Radial Categories Dropdown ───────────────────────────────
+function initCatDropdown() {
+  var wraps = document.querySelectorAll('.cat-dropdown-wrap');
+  var backdrops = document.querySelectorAll('.cat-backdrop');
+
+  wraps.forEach(function(wrap) {
+    var btn = wrap.querySelector('.cat-dropdown-btn');
+    if (!btn) return;
+
+    btn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var isOpen = wrap.classList.contains('open');
+      // Close all first
+      wraps.forEach(function(w) { w.classList.remove('open'); });
+      backdrops.forEach(function(b) { b.classList.remove('open'); });
+      if (!isOpen) {
+        wrap.classList.add('open');
+        var bd = wrap.parentElement.querySelector('.cat-backdrop') || document.querySelector('.cat-backdrop');
+        if (bd) bd.classList.add('open');
+      }
+    });
+  });
+
+  // Close on backdrop click or outside click
+  document.addEventListener('click', function(e) {
+    if (!e.target.closest('.cat-dropdown-wrap')) {
+      wraps.forEach(function(w) { w.classList.remove('open'); });
+      backdrops.forEach(function(b) { b.classList.remove('open'); });
+    }
+  });
+  backdrops.forEach(function(bd) {
+    bd.addEventListener('click', function() {
+      wraps.forEach(function(w) { w.classList.remove('open'); });
+      backdrops.forEach(function(b) { b.classList.remove('open'); });
+    });
+  });
+
+  // Mobile category accordion
+  document.querySelectorAll('.mobile-cat-header').forEach(function(h) {
+    h.addEventListener('click', function() {
+      h.parentElement.classList.toggle('open');
+    });
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initAnimalTheme();
   initLoader();
@@ -1471,4 +1516,5 @@ document.addEventListener('DOMContentLoaded', () => {
   updateCartUI();
   initScrollReveal();
   initCursorEffects();
+  initCatDropdown();
 });

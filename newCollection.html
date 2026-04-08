@@ -31,11 +31,53 @@
           </div>
         </div>
         <nav class="nav-categories">
-          <a href="newCollection.html" class="active">New Collection</a>
-          <a href="hiking.html">Hiking</a>
-          <a href="running.html">Running</a>
-          <a href="trail.html">Trail</a>
+          <a href="newCollection.html">New Collection</a>
+          <div class="cat-dropdown-wrap">
+            <button class="cat-dropdown-btn" aria-expanded="false" aria-label="Categories">
+              Categories
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cat-radial">
+              <!-- Orbit ring -->
+              <div class="cat-orbit-ring"></div>
+              <!-- Center hub -->
+              <div class="cat-hub">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <!-- Connector lines -->
+              <div class="cat-connector" style="transform: rotate(-90deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(30deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(150deg) translateX(-0.5px);"></div>
+              <!-- Category items positioned in a circle -->
+              <div class="cat-item" style="top: 15%; left: 50%;">
+                <a href="hiking.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg>
+                  <span class="cat-item-label">Hiking</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 19%;">
+                <a href="running.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13 4v16"/><path d="M17 4v16"/><path d="M19 4H9.5a4.5 4.5 0 000 9H13"/><circle cx="9.5" cy="8.5" r="0" fill="currentColor"/><path d="M5 20l4-4 4 4 4-4 4 4"/></svg>
+                  <span class="cat-item-label">Running</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 81%;">
+                <a href="trail.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/><path d="M12 14c-3 0-5 2-7 2"/><path d="M12 14c3 0 5 2 7 2"/></svg>
+                  <span class="cat-item-label">Trail</span>
+                </a>
+              </div>
+              <!-- Floating particles -->
+              <div class="cat-particle" style="top:20%;left:25%;animation-delay:0s;"></div>
+              <div class="cat-particle" style="top:30%;left:75%;animation-delay:0.8s;"></div>
+              <div class="cat-particle" style="top:70%;left:50%;animation-delay:1.6s;"></div>
+              <div class="cat-particle" style="top:60%;left:15%;animation-delay:2.2s;"></div>
+              <div class="cat-particle" style="top:45%;left:85%;animation-delay:0.4s;"></div>
+            </div>
+          </div>
+          <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
         </nav>
+        <div class="cat-backdrop"></div>
       </div>
       <div class="navbar-right">
         <nav class="nav-links">
@@ -61,9 +103,22 @@
       <button class="hamburger" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
     <nav class="mobile-menu" id="mobileMenu">
-      <a href="index.html">Home</a><a href="newCollection.html">New Collection</a><a href="hiking.html">Hiking</a><a
-        href="running.html">Running</a><a href="trail.html">Trail</a><a href="about.html">About</a><a
-        href="contact.html">Contact</a>
+      <a href="index.html">Home</a>
+      <a href="newCollection.html">New Collection</a>
+      <div class="mobile-cat-group">
+        <div class="mobile-cat-header">
+          Categories
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="mobile-cat-sub">
+          <a href="hiking.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg> Hiking</a>
+          <a href="running.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 20l4-4 4 4 4-4 4 4"/></svg> Running</a>
+          <a href="trail.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/></svg> Trail</a>
+        </div>
+      </div>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
     </nav>
   </header>
 

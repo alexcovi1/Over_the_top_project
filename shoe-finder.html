@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Altitude Lab &mdash; Over The Top</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>
+    /* ══════════════════════════════════════
+       THE ALTITUDE MACHINE
+       ══════════════════════════════════════ */
+
+    .altitude-page { background: #1a2a1a; min-height: 100vh; overflow-x: hidden; }
+
+    /* ── Background ─────────────────────── */
+    .alt-bg { position: fixed; inset: 0; z-index: 0; }
+    .alt-bg-img {
+      position: absolute; inset: 0;
+      background: url('images/finder-bg%20(2).png') center/cover no-repeat;
+    }
+    .alt-bg::after {
+      content: ''; position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,.25) 100%);
+      pointer-events: none; z-index: 2;
+    }
+    .alt-bg-layer {
+      position: absolute; inset: 0;
+      opacity: 0; transition: opacity 1.6s ease;
+    }
+    .alt-bg-layer.active { opacity: 1; }
+    .alt-bg-layer[data-zone="0"] { background: linear-gradient(180deg, rgba(190,160,110,.12) 0%, rgba(150,125,85,.32) 100%); }
+    .alt-bg-layer[data-zone="1"] { background: linear-gradient(180deg, rgba(30,90,30,.12) 0%, rgba(25,75,20,.34) 100%); }
+    .alt-bg-layer[data-zone="2"] { background: linear-gradient(180deg, rgba(70,90,120,.16) 0%, rgba(50,70,100,.38) 100%); }
+    .alt-bg-layer[data-zone="3"] { background: linear-gradient(180deg, rgba(130,170,210,.18) 0%, rgba(90,140,185,.42) 100%); }
+    .alt-bg-layer[data-zone="4"] { background: linear-gradient(180deg, rgba(35,15,55,.28) 0%, rgba(15,8,35,.55) 100%); }
+
+    /* ── Particles ──────────────────────── */
+    .alt-particles {
+      position: fixed; inset: 0; z-index: 1;
+      pointer-events: none; overflow: hidden;
+    }
+    .alt-p { position: absolute; }
+
+    /* Dust (city) */
+    .alt-p-dust {
+      width: 3px; height: 3px; border-radius: 50%;
+      background: rgba(210,185,140,.55);
+      animation: pDust linear infinite;
+    }
+    @keyframes pDust {
+      0%   { transform: translateY(0) translateX(0); opacity: 0; }
+      10%  { opacity: .6; }
+      90%  { opacity: .35; }
+      100% { transform: translateY(-110vh) translateX(25px); opacity: 0; }
+    }
+
+    /* Leaves (forest) */
+    .alt-p-leaves {
+      width: 6px; height: 4px; border-radius: 1px;
+      background: rgba(76,155,60,.45);
+      animation: pLeaves ease-in-out infinite;
+    }
+    @keyframes pLeaves {
+      0%   { transform: translateY(-10vh) translateX(0) rotate(0deg); opacity: 0; }
+      10%  { opacity: .65; }
+      50%  { transform: translateY(50vh) translateX(35px) rotate(200deg); }
+      90%  { opacity: .4; }
+      100% { transform: translateY(110vh) translateX(-15px) rotate(380deg); opacity: 0; }
+    }
+
+    /* Wind (alpine) */
+    .alt-p-wind {
+      width: 35px; height: 1px;
+      background: rgba(255,255,255,.25);
+      animation: pWind linear infinite;
+    }
+    @keyframes pWind {
+      0%   { transform: translateX(-120px) translateY(0); opacity: 0; }
+      10%  { opacity: .4; }
+      90%  { opacity: .2; }
+      100% { transform: translateX(105vw) translateY(-25px); opacity: 0; }
+    }
+
+    /* Snow */
+    .alt-p-snow {
+      width: 4px; height: 4px; border-radius: 50%;
+      background: rgba(255,255,255,.65);
+      animation: pSnow linear infinite;
+    }
+    @keyframes pSnow {
+      0%   { transform: translateY(-10vh) translateX(0); opacity: 0; }
+      10%  { opacity: .75; }
+      90%  { opacity: .5; }
+      100% { transform: translateY(110vh) translateX(45px); opacity: 0; }
+    }
+
+    /* Ice (extreme) */
+    .alt-p-ice {
+      width: 2px; height: 10px;
+      background: rgba(190,215,255,.5);
+      animation: pIce linear infinite;
+    }
+    @keyframes pIce {
+      0%   { transform: translate(-60px,-10vh) rotate(25deg); opacity: 0; }
+      10%  { opacity: .6; }
+      90%  { opacity: .25; }
+      100% { transform: translate(105vw,110vh) rotate(25deg); opacity: 0; }
+    }
+
+    /* ── Wrapper ────────────────────────── */
+    .alt-wrap {
+      position: relative; z-index: 2;
+      max-width: 720px; margin: 0 auto;
+      padding: calc(var(--nav-h, 70px) + 20px) 20px 40px;
+      min-height: calc(100vh - 60px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+
+    /* ── Glass Panel ────────────────────── */
+    .alt-panel {
+      width: 100%;
+      background: rgba(255,255,255,.58);
+      backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px);
+      border-radius: 32px;
+      border: 1px solid rgba(255,255,255,.45);
+      box-shadow: 0 24px 80px rgba(0,0,0,.1), 0 2px 6px rgba(0,0,0,.04);
+      padding: 30px 38px 26px;
+      transition: box-shadow .5s ease, background .8s ease;
+    }
+    .alt-panel.alt-pulse {
+      box-shadow: 0 0 0 3px var(--gold), 0 24px 80px rgba(0,0,0,.1);
+    }
+
+    /* ── Header ─────────────────────────── */
+    .alt-header { text-align: center; margin-bottom: 14px; }
+    .alt-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 11.5px; font-weight: 600;
+      letter-spacing: .18em; text-transform: uppercase;
+      color: var(--gold-dark);
+    }
+    .alt-logo-sub {
+      display: block; font-size: 11px;
+      color: var(--text-muted); margin-top: 2px;
+    }
+
+    /* ── Zone Info ──────────────────────── */
+    .alt-zone-tag {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 10px; font-weight: 700;
+      letter-spacing: .14em; text-transform: uppercase;
+      color: var(--gold-dark);
+      padding: 4px 12px; border-radius: 20px;
+      background: rgba(200,168,130,.1);
+      margin-bottom: 6px;
+    }
+    .alt-zone-name {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 4.5vw, 44px);
+      color: var(--text); line-height: 1.1;
+      margin-bottom: 2px;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    .alt-zone-name.alt-fade { opacity: 0; transform: translateY(-6px); }
+
+    /* ── Altitude Display ───────────────── */
+    .alt-altitude {
+      font-family: 'Inter', sans-serif;
+      font-size: clamp(52px, 10vw, 88px);
+      font-weight: 900; color: var(--text);
+      line-height: 1; letter-spacing: -.03em;
+      font-variant-numeric: tabular-nums;
+      margin: 2px 0 0;
+    }
+    .alt-altitude-unit {
+      font-size: .3em; font-weight: 600;
+      color: var(--text-muted); letter-spacing: .06em;
+      margin-left: 2px;
+    }
+
+    /* ── Stats ──────────────────────────── */
+    .alt-stats {
+      display: flex; gap: 18px; flex-wrap: wrap;
+      margin: 10px 0 12px;
+    }
+    .alt-stat { display: flex; align-items: center; gap: 8px; }
+    .alt-stat-icon {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: rgba(255,255,255,.55);
+      border: 1px solid rgba(200,168,130,.15);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .alt-stat-icon svg { width: 15px; height: 15px; color: var(--gold-dark); }
+    .alt-stat-info {}
+    .alt-stat-value {
+      font-size: 15px; font-weight: 700; color: var(--text);
+      line-height: 1.2; font-variant-numeric: tabular-nums;
+    }
+    .alt-stat-label {
+      font-size: 9.5px; font-weight: 600; color: var(--text-muted);
+      letter-spacing: .08em; text-transform: uppercase;
+    }
+
+    /* ── Zone Description ───────────────── */
+    .alt-zone-desc {
+      font-size: 13px; color: var(--text-muted);
+      line-height: 1.45; max-width: 500px;
+      margin-bottom: 12px;
+      transition: opacity .3s ease;
+    }
+    .alt-zone-desc.alt-fade { opacity: 0; }
+
+    /* ── Shoe Card (primary) ──────────────── */
+    .alt-shoe {
+      display: flex; align-items: center; gap: 14px;
+      background: rgba(255,255,255,.75);
+      border: 1px solid rgba(224,216,207,.45);
+      border-left: 3px solid var(--gold);
+      border-radius: 16px;
+      padding: 12px 16px;
+      margin-bottom: 6px;
+      transition: all .45s cubic-bezier(.22,1,.36,1);
+    }
+    .alt-shoe.alt-shoe-exit { opacity: 0; transform: translateX(-12px); }
+    .alt-shoe.alt-shoe-enter { animation: altShoeIn .4s ease forwards; }
+    @keyframes altShoeIn { from{opacity:0;transform:translateX(12px)} to{opacity:1;transform:none} }
+
+    .alt-shoe:hover {
+      border-color: var(--gold); border-left-color: var(--gold-dark);
+      box-shadow: 0 6px 24px rgba(168,133,94,.1);
+      transform: translateY(-2px);
+    }
+    .alt-shoe-img {
+      width: 85px; height: 65px; border-radius: 12px;
+      overflow: hidden; background: var(--off-white); flex-shrink: 0;
+    }
+    .alt-shoe-img img { width: 100%; height: 100%; object-fit: cover; }
+    .alt-shoe-info { flex: 1; min-width: 0; }
+    .alt-shoe-rec {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 8px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gold-dark); margin-bottom: 1px;
+    }
+    .alt-shoe-rec svg { width: 10px; height: 10px; }
+    .alt-shoe-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px; color: var(--text); line-height: 1.2;
+    }
+    .alt-shoe-price {
+      font-size: 14px; font-weight: 700; color: var(--text);
+    }
+    .alt-shoe-why {
+      font-size: 11.5px; color: var(--text-muted);
+      line-height: 1.45; margin-top: 2px;
+    }
+    .alt-shoe-actions { display: flex; gap: 8px; flex-shrink: 0; align-items: center; }
+    .alt-shoe-view {
+      padding: 9px 18px; border-radius: 50px;
+      background: var(--black); color: #fff;
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .06em;
+      text-decoration: none; white-space: nowrap;
+      transition: all .3s ease;
+    }
+    .alt-shoe-view:hover { background: var(--gold-dark); }
+    .alt-shoe-cart {
+      width: 38px; height: 38px; border-radius: 50%;
+      background: rgba(255,255,255,.6); border: 1px solid rgba(0,0,0,.06);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all .3s ease; flex-shrink: 0;
+    }
+    .alt-shoe-cart:hover { background: var(--gold-dark); border-color: var(--gold-dark); color: #fff; }
+    .alt-shoe-cart svg { width: 15px; height: 15px; }
+
+    /* ── Also Recommendation (compact row) ── */
+    .alt-also {
+      display: flex; align-items: center; gap: 8px;
+      padding: 7px 10px;
+      background: rgba(255,255,255,.35);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(224,216,207,.22);
+      border-radius: 11px;
+      margin-bottom: 14px;
+      text-decoration: none;
+      transition: all .35s cubic-bezier(.22,1,.36,1);
+    }
+    .alt-also.alt-fade { opacity: 0; transform: translateX(-6px); }
+    .alt-also:hover {
+      border-color: var(--gold);
+      transform: translateX(3px);
+      box-shadow: 0 3px 12px rgba(168,133,94,.06);
+    }
+    .alt-also-img {
+      width: 34px; height: 26px; border-radius: 6px;
+      overflow: hidden; background: var(--off-white); flex-shrink: 0;
+    }
+    .alt-also-img img { width: 100%; height: 100%; object-fit: cover; }
+    .alt-also-tag {
+      font-size: 7px; font-weight: 700;
+      letter-spacing: .08em; text-transform: uppercase;
+      color: var(--text-muted); white-space: nowrap;
+    }
+    .alt-also-name {
+      font-size: 12.5px; font-weight: 700; color: var(--text);
+      flex: 1; min-width: 0;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .alt-also-price {
+      font-size: 11.5px; font-weight: 700; color: var(--text-muted);
+      white-space: nowrap;
+    }
+    .alt-also-arrow {
+      color: var(--text-muted); flex-shrink: 0;
+      transition: all .3s ease;
+    }
+    .alt-also:hover .alt-also-arrow { color: var(--gold-dark); transform: translateX(2px); }
+
+    /* ── Slider Area ────────────────────── */
+    .alt-slider-wrap { width: 100%; position: relative; }
+    .alt-slider-mtn {
+      position: relative; width: 100%; height: 50px;
+      display: flex; align-items: flex-end;
+    }
+    .alt-slider-mtn svg {
+      position: absolute; bottom: 14px; left: 0;
+      width: 100%; height: 38px; opacity: .08;
+    }
+    .alt-slider {
+      -webkit-appearance: none; appearance: none;
+      position: relative; z-index: 1;
+      width: 100%; height: 6px; border-radius: 3px;
+      background: linear-gradient(90deg,
+        #b8a88e 0%, #72b06e 18%, #8a9eb2 45%, #c4dbed 75%, #7060a0 100%
+      );
+      outline: none; cursor: pointer;
+    }
+    .alt-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; appearance: none;
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--gold-dark);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,.22);
+      cursor: grab; transition: transform .2s, box-shadow .2s;
+    }
+    .alt-slider::-webkit-slider-thumb:active {
+      cursor: grabbing; transform: scale(1.15);
+      box-shadow: 0 4px 20px rgba(0,0,0,.3);
+    }
+    .alt-slider::-moz-range-thumb {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: var(--gold-dark);
+      border: 3px solid #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,.22);
+      cursor: grab;
+    }
+    .alt-slider::-moz-range-track {
+      height: 6px; border-radius: 3px;
+      background: linear-gradient(90deg,
+        #b8a88e 0%, #72b06e 18%, #8a9eb2 45%, #c4dbed 75%, #7060a0 100%
+      );
+    }
+
+    /* Zone markers */
+    .alt-zone-markers {
+      display: flex; justify-content: space-between;
+      margin-top: 8px; padding: 0 2px;
+    }
+    .alt-zone-mk {
+      font-size: 9px; font-weight: 600;
+      color: var(--text-muted); text-align: center;
+      opacity: .45; transition: all .4s ease;
+      cursor: default;
+    }
+    .alt-zone-mk.active { opacity: 1; color: var(--gold-dark); }
+
+    /* Drag hint */
+    .alt-hint {
+      text-align: center; margin-top: 12px;
+      font-size: 10.5px; font-weight: 600;
+      color: var(--text-muted); letter-spacing: .06em;
+      opacity: .6; transition: opacity .5s ease;
+    }
+    .alt-hint.hidden { opacity: 0; pointer-events: none; }
+    .alt-hint svg { width: 12px; height: 12px; vertical-align: -2px; margin-right: 4px; }
+
+    /* ── Responsive ─────────────────────── */
+    @media (max-width: 700px) {
+      .alt-wrap { padding: calc(var(--nav-h, 70px) + 12px) 12px 32px; }
+      .alt-panel { padding: 26px 20px 24px; border-radius: 24px; }
+      .alt-stats { gap: 12px; }
+      .alt-shoe { flex-direction: column; text-align: center; gap: 10px; padding: 14px; border-left: 1px solid rgba(224,216,207,.45); border-top: 3px solid var(--gold); }
+      .alt-shoe-img { width: 100%; height: 100px; border-radius: 12px; }
+      .alt-shoe-actions { justify-content: center; margin-top: 4px; }
+      .alt-also { gap: 6px; }
+      .alt-zone-markers { font-size: 8px; }
+    }
+    @media (max-width: 420px) {
+      .alt-panel { padding: 20px 16px 20px; }
+      .alt-stats { flex-direction: column; gap: 8px; }
+      .alt-shoe-actions { flex-direction: column; width: 100%; }
+      .alt-shoe-view { text-align: center; }
+    }
+  </style>
+</head>
+
+<body class="page-body altitude-page">
+
+  <!-- ═══ BACKGROUND ════════════════════════════════════════ -->
+  <div class="alt-bg">
+    <div class="alt-bg-img"></div>
+    <div class="alt-bg-layer active" data-zone="0"></div>
+    <div class="alt-bg-layer" data-zone="1"></div>
+    <div class="alt-bg-layer" data-zone="2"></div>
+    <div class="alt-bg-layer" data-zone="3"></div>
+    <div class="alt-bg-layer" data-zone="4"></div>
+  </div>
+  <div class="alt-particles" id="altParticles"></div>
+
+  <!-- ═══ NAVBAR ═════════════════════════════════════════════ -->
+  <header class="navbar" id="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-left">
+        <div class="logo-wrapper">
+          <button class="logo" id="logoMenuToggle" aria-label="Menu">
+            <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+              <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+              <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+            </svg>
+            <span class="logo-text">Over The Top</span>
+          </button>
+          <div class="logo-dropdown" id="logoDropdown">
+            <a href="index.html"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Home</a>
+            <a href="account.html" data-action="login"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg> Login</a>
+            <a href="account.html" data-action="register"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg> Create Account</a>
+            <a href="account.html" data-action="delete" class="logo-dropdown-danger"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg> Delete Account</a>
+          </div>
+        </div>
+        <nav class="nav-categories">
+          <a href="newCollection.html">New Collection</a>
+          <div class="cat-dropdown-wrap">
+            <button class="cat-dropdown-btn" aria-expanded="false" aria-label="Categories">
+              Categories
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+            </button>
+            <div class="cat-radial">
+              <div class="cat-orbit-ring"></div>
+              <div class="cat-hub">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div class="cat-connector" style="transform: rotate(-90deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(30deg) translateX(-0.5px);"></div>
+              <div class="cat-connector" style="transform: rotate(150deg) translateX(-0.5px);"></div>
+              <div class="cat-item" style="top: 15%; left: 50%;">
+                <a href="hiking.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg>
+                  <span class="cat-item-label">Hiking</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 19%;">
+                <a href="running.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M13 4v16"/><path d="M17 4v16"/><path d="M19 4H9.5a4.5 4.5 0 000 9H13"/><circle cx="9.5" cy="8.5" r="0" fill="currentColor"/><path d="M5 20l4-4 4 4 4-4 4 4"/></svg>
+                  <span class="cat-item-label">Running</span>
+                </a>
+              </div>
+              <div class="cat-item" style="top: 75%; left: 81%;">
+                <a href="trail.html">
+                  <svg class="cat-item-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/><path d="M12 14c-3 0-5 2-7 2"/><path d="M12 14c3 0 5 2 7 2"/></svg>
+                  <span class="cat-item-label">Trail</span>
+                </a>
+              </div>
+              <div class="cat-particle" style="top:20%;left:25%;animation-delay:0s;"></div>
+              <div class="cat-particle" style="top:30%;left:75%;animation-delay:0.8s;"></div>
+              <div class="cat-particle" style="top:70%;left:50%;animation-delay:1.6s;"></div>
+              <div class="cat-particle" style="top:60%;left:15%;animation-delay:2.2s;"></div>
+              <div class="cat-particle" style="top:45%;left:85%;animation-delay:0.4s;"></div>
+            </div>
+          </div>
+          <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
+        </nav>
+        <div class="cat-backdrop"></div>
+      </div>
+      <div class="navbar-right">
+        <nav class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="contact.html">Contact</a>
+        </nav>
+        <div class="nav-actions">
+          <button class="ambient-btn" id="ambientBtn" aria-label="Toggle ambient mode">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M9.59 4.59A2 2 0 1111 8H2"/>
+              <path d="M12.59 19.41A2 2 0 1014 16H2"/>
+              <path d="M17.73 7.73A2.5 2.5 0 1119.5 12H2"/>
+            </svg>
+            <span>Ambient</span>
+          </button>
+          <button class="cart-btn" aria-label="Cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/>
+              <line x1="3" y1="6" x2="21" y2="6"/>
+              <path d="M16 10a4 4 0 01-8 0"/>
+            </svg>
+            <span class="cart-count" id="cartCount">0</span>
+          </button>
+        </div>
+      </div>
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="newCollection.html">New Collection</a>
+      <div class="mobile-cat-group">
+        <div class="mobile-cat-header">
+          Categories
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+        </div>
+        <div class="mobile-cat-sub">
+          <a href="hiking.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 20l5-8 4 5 3-4 6 7"/><circle cx="18" cy="6" r="3"/></svg> Hiking</a>
+          <a href="running.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 20l4-4 4 4 4-4 4 4"/></svg> Running</a>
+          <a href="trail.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 22V8"/><path d="M12 8C12 4 17 2 17 2s-1 4-1 6"/><path d="M12 8C12 4 7 2 7 2s1 4 1 6"/></svg> Trail</a>
+        </div>
+      </div>
+      <a href="about.html">About</a>
+      <a href="contact.html">Contact</a>
+      <a href="shoe-finder.html" class="nav-new-badge">Altitude Lab<span class="badge-new">NEW</span></a>
+    </nav>
+  </header>
+
+  <!-- ═══ MAIN CONTENT ══════════════════════════════════════ -->
+  <main class="alt-wrap">
+    <div class="alt-panel" id="altPanel">
+
+      <div class="alt-header">
+        <span class="alt-logo">The Altitude Machine</span>
+        <span class="alt-logo-sub">Explore altitudes. Discover your shoe.</span>
+      </div>
+
+      <!-- Zone Info -->
+      <div class="alt-zone-tag" id="altTag">ZONE 1 OF 5</div>
+      <div class="alt-zone-name" id="altZoneName">Urban Coast</div>
+
+      <!-- Altitude -->
+      <div class="alt-altitude">
+        <span id="altNum">0</span><span class="alt-altitude-unit">m</span>
+      </div>
+
+      <!-- Stats -->
+      <div class="alt-stats">
+        <div class="alt-stat">
+          <div class="alt-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 14.76V3.5a2.5 2.5 0 00-5 0v11.26a4.5 4.5 0 105 0z"/></svg>
+          </div>
+          <div class="alt-stat-info">
+            <div class="alt-stat-value" id="altTemp">22&deg;C</div>
+            <div class="alt-stat-label">Temperature</div>
+          </div>
+        </div>
+        <div class="alt-stat">
+          <div class="alt-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
+          </div>
+          <div class="alt-stat-info">
+            <div class="alt-stat-value" id="altDiff">Easy</div>
+            <div class="alt-stat-label">Difficulty</div>
+          </div>
+        </div>
+        <div class="alt-stat">
+          <div class="alt-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          </div>
+          <div class="alt-stat-info">
+            <div class="alt-stat-value" id="altSeason">Spring &mdash; Autumn</div>
+            <div class="alt-stat-label">Best Season</div>
+          </div>
+        </div>
+        <div class="alt-stat">
+          <div class="alt-stat-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+          </div>
+          <div class="alt-stat-info">
+            <div class="alt-stat-value" id="altTerrain">Pavement &amp; Parks</div>
+            <div class="alt-stat-label">Terrain</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Description -->
+      <p class="alt-zone-desc" id="altDesc">City streets and coastal boardwalks. Flat terrain, warm temperatures &mdash; speed and comfort reign supreme.</p>
+
+      <!-- Shoe Recommendation -->
+      <div class="alt-shoe" id="altShoe">
+        <div class="alt-shoe-img">
+          <img id="altShoeImg" src="images/05_RUNNING_Urban_Pace_01_Hero.png" alt="Urban Pace">
+        </div>
+        <div class="alt-shoe-info">
+          <div class="alt-shoe-rec">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            BEST MATCH
+          </div>
+          <div class="alt-shoe-name" id="altShoeName">Urban Pace</div>
+          <div class="alt-shoe-price" id="altShoePrice">&euro;120</div>
+          <div class="alt-shoe-why" id="altShoeWhy">Lightweight mesh and responsive cushioning for warm, flat city streets.</div>
+        </div>
+        <div class="alt-shoe-actions">
+          <a href="product-urban-pace.html" class="alt-shoe-view" id="altShoeLink">View</a>
+          <button class="alt-shoe-cart" id="altCartBtn" aria-label="Add to cart">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Also -->
+      <a class="alt-also" id="altAlso" href="product-marathon-elite.html">
+        <div class="alt-also-img"><img id="altAlsoImg" src="images/04_RUNNING_Marathon_Elite_01_Hero.png" alt="Marathon Elite"></div>
+        <span class="alt-also-tag">ALSO&nbsp;GREAT</span>
+        <span class="alt-also-name" id="altAlsoName">Marathon Elite</span>
+        <span class="alt-also-price" id="altAlsoPrice">&euro;150</span>
+        <svg class="alt-also-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </a>
+
+      <!-- Slider -->
+      <div class="alt-slider-wrap">
+        <div class="alt-slider-mtn">
+          <svg viewBox="0 0 1000 40" preserveAspectRatio="none" fill="none">
+            <path d="M0 38 C100 36 200 32 300 26 C400 20 500 14 600 10 C700 7 800 4 900 3 L1000 2 L1000 40 L0 40Z" fill="rgba(0,0,0,.06)"/>
+          </svg>
+          <input type="range" class="alt-slider" id="altSlider" min="0" max="5364" value="0" step="1">
+        </div>
+        <div class="alt-zone-markers">
+          <span class="alt-zone-mk active" data-mk="0">Sea Level</span>
+          <span class="alt-zone-mk" data-mk="1">Forest</span>
+          <span class="alt-zone-mk" data-mk="2">Alpine</span>
+          <span class="alt-zone-mk" data-mk="3">Snowline</span>
+          <span class="alt-zone-mk" data-mk="4">5,364m</span>
+        </div>
+      </div>
+
+      <div class="alt-hint" id="altHint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+        Drag the slider to climb
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ═══ FOOTER ════════════════════════════════════════════ -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-logo">
+        <svg class="logo-icon" viewBox="0 0 50 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M25 2L45 38H5L25 2Z" stroke="white" stroke-width="2.5" fill="none" />
+          <path d="M15 22L22 14L30 24" stroke="white" stroke-width="2" fill="none" />
+          <circle cx="34" cy="12" r="3" stroke="white" stroke-width="1.5" fill="none" />
+        </svg>
+        <p class="footer-logo-text">Over The Top</p>
+      </div>
+      <div class="footer-columns">
+        <div class="footer-col"><h3>Shop</h3><ul><li><a href="newCollection.html">New Collection</a></li><li><a href="hiking.html">Hiking</a></li><li><a href="running.html">Running</a></li><li><a href="trail.html">Trail</a></li></ul></div>
+        <div class="footer-col"><h3>Assistance</h3><ul><li><a href="#">Shipping &amp; Delivery</a></li><li><a href="#">Returns &amp; Exchanges</a></li><li><a href="#">Size Guide</a></li><li><a href="contact.html">Contact Us</a></li></ul></div>
+        <div class="footer-col"><h3>Company</h3><ul><li><a href="about.html">About Us</a></li><li><a href="#">Mission &amp; Vision</a></li><li><a href="#">Careers</a></li><li><a href="#">Press</a></li></ul></div>
+        <div class="footer-col"><h3>Follow Us</h3>
+          <div class="social-icons">
+            <a href="#" aria-label="Instagram"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg></a>
+            <a href="#" aria-label="Facebook"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg></a>
+            <a href="#" aria-label="YouTube"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 12a29 29 0 00.46 5.58A2.78 2.78 0 003.4 19.6C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 001.94-2A29 29 0 0023 12a29 29 0 00-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="currentColor" stroke="none"/></svg></a>
+          </div>
+          <ul><li><a href="#">Events</a></li><li><a href="#">Community Forum</a></li></ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom"><div class="footer-bottom-inner"><p>&copy; 2026 Over The Top. All rights reserved.</p><p>Privacy Policy</p><p>Terms of Service</p><p>Cookie Policy</p></div></div>
+  </footer>
+
+  <!-- ═══ CART SIDEBAR ══════════════════════════════════════ -->
+  <div class="cart-overlay" id="cartOverlay"></div>
+  <aside class="cart-sidebar" id="cartSidebar" aria-label="Shopping cart">
+    <div class="cart-header"><h2>Your Cart</h2><button class="cart-close" id="cartClose" aria-label="Close cart"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer" id="cartFooter" style="display:none;">
+      <div class="cart-subtotal"><span>Subtotal</span><span id="cartTotal">&euro;0</span></div>
+      <p class="cart-note">Shipping calculated at checkout. Free over &euro;100.</p>
+      <button class="btn-checkout" id="checkoutBtn">Proceed to Checkout</button>
+      <button class="btn-continue" id="continueBtn">Continue Shopping</button>
+    </div>
+  </aside>
+
+  <script src="js/app.js"></script>
+  <script>
+  (function() {
+    'use strict';
+
+    /* ── Zone Data ───────────────────── */
+    var zones = [
+      {
+        name: 'Urban Coast', tag: 'ZONE 1 OF 5',
+        min: 0, max: 200,
+        terrain: 'Pavement & Parks', difficulty: 'Easy', season: 'Year-round',
+        desc: 'City streets and coastal boardwalks. Flat terrain, warm temperatures \u2014 speed and comfort reign supreme.',
+        particles: 'dust',
+        shoe: { name:'Urban Pace', cat:'Running', price:120, image:'images/05_RUNNING_Urban_Pace_01_Hero.png', link:'product-urban-pace.html', why:'Lightweight mesh and responsive cushioning for warm, flat city streets.' },
+        also: { name:'Marathon Elite', price:150, image:'images/04_RUNNING_Marathon_Elite_01_Hero.png', link:'product-marathon-elite.html' }
+      },
+      {
+        name: 'Forest Trails', tag: 'ZONE 2 OF 5',
+        min: 200, max: 1000,
+        terrain: 'Roots, Mud & Dirt', difficulty: 'Moderate', season: 'Spring \u2014 Autumn',
+        desc: 'Dense forest paths beneath the canopy. Uneven ground, stream crossings, and damp conditions test every step you take.',
+        particles: 'leaves',
+        shoe: { name:'Trail Voyager', cat:'Hiking', price:140, image:'images/03_HIKING_Trail_Voyager_01_Hero.png', link:'product-trail-voyager.html', why:'Quick-dry mesh with mud-gripping outsole. Flexible enough for roots and rocks.' },
+        also: { name:'Mountain Grip', price:145, image:'images/07_TRAIL_Mountain_Grip_01_Hero.png', link:'product-mountain-grip.html' }
+      },
+      {
+        name: 'Alpine Ridge', tag: 'ZONE 3 OF 5',
+        min: 1000, max: 2500,
+        terrain: 'Rock & Scree', difficulty: 'Hard', season: 'June \u2014 September',
+        desc: 'Above the treeline. Exposed ridges, loose scree, and unpredictable weather demand serious protection underfoot.',
+        particles: 'wind',
+        shoe: { name:'Mountain Guardian', cat:'Hiking', price:155, image:'images/02_HIKING_Mountain_Guardian_01_Hero.png', link:'product-mountain-guardian.html', why:'Reinforced toe cap and stable platform handle loose rock and exposed ridges.' },
+        also: { name:'Rock Climber', price:160, image:'images/08_TRAIL_Rock_Climber_01_Hero.png', link:'product-rock-climber.html' }
+      },
+      {
+        name: 'Snowline', tag: 'ZONE 4 OF 5',
+        min: 2500, max: 4000,
+        terrain: 'Snow & Ice', difficulty: 'Expert', season: 'July \u2014 August',
+        desc: 'Permanent snowfields and frozen ridges. Sub-zero temperatures and icy surfaces demand maximum protection and grip.',
+        particles: 'snow',
+        shoe: { name:'Summit Apex', cat:'Trail', price:165, image:'images/09_TRAIL_Summit_Apex_01_Hero.png', link:'product-summit-apex.html', why:'All-weather construction with technical outsole that grips frozen surfaces at extreme altitude.' },
+        also: { name:'Summit Explorer', price:170, image:'images/01_HIKING_Summit_Explorer_01_Hero.png', link:'product-summit-explorer.html' }
+      },
+      {
+        name: 'Extreme Altitude', tag: 'ZONE 5 OF 5',
+        min: 4000, max: 5364,
+        terrain: 'Glacier & Extreme Rock', difficulty: 'Extreme', season: 'May \u2014 June only',
+        desc: 'Beyond the clouds. Oxygen drops, temperatures plummet, and every gram of gear matters. Only the best survive up here.',
+        particles: 'ice',
+        shoe: { name:'Summit Explorer', cat:'Hiking', price:170, image:'images/01_HIKING_Summit_Explorer_01_Hero.png', link:'product-summit-explorer.html', why:'Fully waterproof with thermal insulation. Maximum ankle support for the most extreme terrain on earth.' },
+        also: { name:'Mountain Guardian', price:155, image:'images/02_HIKING_Mountain_Guardian_01_Hero.png', link:'product-mountain-guardian.html' }
+      }
+    ];
+
+    /* ── DOM refs ─────────────────────── */
+    var slider    = document.getElementById('altSlider');
+    var panel     = document.getElementById('altPanel');
+    var altNum    = document.getElementById('altNum');
+    var altTag    = document.getElementById('altTag');
+    var altName   = document.getElementById('altZoneName');
+    var altTemp   = document.getElementById('altTemp');
+    var altDiff   = document.getElementById('altDiff');
+    var altSeason = document.getElementById('altSeason');
+    var altTerr   = document.getElementById('altTerrain');
+    var altDesc   = document.getElementById('altDesc');
+    var altShoe   = document.getElementById('altShoe');
+    var altSImg   = document.getElementById('altShoeImg');
+    var altSName  = document.getElementById('altShoeName');
+    var altSPrice = document.getElementById('altShoePrice');
+    var altSWhy   = document.getElementById('altShoeWhy');
+    var altSLink  = document.getElementById('altShoeLink');
+    var altCartB  = document.getElementById('altCartBtn');
+    var altAlso   = document.getElementById('altAlso');
+    var altAlsoImg  = document.getElementById('altAlsoImg');
+    var altAlsoName = document.getElementById('altAlsoName');
+    var altAlsoPrice= document.getElementById('altAlsoPrice');
+    var altHint   = document.getElementById('altHint');
+    var bgLayers  = document.querySelectorAll('.alt-bg-layer');
+    var markers   = document.querySelectorAll('.alt-zone-mk');
+    var particles = document.getElementById('altParticles');
+
+    var currentZone = 0;
+    var firstDrag = true;
+
+    /* ── Slider handler ──────────────── */
+    slider.addEventListener('input', function() {
+      var alt = parseInt(this.value);
+      update(alt);
+      if (firstDrag) { firstDrag = false; altHint.classList.add('hidden'); }
+    });
+
+    /* ── Main update ─────────────────── */
+    function update(alt) {
+      altNum.textContent = alt.toLocaleString('en-US');
+
+      var temp = Math.round(22 - alt * 6.5 / 1000);
+      altTemp.innerHTML = temp + '&deg;C';
+
+
+
+      var zi = getZoneIndex(alt);
+      if (zi !== currentZone) transitionZone(zi);
+    }
+
+    function getZoneIndex(alt) {
+      for (var i = zones.length - 1; i >= 0; i--) {
+        if (alt >= zones[i].min) return i;
+      }
+      return 0;
+    }
+
+    /* ── Zone Transition ─────────────── */
+    function transitionZone(zi) {
+      var z = zones[zi];
+      currentZone = zi;
+
+      /* Background */
+      bgLayers.forEach(function(l, i) {
+        i === zi ? l.classList.add('active') : l.classList.remove('active');
+      });
+
+      /* Markers */
+      markers.forEach(function(m, i) {
+        i === zi ? m.classList.add('active') : m.classList.remove('active');
+      });
+
+      /* Panel pulse */
+      panel.classList.add('alt-pulse');
+      setTimeout(function() { panel.classList.remove('alt-pulse'); }, 600);
+
+      /* Zone name fade */
+      altName.classList.add('alt-fade');
+      altDesc.classList.add('alt-fade');
+      setTimeout(function() {
+        altTag.textContent = z.tag;
+        altName.textContent = z.name;
+        altDiff.textContent = z.difficulty;
+        altSeason.textContent = z.season;
+        altTerr.innerHTML = z.terrain;
+        altDesc.textContent = z.desc;
+        altName.classList.remove('alt-fade');
+        altDesc.classList.remove('alt-fade');
+      }, 280);
+
+      /* Shoe transition */
+      altShoe.classList.add('alt-shoe-exit');
+      altAlso.classList.add('alt-fade');
+      setTimeout(function() {
+        altSImg.src = z.shoe.image;
+        altSImg.alt = z.shoe.name;
+        altSName.textContent = z.shoe.name;
+        altSPrice.innerHTML = '\u20AC' + z.shoe.price;
+        altSWhy.textContent = z.shoe.why;
+        altSLink.href = z.shoe.link;
+        altAlso.href = z.also.link;
+        altAlsoImg.src = z.also.image;
+        altAlsoImg.alt = z.also.name;
+        altAlsoName.textContent = z.also.name;
+        altAlsoPrice.innerHTML = '\u20AC' + z.also.price;
+        altShoe.classList.remove('alt-shoe-exit');
+        altShoe.classList.add('alt-shoe-enter');
+        altAlso.classList.remove('alt-fade');
+        setTimeout(function() { altShoe.classList.remove('alt-shoe-enter'); }, 420);
+      }, 320);
+
+      /* Particles */
+      spawnParticles(z.particles);
+
+      /* Cart button */
+      altCartB.onclick = function() {
+        if (typeof addToCartByName === 'function') addToCartByName(z.shoe.name);
+      };
+    }
+
+    /* ── Particle System ─────────────── */
+    function spawnParticles(type) {
+      particles.innerHTML = '';
+      var counts = { dust:30, leaves:22, wind:16, snow:38, ice:28 };
+      var n = counts[type] || 25;
+      for (var i = 0; i < n; i++) {
+        var p = document.createElement('div');
+        p.className = 'alt-p alt-p-' + type;
+        p.style.left = Math.random() * 100 + '%';
+        p.style.top = Math.random() * 100 + '%';
+        p.style.animationDuration = (Math.random() * 6 + 4) + 's';
+        p.style.animationDelay = (Math.random() * 6) + 's';
+        particles.appendChild(p);
+      }
+    }
+
+    /* ── Init ─────────────────────────── */
+    spawnParticles('dust');
+
+  })();
+  </script>
+
+</body>
+</html>
